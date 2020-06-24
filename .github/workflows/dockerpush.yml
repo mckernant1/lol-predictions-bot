@@ -1,0 +1,19 @@
+name: Docker Push
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build Gradle Jar
+        run: ./gradlew build
+      - name: Build and push Docker images
+        uses: mr-smithers-excellent/docker-build-push@v3
+        with:
+          image: predictions-api/predictions-api
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
