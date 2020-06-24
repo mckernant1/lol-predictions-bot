@@ -12,7 +12,7 @@ jobs:
       - name: Build and push Docker images
         uses: mr-smithers-excellent/docker-build-push@v3
         with:
-          image: predictions-api/predictions-api
+          image: predictions-bot/predictions-bot
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
