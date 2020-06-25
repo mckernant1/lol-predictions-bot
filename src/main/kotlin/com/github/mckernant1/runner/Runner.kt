@@ -25,19 +25,27 @@ suspend fun main() {
                     react("⛔")
                     return@command
                 }
-                val getNumber = (words.getOrNull(2) ?: "3").toInt()
-                val region = words[1].toUpperCase()
-                println(region)
-                val league = leagueClient.getLeagueByName(region)
-                println(league)
-                val schedule = scheduleClient.getSplit(league.id, 2020, 2)
-                println(schedule)
-                schedule.matches.dropWhile {
-                    it.date < Date()
-                }.take(getNumber).forEach {
-                    reply("${it.team1} vs ${it.team2}")
-                }
+                reply(schedule(words))
+            }
+            command("predict") {
+
             }
         }
     }
+}
+
+fun schedule(words: List<String>): String {
+    val getNumber = (words.getOrNull(2) ?: "3").toInt()
+    val region = words[1].toUpperCase()
+    val league = leagueClient.getLeagueByName(region)
+    val tourney = tournamentClient.getMostRecentTournament(league.id)
+    val schedule = scheduleClient.getSplitByTournament(league.id, tourney)
+    val messageBuilder = StringBuilder()
+    schedule.matches.dropWhile {
+        it.date < Date()
+    }.take(getNumber).forEach {
+        messageBuilder.appendln("${it.team1} vs ${it.team2}")
+    }
+    messageBuilder.insert(0, "The next $getNumber of matches in $region are:\n")
+    return messageBuilder.toString()
 }
