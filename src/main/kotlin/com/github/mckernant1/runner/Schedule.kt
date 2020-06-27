@@ -7,14 +7,14 @@ fun scheduleCmd(
     words: List<String>,
     event: MessageReceivedEvent
 ) {
-    val (region, numToGet) = validate(words, event) ?: return
+    val (region, numToGet) = validateToRegionAndNumberOfGames(words, event) ?: return
     val matches = getSchedule(region, numToGet)
     val replyString = formatReply(matches, numToGet, region)
     event.channel.sendMessage(replyString).complete()
 }
 
 
-fun formatReply(matches: List<Match>, numToGet: Int, region: String): String {
+private fun formatReply(matches: List<Match>, numToGet: Int, region: String): String {
     val sb = StringBuilder()
     sb.appendln("The next $numToGet matches in $region are: ")
     matches.forEach {
@@ -23,22 +23,3 @@ fun formatReply(matches: List<Match>, numToGet: Int, region: String): String {
     return sb.toString()
 }
 
-fun validate(
-    words: List<String>,
-    event: MessageReceivedEvent
-): Pair<String, Int>? {
-    if (words.size < 2) {
-        event.message.addReaction("⛔").complete()
-        return null
-    }
-    return try {
-        val getNumber = (words.getOrNull(2) ?: "3").toInt()
-        val region = words[1].toUpperCase()
-        event.message.addReaction("\uD83D\uDC4C").complete()
-        Pair(region, getNumber)
-    } catch (e: Exception) {
-        event.message.addReaction("❌").complete()
-        null
-    }
-
-}

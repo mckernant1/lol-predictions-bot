@@ -5,6 +5,7 @@ import com.github.mckernant1.lolapi.schedule.ScheduleClient
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 
@@ -26,9 +27,18 @@ class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = event.message.contentRaw.replace("\\s+".toRegex(), " ").split(" ")
 
-        val command = words[0]
-        when (command) {
+        when (words[0]) {
             "!schedule" -> scheduleCmd(words, event)
+            "!predict" -> predictCmd(words, event)
+            else -> {
+                if (words[0].contains("!")) {
+                    reactUserError(event.message)
+                }
+            }
         }
+    }
+
+    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
+        super.onGenericMessageReaction(event)
     }
 }
