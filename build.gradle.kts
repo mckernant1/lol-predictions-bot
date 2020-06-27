@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.jessecorbett:diskord:1.6.2")
+    implementation("net.dv8tion:JDA:4.1.1_166")
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.6")
 }
 
