@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build Gradle Jar
-        run: ./gradlew build
+        run: ./gradlew build shadowJar
       - name: Build and push Docker images
         uses: mr-smithers-excellent/docker-build-push@v3
         with:

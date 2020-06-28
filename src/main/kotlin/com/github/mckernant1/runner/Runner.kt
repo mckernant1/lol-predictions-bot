@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 
-const val BOT_TOKEN = "NzI1MTY5NTQ2NjMzMjgxNjI4.XvLMFw.sRJ9pTWXyxeaxAOhEoVayitk2oo"
+val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: "NDc2MjE3ODk5OTA0OTI1Njk2.Xvj0Nw.hTwdhUgGfRNn58vtvIXRczIRiLM"
 
 val leagueClient = LeagueClient()
 val tournamentClient = TournamentClient()
