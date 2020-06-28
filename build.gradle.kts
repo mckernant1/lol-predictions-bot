@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.mckernant1"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 
 application {
     mainClassName = "com.github.mckernant1.runner.RunnerKt"
