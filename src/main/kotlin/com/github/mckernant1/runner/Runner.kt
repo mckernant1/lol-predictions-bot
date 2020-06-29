@@ -29,13 +29,8 @@ class MessageListener : ListenerAdapter() {
 
         when (words[0]) {
             "!schedule" -> scheduleCmd(words, event)
-            "!help" -> printHelp(event)
+            "!info" -> printHelp(event)
 //            "!predict" -> predictCmd(words, event)
-            else -> {
-                if (words[0].startsWith("!")) {
-                    reactUserError(event.message)
-                }
-            }
         }
     }
 
