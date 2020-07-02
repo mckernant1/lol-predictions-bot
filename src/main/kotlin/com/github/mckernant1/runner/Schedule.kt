@@ -11,12 +11,12 @@ fun scheduleCmd(
 ) {
     val (region, numToGet) = validateToRegionAndNumberOfGames(words, event) ?: return
     val matches = getSchedule(region, numToGet)
-    val replyString = formatReply(matches, numToGet, region)
+    val replyString = formatScheduleReply(matches, numToGet, region)
     event.channel.sendMessage(replyString).complete()
 }
 
 
-private fun formatReply(matches: List<Match>, numToGet: Int, region: String): String {
+private fun formatScheduleReply(matches: List<Match>, numToGet: Int, region: String): String {
     val sb = StringBuilder()
     val dateFormat = DateFormat.getDateTimeInstance(
         DateFormat.FULL, DateFormat.LONG,

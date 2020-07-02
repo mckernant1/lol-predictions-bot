@@ -21,6 +21,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
     implementation("net.dv8tion:JDA:4.1.1_166")
+    implementation("org.apache.httpcomponents:httpclient-cache:4.5.12")
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.6")
 }
 
