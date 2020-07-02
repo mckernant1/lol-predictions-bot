@@ -31,8 +31,8 @@ fun getSchedule(region: String, numberToGet: Int): List<Match> {
 }
 
 fun getResults(region: String, numberToGet: Int): List<Match>  {
-    return getMatches(region).matches.sortedBy { it.date }.takeWhile {
-        it.date < Date()
+    return getMatches(region).matches.sortedByDescending { it.date }.dropWhile {
+        it.date > Date()
     }.take(numberToGet)
 }
 
