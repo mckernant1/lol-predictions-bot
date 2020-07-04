@@ -23,7 +23,7 @@ fun predictCmd(
 }
 
 
-fun formatReplies(matches: List<Match>): List<Pair<String, Date>> {
+private fun formatReplies(matches: List<Match>): List<Pair<String, Date>> {
     return matches.map {
         "${it.date}: \uD83D\uDD35 ${it.team1} vs ${it.team2} \uD83D\uDD34" to it.date
     }

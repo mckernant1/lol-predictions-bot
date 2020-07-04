@@ -22,6 +22,7 @@ class MessageListener : ListenerAdapter() {
             "!schedule" -> scheduleCmd(words, event)
             "!info" -> printHelp(event)
             "!results" -> resultsCMD(words, event)
+            "!standings" -> standingsCMD(words, event)
 //            "!predict" -> predictCmd(words, event)
         }
     }
