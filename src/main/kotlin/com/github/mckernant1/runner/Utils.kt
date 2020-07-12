@@ -14,7 +14,7 @@ import java.time.Year
 import java.util.*
 
 
-val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: "NDc2MjE3ODk5OTA0OTI1Njk2.Xvj0Nw.hTwdhUgGfRNn58vtvIXRczIRiLM"
+val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
 private val cacheConfig: CacheConfig = CacheConfig.custom()
     .setSharedCache(false)
