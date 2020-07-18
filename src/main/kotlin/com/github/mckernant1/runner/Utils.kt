@@ -8,7 +8,6 @@ import com.github.mckernant1.lolapi.schedule.Split
 import com.github.mckernant1.lolapi.tournaments.Standing
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.apache.http.impl.client.cache.CacheConfig
 import java.time.Year
 import java.util.*
@@ -49,58 +48,4 @@ fun getMatches(region: String): Split {
     return scheduleClient.getSplitByTournament(league.id, tourney)
 }
 
-fun reactInternalError(m: Message) {
-    m.addReaction("❌").complete()
-}
-
-fun reactUserError(m: Message) {
-    m.addReaction("⛔").complete()
-}
-
-
-fun validateToRegionAndNumberOfGames(
-    words: List<String>,
-    event: MessageReceivedEvent
-): Pair<String, Int>? {
-    val message = event.message
-    if (words.size < 2) {
-        reactUserError(message)
-        return null
-    }
-    return try {
-        val getNumber = (words.getOrNull(2) ?: "3").toInt()
-        val region = validateRegion(words, message) ?: return null
-        message.addReaction("\uD83D\uDC4C").complete()
-        Pair(region, getNumber)
-    } catch (e: Exception) {
-        reactInternalError(message)
-        null
-    }
-
-}
-
-fun validateRegionAndWordCount(
-    words: List<String>,
-    event: MessageReceivedEvent
-): String? {
-    val message = event.message
-    if (words.size != 2) {
-        reactUserError(message)
-        return null
-    }
-    val region = validateRegion(words, message)
-    message.addReaction("\uD83D\uDC4C").complete()
-    return region
-}
-
-private fun validateRegion(
-    words: List<String>,
-    message: Message
-): String? {
-    val region = words[1].toUpperCase()
-    if (!leagueClient.getLeagues().map { it.name }.contains(region)) {
-        reactUserError(message)
-        return null
-    }
-    return region
-}
+fun getWordsFromMessage(message: Message) = message.contentRaw.replace("\\s+".toRegex(), " ").split(" ")

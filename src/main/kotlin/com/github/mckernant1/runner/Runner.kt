@@ -16,13 +16,13 @@ fun main() {
 
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        val words = event.message.contentRaw.replace("\\s+".toRegex(), " ").split(" ")
+        val words = getWordsFromMessage(event.message)
 
         when (words[0]) {
-            "!schedule" -> scheduleCmd(words, event)
+            "!schedule" -> scheduleCmd(event)
             "!info" -> printHelp(event)
-            "!results" -> resultsCMD(words, event)
-            "!standings" -> standingsCMD(words, event)
+            "!results" -> resultsCMD(event)
+            "!standings" -> standingsCMD(event)
 //            "!predict" -> predictCmd(words, event)
         }
     }
