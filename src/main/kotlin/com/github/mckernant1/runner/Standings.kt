@@ -32,12 +32,12 @@ fun formatStandingsReply(
 ): String {
     val sb = StringBuilder()
     sb.appendln("Standings for $region:")
-    standings.sortedByDescending { it.wins }.forEach {
-        if (it.teamName != "TBD") {
-            sb.appendln("${it.teamName}: ${it.wins}-${it.losses}")
+    return standings.sortedByDescending { it.wins / it.losses.toDouble() }.fold(sb) { stringBuilder: StringBuilder, standing: Standing ->
+        if (standing.teamName != "TBD") {
+            stringBuilder.appendln("${standing.teamName}: ${standing.wins}-${standing.losses}")
         }
-    }
-    return sb.toString()
+        return@fold stringBuilder
+    }.toString()
 }
 
 

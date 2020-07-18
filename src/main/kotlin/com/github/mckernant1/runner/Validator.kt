@@ -4,7 +4,7 @@ fun validateWordCount(words: List<String>, lenFunction: (Int) -> Boolean): Boole
     .also { println("validateWordCount running with words: $words and result: $it") }
 
 fun validateRegion(region: String): Boolean = (leagueClient.getLeagues().find { it.name.equals(region, ignoreCase = true) } != null)
-    .also { println("validateRegion failed with region: $region and result: $it") }
+    .also { println("validateRegion with region: $region and result: $it") }
 
 fun validateNumberOfMatches(num: Int): Boolean = (num in 1..19)
-    .also { println("validateNumberOfMatches failed with number $num and result: $it") }
+    .also { println("validateNumberOfMatches with number $num and result: $it") }
