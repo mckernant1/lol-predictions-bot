@@ -1,15 +1,21 @@
-package com.github.mckernant1.runner
+package com.github.mckernant1.runner.commands
 
 import com.github.mckernant1.lolapi.schedule.Match
+import com.github.mckernant1.runner.utils.getResults
+import com.github.mckernant1.runner.utils.reactUserOk
+import com.github.mckernant1.runner.utils.validateAndParseRegionAndNumberForResultsAndSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 fun resultsCMD(
     event: MessageReceivedEvent
 ) {
-    val (region, numToGet) = validateAndParseRegionAndNumberForResultsAndSchedule(event) ?: return
+    val (region, numToGet) = validateAndParseRegionAndNumberForResultsAndSchedule(
+        event
+    ) ?: return
     reactUserOk(event.message)
     val matches = getResults(region, numToGet)
-    val replyString = formatResultsReply(matches, numToGet, region)
+    val replyString =
+        formatResultsReply(matches, numToGet, region)
     event.channel.sendMessage(replyString).complete()
 }
 

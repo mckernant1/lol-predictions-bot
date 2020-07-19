@@ -1,4 +1,4 @@
-package com.github.mckernant1.runner
+package com.github.mckernant1.runner.utils
 
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -29,7 +29,9 @@ fun validateAndParseRegionAndNumberForResultsAndSchedule(event: MessageReceivedE
 
     val (region, numToGet) = getRegionAndNumber(message)
 
-    if (!(validateRegion(region) && validateNumberOfMatches(numToGet))) {
+    if (!(validateRegion(region) && validateNumberOfMatches(
+            numToGet
+        ))) {
         reactUserError(message)
         return null
     }

@@ -1,4 +1,4 @@
-package com.github.mckernant1.runner
+package com.github.mckernant1.runner.commands
 
 //fun predictCmd(
 //    words: List<String>,

@@ -1,6 +1,7 @@
-package com.github.mckernant1.runner
+package com.github.mckernant1.runner.commands
 
 import com.github.mckernant1.lolapi.tournaments.Standing
+import com.github.mckernant1.runner.utils.*
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 fun standingsCMD(
