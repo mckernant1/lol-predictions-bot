@@ -1,6 +1,7 @@
 package com.github.mckernant1.runner.utils
 
 import com.github.mckernant1.lolapi.config.EsportsApiConfig
+import com.github.mckernant1.lolapi.fstore.LocalFileStoreConfig
 import com.github.mckernant1.lolapi.leagues.LeagueClient
 import com.github.mckernant1.lolapi.schedule.ScheduleClient
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
@@ -8,9 +9,13 @@ import org.apache.http.impl.client.cache.CacheConfig
 
 private val cacheConfig: CacheConfig = CacheConfig.custom()
     .setSharedCache(false)
-    .setHeuristicDefaultLifetime(3600)
+    .setHeuristicDefaultLifetime(7200)
     .build()
-private val esportsApiConfig = EsportsApiConfig(cacheConfig = cacheConfig)
+private val esportsApiConfig = EsportsApiConfig(
+    cacheConfig = cacheConfig,
+    fileSystemStorageConfig = LocalFileStoreConfig(),
+    logger = System.out
+)
 
 val leagueClient = LeagueClient(esportsApiConfig = esportsApiConfig)
 val tournamentClient = TournamentClient(esportsApiConfig = esportsApiConfig)
