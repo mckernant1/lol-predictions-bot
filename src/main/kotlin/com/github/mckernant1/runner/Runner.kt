@@ -8,7 +8,6 @@ import com.github.mckernant1.runner.utils.BOT_TOKEN
 import com.github.mckernant1.runner.utils.getWordsFromMessage
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 
@@ -23,17 +22,14 @@ fun main() {
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = getWordsFromMessage(event.message)
-
-        when (words[0]) {
-            "!schedule" -> scheduleCmd(event)
-            "!info" -> printHelp(event)
-            "!results" -> resultsCMD(event)
-            "!standings" -> standingsCMD(event)
-//            "!predict" -> predictCmd(words, event)
-        }
-    }
-
-    override fun onGenericMessageReaction(event: GenericMessageReactionEvent) {
-        super.onGenericMessageReaction(event)
+        event.channel.sendTyping()
+            .queue {
+                when (words[0]) {
+                    "!schedule" -> scheduleCmd(event)
+                    "!info" -> printHelp(event)
+                    "!results" -> resultsCMD(event)
+                    "!standings" -> standingsCMD(event)
+                }
+            }
     }
 }

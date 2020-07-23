@@ -11,6 +11,6 @@ fun printHelp(event: MessageReceivedEvent) {
                 !results <league> [number of matches] -> league is required. matches default is 3
                 !standings <league> -> league is required
             """.trimIndent()
-        ).complete()
+        ).queue()
     }
 }

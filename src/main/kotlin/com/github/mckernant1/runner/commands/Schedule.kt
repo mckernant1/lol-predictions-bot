@@ -20,7 +20,7 @@ fun scheduleCmd(
     val matches = getSchedule(region, numToGet)
     val replyString =
         formatScheduleReply(matches, numToGet, region)
-    event.channel.sendMessage(replyString).complete()
+    event.channel.sendMessage(replyString).queue()
 }
 
 

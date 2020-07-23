@@ -16,7 +16,7 @@ fun resultsCMD(
     val matches = getResults(region, numToGet)
     val replyString =
         formatResultsReply(matches, numToGet, region)
-    event.channel.sendMessage(replyString).complete()
+    event.channel.sendMessage(replyString).queue()
 }
 
 private fun formatResultsReply(matches: List<Match>, numToGet: Int, region: String): String {

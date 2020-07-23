@@ -24,7 +24,7 @@ fun standingsCMD(
 
     val standings = getStandings(region)
     val replyString = formatStandingsReply(standings, region)
-    event.channel.sendMessage(replyString).complete()
+    event.channel.sendMessage(replyString).queue()
 }
 
 fun formatStandingsReply(
