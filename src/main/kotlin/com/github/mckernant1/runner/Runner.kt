@@ -22,14 +22,20 @@ fun main() {
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = getWordsFromMessage(event.message)
+        val cmdMap = mapOf(
+            "!schedule" to ::scheduleCmd,
+            "!info" to ::printHelp,
+            "!results" to ::resultsCMD,
+            "!standings" to ::standingsCMD
+        )
+
+        if (! cmdMap.containsKey(words[0])) {
+            return
+        }
+
         event.channel.sendTyping()
             .queue {
-                when (words[0]) {
-                    "!schedule" -> scheduleCmd(event)
-                    "!info" -> printHelp(event)
-                    "!results" -> resultsCMD(event)
-                    "!standings" -> standingsCMD(event)
-                }
+                cmdMap[words[0]]?.invoke(event)
             }
     }
 }
