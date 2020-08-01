@@ -1,7 +1,6 @@
 package com.github.mckernant1.runner.utils
 
 import com.github.mckernant1.lolapi.config.EsportsApiConfig
-import com.github.mckernant1.lolapi.fstore.LocalFileStoreConfig
 import com.github.mckernant1.lolapi.leagues.LeagueClient
 import com.github.mckernant1.lolapi.schedule.ScheduleClient
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
@@ -13,7 +12,6 @@ private val cacheConfig: CacheConfig = CacheConfig.custom()
     .build()
 private val esportsApiConfig = EsportsApiConfig(
     cacheConfig = cacheConfig,
-    fileSystemStorageConfig = LocalFileStoreConfig(),
     logger = System.out
 )
 
