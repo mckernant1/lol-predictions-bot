@@ -13,12 +13,14 @@ import java.util.*
 
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
-val fileHandler = FileHandler()
+val fileHandler = FileHandler(
+    duration = Duration.ofMinutes(10),
+    logger = System.out
+)
 
 val schedules = mutableMapOf<String, Thread>()
 
 fun getSchedule(region: String, numberToGet: Int): List<Match> {
-
     return getMatchesWithThreads(region).matches
         .sortedBy { it.date }.dropWhile {
             it.date < Date()
@@ -60,7 +62,7 @@ fun getStandings(region: String): List<Standing> {
     }
     if (!schedules.containsKey(leagueId)) {
         println("Starting Thread for retrieving $leagueId")
-        schedules[leagueId] = startJobThread(Duration.ofHours(1)) {
+        schedules[leagueId] = startJobThread(Duration.ofMinutes(10)) {
             fileHandler.getResult(leagueId) {
                 val list = arrayListOf<Standing>()
                 list.addAll(tournamentClient.getStandingsForLeague(league.id, Year.now().value))
