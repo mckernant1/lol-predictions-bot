@@ -14,7 +14,7 @@ import java.util.*
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
 val fileHandler = FileHandler(
-    duration = Duration.ofMinutes(10),
+    duration = Duration.ofMinutes(60),
     logger = System.out
 )
 
@@ -62,7 +62,7 @@ fun getStandings(region: String): List<Standing> {
     }
     if (!schedules.containsKey(leagueId)) {
         println("Starting Thread for retrieving $leagueId")
-        schedules[leagueId] = startJobThread(Duration.ofMinutes(10)) {
+        schedules[leagueId] = startJobThread(Duration.ofMinutes(5)) {
             fileHandler.getResult(leagueId) {
                 val list = arrayListOf<Standing>()
                 list.addAll(tournamentClient.getStandingsForLeague(league.id, Year.now().value))
