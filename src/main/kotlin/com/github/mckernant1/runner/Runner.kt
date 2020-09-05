@@ -1,9 +1,6 @@
 package com.github.mckernant1.runner
 
-import com.github.mckernant1.runner.commands.HelpCommand
-import com.github.mckernant1.runner.commands.ResultsCommand
-import com.github.mckernant1.runner.commands.ScheduleCommand
-import com.github.mckernant1.runner.commands.StandingsCommand
+import com.github.mckernant1.runner.commands.*
 import com.github.mckernant1.runner.utils.BOT_TOKEN
 import com.github.mckernant1.runner.utils.getWordsFromMessage
 import com.github.mckernant1.runner.utils.reactUserError
@@ -30,8 +27,8 @@ class MessageListener : ListenerAdapter() {
             "!schedule" to ScheduleCommand(event),
             "!info" to HelpCommand(event),
             "!results" to ResultsCommand(event),
-            "!standings" to StandingsCommand(event)
-//            "!predict" to PredictCommand(event)
+            "!standings" to StandingsCommand(event),
+            "!predict" to PredictCommand(event)
         )
 
 
