@@ -4,6 +4,7 @@ Predictions will be integrated once @bgraver finishes the api and predictions si
 
 ### Commands
 - `!info` -> lists this menu
-- `!schedule <league> [number of matches]` -> league is required. matches default is 3
-- `!results <league> [number of matches]` -> league is required. matches default is 3
+- `!schedule <league> [number of matches]` -> league is required. matches default is 4
+- `!results <league> [number of matches]` -> league is required. matches default is 4
 - `!standings <league>` -> league is required
+- `!predict <league> [number of matches]` -> league is required. matches default is 4
