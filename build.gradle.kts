@@ -24,6 +24,8 @@ dependencies {
     implementation("org.apache.httpcomponents:httpclient-cache:4.5.12")
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.13")
     implementation("com.github.mckernant1:fs-scheduler:0.0.2")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.30")
 }
 
 tasks {

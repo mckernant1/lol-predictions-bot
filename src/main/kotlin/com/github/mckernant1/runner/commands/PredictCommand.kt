@@ -1,6 +1,7 @@
 package com.github.mckernant1.runner.commands
 
 import com.github.mckernant1.runner.utils.getScheduleForNextDay
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.text.DateFormat
 import java.time.Duration
@@ -10,8 +11,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.schedule
 
 val sharedStatePredictionsMap = ConcurrentHashMap<String, ConcurrentHashMap<String, List<String>>>()
-const val BLUE_TEAM_EMOJI = "\uD83D\uDD35"
-const val RED_TEAM_EMOJI = "\uD83D\uDD34"
 
 class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
@@ -29,35 +28,45 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             event.channel.sendMessage(msg).queue { message ->
                 message.addReaction(BLUE_TEAM_EMOJI).queue()
                 message.addReaction(RED_TEAM_EMOJI).queue()
-                timer.schedule(500, Duration.ofMinutes(1).toMillis()) {
-                    println("Checking for reaction updates")
+                timer.schedule(5000, Duration.ofMinutes(1).toMillis()) {
+                    message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().also { users ->
+                        updateState(users, match.team1, match.id)
+                    }
+                    message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().also { users ->
+                        updateState(users, match.team2, match.id)
+                    }
+                    logger.info("Shared State map $sharedStatePredictionsMap")
                     if (Date() >= date) {
+                        logger.info("Match ${match.team1} vs ${match.team2} is starting")
                         val matchMap = sharedStatePredictionsMap[match.id] ?: ConcurrentHashMap()
                         val messageStr = matchMap.map { (team, users) ->
-                            "$team was picked by $users"
-                        }.reduce { acc, s -> "$acc\n$s" }
-                        event.channel.sendMessage(messageStr)
+                            "$team was picked by ${users.joinToString(separator = ", ") { "<@$it>" }}"
+                        }.fold("") { acc, s -> "$acc\n$s" }.also { logger.info(it) }
+                        if (messageStr.isNotBlank()) {
+                            event.channel.sendMessage("Match ${match.team1} vs ${match.team2} is starting: $messageStr").complete()
+                        }
                         cancel()
                     }
-                    message.retrieveReactionUsers(BLUE_TEAM_EMOJI).queue { users ->
-                        val usernames = users.map { it.name }
-                        println("${match.team1} was picked by $usernames")
-                        sharedStatePredictionsMap.getOrPut(match.id) { ConcurrentHashMap() }[match.team1] = usernames
-                    }
-                    message.retrieveReactionUsers(RED_TEAM_EMOJI).queue { users ->
-                        val usernames = users.map { it.name }
-                        println("${match.team2} was picked by $usernames")
-                        sharedStatePredictionsMap.getOrPut(match.id) { ConcurrentHashMap() }[match.team2] = usernames
-                    }
-                    println("Resulting $sharedStatePredictionsMap")
                 }
             }
         }
 
     }
 
+
+    private fun updateState(users: List<User>, team: String, matchId: String) {
+        val usernames = users.filter { !it.isBot }.map { it.id }
+        logger.info("$team was picked by $usernames")
+        sharedStatePredictionsMap.getOrPut(matchId) { ConcurrentHashMap() }[team] = usernames
+    }
+
     override fun validate(): Boolean {
         return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2, 1)
+    }
+
+    companion object {
+        const val BLUE_TEAM_EMOJI = "\uD83D\uDD35"
+        const val RED_TEAM_EMOJI = "\uD83D\uDD34"
     }
 }
 

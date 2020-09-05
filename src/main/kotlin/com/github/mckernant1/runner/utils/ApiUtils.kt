@@ -10,6 +10,7 @@ private val cacheConfig: CacheConfig = CacheConfig.custom()
     .setSharedCache(false)
     .setHeuristicDefaultLifetime(7200)
     .build()
+
 private val esportsApiConfig = EsportsApiConfig(
     cacheConfig = cacheConfig,
     logger = System.out
