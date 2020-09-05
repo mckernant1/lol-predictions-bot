@@ -2,7 +2,9 @@ package com.github.mckernant1.runner.commands
 
 import com.github.mckernant1.runner.utils.getScheduleForNextDay
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import java.text.DateFormat
 import java.time.Duration
+import java.time.ZoneId
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.schedule
@@ -18,7 +20,11 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val matches = getScheduleForNextDay(region, numToGet)
         matches.map { match ->
-            val msg = "${match.date}: \uD83D\uDD35 ${match.team1} vs ${match.team2} \uD83D\uDD34"
+            val dateFormat = DateFormat.getDateTimeInstance(
+                DateFormat.FULL, DateFormat.LONG
+            )
+            dateFormat.timeZone = TimeZone.getTimeZone(ZoneId.of("America/Los_Angeles"))
+            val msg = "${dateFormat.format(match.date)}: \uD83D\uDD35 ${match.team1} vs ${match.team2} \uD83D\uDD34"
             val date = match.date
             event.channel.sendMessage(msg).queue { message ->
                 message.addReaction(BLUE_TEAM_EMOJI).queue()
