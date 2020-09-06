@@ -23,22 +23,20 @@ fun main() {
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = getWordsFromMessage(event.message)
-        val cmdMap = mapOf(
-            "!schedule" to ScheduleCommand(event),
-            "!info" to HelpCommand(event),
-            "!results" to ResultsCommand(event),
-            "!standings" to StandingsCommand(event),
-            "!predict" to PredictCommand(event)
-        )
+        if (event.author.isBot || words.isEmpty()) return
 
-
-        if (! cmdMap.containsKey(words[0])) {
-            return
+        val command = when (words[0]) {
+            "!schedule" -> ScheduleCommand(event)
+            "!info" -> InfoCommand(event)
+            "!results" -> ResultsCommand(event)
+            "!standings" -> StandingsCommand(event)
+            "!predict" -> PredictCommand(event)
+            "!report" -> ReportPredictions(event)
+            else -> return
         }
 
         event.channel.sendTyping()
             .queue {
-                val command = cmdMap[words[0]] ?: return@queue
                 if (command.validate()) {
                     reactUserOk(event.message)
                     GlobalScope.launch {

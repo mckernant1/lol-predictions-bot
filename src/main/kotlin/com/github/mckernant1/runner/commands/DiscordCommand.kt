@@ -5,6 +5,9 @@ import com.github.mckernant1.runner.utils.getWordsFromMessage
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.text.DateFormat
+import java.time.ZoneId
+import java.util.*
 
 abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
@@ -12,12 +15,20 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected var numToGet: Int = 0
 
+    protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
+    protected val dateFormat: DateFormat = DateFormat.getDateTimeInstance(
+        DateFormat.FULL, DateFormat.LONG
+    ).apply { timeZone = TimeZone.getTimeZone(ZoneId.of("America/Los_Angeles")) }
+
+
     abstract suspend fun execute()
 
     abstract fun validate(): Boolean
 
-    companion object {
-        val logger: Logger = LoggerFactory.getLogger(DiscordCommand::class.java)
+
+    init {
+        logger.info("logger started")
     }
 
     protected fun validateNumberOfMatches(event: MessageReceivedEvent, position: Int, default: Int = 4): Boolean {

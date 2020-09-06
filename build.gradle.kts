@@ -26,6 +26,7 @@ dependencies {
     implementation("com.github.mckernant1:fs-scheduler:0.0.2")
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("org.litote.kmongo:kmongo:4.1.2")
 }
 
 tasks {

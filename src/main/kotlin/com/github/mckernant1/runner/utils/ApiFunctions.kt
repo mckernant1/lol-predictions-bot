@@ -27,16 +27,6 @@ fun getSchedule(region: String, numberToGet: Int): List<Match> {
         }.take(numberToGet)
 }
 
-fun getScheduleForNextDay(region: String, numberToGet: Int = 4): List<Match> {
-    return getMatchesWithThreads(region).matches
-        .sortedBy { it.date }
-        .filter {
-            val date = it.date
-            val today = Date()
-            date.date >= today.date && date.month >= today.month && date.year >= today.year
-        }.take(numberToGet)
-}
-
 fun getResults(region: String, numberToGet: Int): List<Match> {
     return getMatchesWithThreads(region).matches
         .sortedByDescending { it.date }.dropWhile {
