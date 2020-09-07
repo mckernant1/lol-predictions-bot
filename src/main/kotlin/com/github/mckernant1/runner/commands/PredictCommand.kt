@@ -1,7 +1,9 @@
 package com.github.mckernant1.runner.commands
 
-import com.github.mckernant1.runner.utils.getResults
+import com.github.mckernant1.runner.utils.getSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import org.litote.kmongo.and
+import org.litote.kmongo.eq
 import java.time.Duration
 import java.util.*
 import kotlin.concurrent.schedule
@@ -9,9 +11,8 @@ import kotlin.concurrent.schedule
 
 class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
 
-
     override suspend fun execute() {
-        val matches = getResults(region, numToGet)
+        val matches = getSchedule(region, numToGet)
         matches.forEach { match ->
             val date = match.date
             val msg = "${dateFormat.format(date)}: \uD83D\uDD35 ${match.team1} vs ${match.team2} \uD83D\uDD34\n" +
@@ -24,11 +25,20 @@ class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
                     message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
                 val redTeamUsers =
                     message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
-                val predictions = mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers).map { (team, users) ->
-                    users.map { Prediction(match.id, it, team) }
-                }.flatten().also { logger.info(it.toString()) }
+                val predictions =
+                    mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers).map { (team, users) ->
+                        users.map { Prediction(match.id, it, team) }
+                    }.flatten().also { logger.info(it.toString()) }
                 if (predictions.isNotEmpty()) {
-                    collection.insertMany(predictions)
+                    predictions.forEach {
+                        collection.findOneAndDelete(
+                            and(
+                                Prediction::userId eq it.userId,
+                                Prediction::matchId eq it.matchId
+                            )
+                        )
+                        collection.insertOne(it)
+                    }
                 }
                 message.delete().complete()
                 event.message.delete().complete()
