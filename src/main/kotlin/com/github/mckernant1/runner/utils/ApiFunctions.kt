@@ -8,7 +8,8 @@ import com.github.mckernant1.lolapi.tournaments.Standing
 import net.dv8tion.jda.api.entities.Message
 import java.time.Duration
 import java.time.Year
-import java.util.*
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
@@ -23,14 +24,14 @@ val schedules = mutableMapOf<String, Thread>()
 fun getSchedule(region: String, numberToGet: Int): List<Match> {
     return getMatchesWithThreads(region).matches
         .sortedBy { it.date }.dropWhile {
-            it.date < Date()
+            it.date < ZonedDateTime.now(ZoneId.of("UTC"))
         }.take(numberToGet)
 }
 
 fun getResults(region: String, numberToGet: Int): List<Match> {
     return getMatchesWithThreads(region).matches
         .sortedByDescending { it.date }.dropWhile {
-            it.date > Date()
+            it.date > ZonedDateTime.now(ZoneId.of("UTC"))
         }.take(numberToGet)
 }
 

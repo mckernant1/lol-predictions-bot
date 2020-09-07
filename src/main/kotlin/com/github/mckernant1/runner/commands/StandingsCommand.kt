@@ -21,11 +21,11 @@ class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         region: String
     ): String {
         val sb = StringBuilder()
-        sb.appendln("Standings for $region:")
+        sb.appendLine("Standings for $region:")
         return standings.sortedByDescending { it.wins / it.losses.toDouble() }
             .fold(sb) { stringBuilder: StringBuilder, standing: Standing ->
                 if (standing.teamName != "TBD") {
-                    stringBuilder.appendln("${standing.teamName}: ${standing.wins}-${standing.losses}")
+                    stringBuilder.appendLine("${standing.teamName}: ${standing.wins}-${standing.losses}")
                 }
                 return@fold stringBuilder
             }.toString()

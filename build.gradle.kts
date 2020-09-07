@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.0"
     id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
     implementation("net.dv8tion:JDA:4.1.1_166")
     implementation("org.apache.httpcomponents:httpclient-cache:4.5.12")
-    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.13")
+    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.14_1")
     implementation("com.github.mckernant1:fs-scheduler:0.0.2")
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")

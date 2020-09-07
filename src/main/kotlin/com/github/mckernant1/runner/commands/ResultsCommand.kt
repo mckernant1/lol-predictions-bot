@@ -19,9 +19,9 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun formatResultsReply(matches: List<Match>, numToGet: Int, region: String): String {
         val sb = StringBuilder()
-        sb.appendln("The last $numToGet matches in $region were: ")
+        sb.appendLine("The last $numToGet matches in $region were: ")
         matches.forEach {
-            sb.appendln(
+            sb.appendLine(
                 "${
                     if (it.winner == it.team1)
                         "\uD83D\uDC51 " else ""

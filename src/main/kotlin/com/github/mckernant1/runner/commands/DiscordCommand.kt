@@ -26,11 +26,6 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     abstract fun validate(): Boolean
 
-
-    init {
-        logger.info("logger started")
-    }
-
     protected fun validateNumberOfMatches(event: MessageReceivedEvent, position: Int, default: Int = 4): Boolean {
         val words = getWordsFromMessage(event.message)
         numToGet = words.getOrNull(position)?.toInt() ?: default
