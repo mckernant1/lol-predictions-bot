@@ -31,7 +31,7 @@ class MessageListener : ListenerAdapter() {
             "!results" -> ResultsCommand(event)
             "!standings" -> StandingsCommand(event)
             "!predict" -> PredictCommand(event)
-            "!report" -> ReportPredictions(event)
+            "!report" -> ReportCommand(event)
             else -> return
         }
 

@@ -15,7 +15,7 @@ abstract class MongoCommand(event: MessageReceivedEvent) : DiscordCommand(event)
     )
 
     companion object {
-        private val dbUser = System.getenv("MONGO_USER")
-        private val dbPassword = System.getenv("MONGO_PASSWORD")
+        private val dbUser: String = System.getenv("MONGO_USER") ?: throw Exception("Environment variable MONGO_USER has not been specified")
+        private val dbPassword: String = System.getenv("MONGO_PASSWORD") ?: throw Exception("Environment variable MONGO_PASSWORD has not been specified")
     }
 }

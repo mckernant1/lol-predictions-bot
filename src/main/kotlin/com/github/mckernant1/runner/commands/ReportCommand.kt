@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 import org.litote.kmongo.and
 
-class ReportPredictions(event: MessageReceivedEvent) : MongoCommand(event) {
+class ReportCommand(event: MessageReceivedEvent) : MongoCommand(event) {
     override suspend fun execute() {
         val results = getResults(region, numToGet)
         val predictions = collection.find(
