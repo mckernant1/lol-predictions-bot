@@ -13,7 +13,9 @@ class StatsCommand(event: MessageReceivedEvent) : MongoCommand(event) {
         )
 
         val resultString = users.map { userId ->
-            val numberPredicted = serverMatches.count { it.userId == userId }
+            val numberPredicted = serverMatches.count { prediction ->
+                prediction.userId == userId && results.any { it.id == prediction.matchId }
+            }
             val numberCorrect = serverMatches.count { prediction ->
                 val relevantResult = results.find { prediction.matchId == it.id }
                     ?: return@count false
