@@ -8,4 +8,4 @@ Predictions will be integrated once @bgraver finishes the api and predictions si
 - `!results <league> [number of matches]` -> league is required. matches default is 4
 - `!standings <league>` -> league is required
 - `!predict <league> [number of matches]` -> league is required. matches default is 4
-- `!stats <league> -> Displays the predictions standings`
+- `!stats <league>` -> Displays the predictions standings
