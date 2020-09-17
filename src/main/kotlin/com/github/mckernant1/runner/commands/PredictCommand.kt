@@ -41,7 +41,6 @@ class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
                     }
                 }
                 message.delete().complete()
-                event.message.delete().complete()
             }
         }
     }
