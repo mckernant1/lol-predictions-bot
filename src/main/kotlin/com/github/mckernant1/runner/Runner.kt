@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
 import java.io.File
 
 
@@ -17,6 +18,7 @@ fun main() {
     File("store").mkdir()
     JDABuilder.createDefault(BOT_TOKEN)
         .addEventListeners(MessageListener())
+        .enableIntents(GatewayIntent.GUILD_MEMBERS)
         .build()
         .awaitReady()
 }
