@@ -20,7 +20,7 @@ class ReportCommand(event: MessageReceivedEvent) : MongoCommand(event) {
             event.guild.members.map { it.id }
         } catch (e: IllegalStateException) {
             listOf(event.message.author.id)
-        }
+        }.also { logger.info("User Ids in server: $it") }
 
         val predictions = collection.find(
             and(
