@@ -1,6 +1,7 @@
 ## League of legends esports bot
 This bot provides schedule, results, and standings for all regions listed in the esports api
-For support please file an issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
+
+For support please file a Github issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
 
 ### Commands
 !info lists this menu
