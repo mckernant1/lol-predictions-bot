@@ -19,6 +19,7 @@ class ReportCommand(event: MessageReceivedEvent) : MongoCommand(event) {
         val users = try {
             event.guild.members.map { it.id }
         } catch (e: IllegalStateException) {
+            logger.info("IllegalStateException thrown ${e.message}")
             listOf(event.message.author.id)
         }.also { logger.info("User Ids in server: $it") }
 
