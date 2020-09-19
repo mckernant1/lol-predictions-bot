@@ -22,7 +22,7 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val sb = StringBuilder()
         sb.appendLine("The next $numToGet matches in $region are: ")
         matches.forEach {
-            sb.appendLine("${dateFormat.format(it.date)}: ${it.team1} vs ${it.team2}")
+            sb.appendLine("${dateFormat.format(it.date)}: **${it.team1}** vs **${it.team2}**")
         }
         return sb.toString()
     }

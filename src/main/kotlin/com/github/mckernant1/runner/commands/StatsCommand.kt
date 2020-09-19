@@ -7,7 +7,14 @@ import org.litote.kmongo.`in`
 class StatsCommand(event: MessageReceivedEvent) : MongoCommand(event) {
     override suspend fun execute() {
         val results = getMatchesWithThreads(region).matches
-        val users = event.guild.members.map { it.id }
+
+
+        val users = try {
+            event.guild.members.map { it.id }
+        } catch (e: IllegalStateException) {
+            listOf(event.message.author.id)
+        }
+
         val serverMatches = collection.find(
             Prediction::userId `in` users
         )
@@ -21,11 +28,11 @@ class StatsCommand(event: MessageReceivedEvent) : MongoCommand(event) {
                     ?: return@count false
                 return@count prediction.userId == userId && relevantResult.winner == prediction.prediction
             }
-            PredictionRatio(userId, numberPredicted, numberCorrect)
+            return@map PredictionRatio(userId, numberPredicted, numberCorrect)
         }.filter { it.numberPredicted != 0 }
             .sortedByDescending { it.numberCorrect / it.numberPredicted.toDouble() }
             .joinToString("\n") {
-                "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of ${100 * it.numberCorrect / it.numberPredicted.toDouble()}%"
+                "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${100 * it.numberCorrect / it.numberPredicted.toDouble()}%**"
             }
         event.channel.sendMessage("Prediction results are:\n$resultString").complete()
     }

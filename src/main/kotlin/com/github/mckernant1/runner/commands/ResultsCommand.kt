@@ -25,7 +25,7 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 "${
                     if (it.winner == it.team1)
                         "\uD83D\uDC51 " else ""
-                }${it.team1} (${it.team1NumWins}) vs (${it.team2NumWins}) ${it.team2}${
+                }**${it.team1}** (${it.team1NumWins}) vs (${it.team2NumWins}) **${it.team2}**${
                     if (it.winner == it.team2)
                         " \uD83D\uDC51" else ""
                 }"

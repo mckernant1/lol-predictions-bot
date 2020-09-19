@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import java.time.Duration
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.schedule
 
 
@@ -15,7 +15,7 @@ class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
         val matches = getSchedule(region, numToGet)
         matches.forEach { match ->
             val date = match.date
-            val msg = "${dateFormat.format(date)}: \uD83D\uDD35 ${match.team1} vs ${match.team2} \uD83D\uDD34\n" +
+            val msg = "${dateFormat.format(date)}: \uD83D\uDD35 **${match.team1}** vs **${match.team2}** \uD83D\uDD34\n" +
                     "(This message will be deleted in 5 mins)"
             val message = event.channel.sendMessage(msg).complete()
             message.addReaction(BLUE_TEAM_EMOJI).complete()
@@ -29,16 +29,14 @@ class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
                     mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers).map { (team, users) ->
                         users.map { Prediction(match.id, it, team) }
                     }.flatten().also { logger.info(it.toString()) }
-                if (predictions.isNotEmpty()) {
-                    predictions.forEach {
-                        collection.findOneAndDelete(
-                            and(
-                                Prediction::userId eq it.userId,
-                                Prediction::matchId eq it.matchId
-                            )
+                predictions.forEach {
+                    collection.deleteMany(
+                        and(
+                            Prediction::userId eq it.userId,
+                            Prediction::matchId eq it.matchId
                         )
-                        collection.insertOne(it)
-                    }
+                    )
+                    collection.insertOne(it)
                 }
                 message.delete().complete()
             }
