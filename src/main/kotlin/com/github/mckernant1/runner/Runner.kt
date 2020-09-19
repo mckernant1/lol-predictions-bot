@@ -11,18 +11,15 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
-import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import java.io.File
 
 
 fun main() {
     File("store").mkdir()
-    JDABuilder.createDefault(BOT_TOKEN)
+    JDABuilder.create(BOT_TOKEN, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES)
         .addEventListeners(MessageListener())
-        .setChunkingFilter(ChunkingFilter.ALL)
         .setMemberCachePolicy(MemberCachePolicy.ALL)
-        .enableIntents(GatewayIntent.GUILD_MEMBERS)
         .build()
         .awaitReady()
 }
