@@ -1,6 +1,7 @@
 package com.github.mckernant1.runner.utils
 
 import com.github.mckernant1.lolapi.config.EsportsApiConfig
+import com.github.mckernant1.lolapi.config.HostUrl
 import com.github.mckernant1.lolapi.leagues.LeagueClient
 import com.github.mckernant1.lolapi.schedule.ScheduleClient
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
@@ -16,7 +17,8 @@ private val cacheConfig: CacheConfig = CacheConfig.custom()
 val logger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
     cacheConfig = cacheConfig,
-    logger = { logger.info(it) }
+    logger = { logger.info(it) },
+    endpointHost = HostUrl.ESPORTS_API_2
 )
 
 val leagueClient = LeagueClient(esportsApiConfig = esportsApiConfig)

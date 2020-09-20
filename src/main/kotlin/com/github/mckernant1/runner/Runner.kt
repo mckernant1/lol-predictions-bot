@@ -11,15 +11,34 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
+import net.dv8tion.jda.api.utils.cache.CacheFlag
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 
 
 fun main() {
     File("store").mkdir()
-    JDABuilder.create(BOT_TOKEN, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES)
-        .addEventListeners(MessageListener())
+    JDABuilder.create(
+        BOT_TOKEN,
+        GatewayIntent.GUILD_MEMBERS,
+        GatewayIntent.GUILD_MESSAGES,
+        GatewayIntent.GUILD_MESSAGE_TYPING,
+        GatewayIntent.GUILD_MESSAGE_REACTIONS,
+        GatewayIntent.DIRECT_MESSAGES,
+        GatewayIntent.DIRECT_MESSAGE_REACTIONS,
+        GatewayIntent.DIRECT_MESSAGE_TYPING
+    )
+        .disableCache(
+            CacheFlag.ACTIVITY,
+            CacheFlag.VOICE_STATE,
+            CacheFlag.EMOTE,
+            CacheFlag.CLIENT_STATUS
+        ).setChunkingFilter(ChunkingFilter.exclude(264445053596991498))
         .setMemberCachePolicy(MemberCachePolicy.ALL)
+        .addEventListeners(MessageListener())
         .build()
         .awaitReady()
 }
@@ -53,5 +72,9 @@ class MessageListener : ListenerAdapter() {
                     reactUserError(event.message)
                 }
             }
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
     }
 }
