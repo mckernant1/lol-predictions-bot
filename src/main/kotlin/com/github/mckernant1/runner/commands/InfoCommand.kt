@@ -10,7 +10,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 **Basic Info**
                 !info lists this menu
                 <league> refers to one of the league codes (lcs, lpl, lck, ...) 
-                [number of matches] is optional, picks the number of matches to display. Default is 4
+                [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
                 **Esports Commands**
                 !schedule <league> [number of matches] -> Displays the upcoming games for the region
                 !results <league> [number of matches] -> Displays the most recent results for the region 

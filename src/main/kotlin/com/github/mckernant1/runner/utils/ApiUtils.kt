@@ -6,6 +6,8 @@ import com.github.mckernant1.lolapi.leagues.LeagueClient
 import com.github.mckernant1.lolapi.schedule.ScheduleClient
 import com.github.mckernant1.lolapi.tournaments.TournamentClient
 import org.apache.http.impl.client.cache.CacheConfig
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.getCollection
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -24,4 +26,16 @@ private val esportsApiConfig = EsportsApiConfig(
 val leagueClient = LeagueClient(esportsApiConfig = esportsApiConfig)
 val tournamentClient = TournamentClient(esportsApiConfig = esportsApiConfig)
 val scheduleClient = ScheduleClient(esportsApiConfig = esportsApiConfig)
+
+private val dbUser: String = System.getenv("MONGO_USER") ?: throw Exception("Environment variable MONGO_USER has not been specified")
+private val dbPassword: String = System.getenv("MONGO_PASSWORD") ?: throw Exception("Environment variable MONGO_PASSWORD has not been specified")
+
+private val client = KMongo.createClient("mongodb://$dbUser:$dbPassword@ds359118.mlab.com:59118/lol-prediction?retryWrites=false")
+val collection = client.getDatabase("lol-prediction").getCollection<Prediction>("discord-predictions")
+
+data class Prediction (
+    val matchId: String,
+    val userId: String,
+    val prediction: String
+)
 

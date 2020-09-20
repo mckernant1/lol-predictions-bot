@@ -1,5 +1,7 @@
 package com.github.mckernant1.runner.commands
 
+import com.github.mckernant1.runner.utils.Prediction
+import com.github.mckernant1.runner.utils.collection
 import com.github.mckernant1.runner.utils.getSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.and
@@ -9,7 +11,7 @@ import java.util.Timer
 import kotlin.concurrent.schedule
 
 
-class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
+class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val matches = getSchedule(region, numToGet)
@@ -44,7 +46,7 @@ class PredictCommand(event: MessageReceivedEvent) : MongoCommand(event) {
     }
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2, 1)
+        return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2)
     }
 
     companion object {

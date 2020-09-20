@@ -1,10 +1,12 @@
 package com.github.mckernant1.runner.commands
 
+import com.github.mckernant1.runner.utils.Prediction
+import com.github.mckernant1.runner.utils.collection
 import com.github.mckernant1.runner.utils.getMatchesWithThreads
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 
-class StatsCommand(event: MessageReceivedEvent) : MongoCommand(event) {
+class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val results = getMatchesWithThreads(region).matches
 

@@ -8,7 +8,7 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 
 \<league\> refers to one of the league codes (lcs, lpl, lck, ...) 
 
-[number of matches] is optional, picks the number of matches to display. Default is 4
+[number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
 
 ### Esports Commands
 !schedule <league> [number of matches] -> Displays the upcoming games for the region

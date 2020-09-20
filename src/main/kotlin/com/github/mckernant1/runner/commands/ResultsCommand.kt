@@ -9,7 +9,7 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val matches = getResults(region, numToGet)
         val replyString =
-            formatResultsReply(matches, numToGet, region)
+            formatResultsReply(matches, region)
         event.channel.sendMessage(replyString).queue()
     }
 
@@ -17,9 +17,9 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2)
     }
 
-    private fun formatResultsReply(matches: List<Match>, numToGet: Int, region: String): String {
+    private fun formatResultsReply(matches: List<Match>, region: String): String {
         val sb = StringBuilder()
-        sb.appendLine("The last $numToGet matches in $region were: ")
+        sb.appendLine("The last ${matches.size} matches in $region were: ")
         matches.forEach {
             sb.appendLine(
                 "${

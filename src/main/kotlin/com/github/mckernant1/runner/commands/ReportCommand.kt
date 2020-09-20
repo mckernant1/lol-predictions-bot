@@ -1,12 +1,14 @@
 package com.github.mckernant1.runner.commands
 
+import com.github.mckernant1.runner.utils.Prediction
+import com.github.mckernant1.runner.utils.collection
 import com.github.mckernant1.runner.utils.getResults
 import com.github.mckernant1.runner.utils.getSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 import org.litote.kmongo.and
 
-class ReportCommand(event: MessageReceivedEvent) : MongoCommand(event) {
+class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     private var previous: Boolean = false
 
     constructor(event: MessageReceivedEvent, previous: Boolean) : this(event) {

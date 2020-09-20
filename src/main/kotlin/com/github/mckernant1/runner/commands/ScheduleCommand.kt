@@ -9,7 +9,7 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val matches = getSchedule(region, numToGet)
-        val replyString = formatScheduleReply(matches, numToGet, region)
+        val replyString = formatScheduleReply(matches, region)
         event.channel.sendMessage(replyString).queue()
     }
 
@@ -18,9 +18,9 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     }
 
-    private fun formatScheduleReply(matches: List<Match>, numToGet: Int, region: String): String {
+    private fun formatScheduleReply(matches: List<Match>, region: String): String {
         val sb = StringBuilder()
-        sb.appendLine("The next $numToGet matches in $region are: ")
+        sb.appendLine("The next ${matches.size} matches in $region are: ")
         matches.forEach {
             sb.appendLine("${dateFormat.format(it.date)}: **${it.team1}** vs **${it.team2}**")
         }

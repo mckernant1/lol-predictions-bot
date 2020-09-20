@@ -21,18 +21,35 @@ val fileHandler = FileHandler(
 
 val schedules = mutableMapOf<String, Thread>()
 
-fun getSchedule(region: String, numberToGet: Int): List<Match> {
-    return getMatchesWithThreads(region).matches
+fun getSchedule(region: String, numberToGet: Int?): List<Match> {
+    val matches = getMatchesWithThreads(region).matches
         .sortedBy { it.date }.dropWhile {
             it.date < ZonedDateTime.now(ZoneId.of("UTC"))
-        }.take(numberToGet)
+        }
+
+    return if (numberToGet == null) {
+        val first = matches.first()
+        matches.takeWhile {
+            it.date.isBefore(first.date + Duration.ofHours(12))
+        }
+    } else {
+        matches.take(numberToGet)
+    }
 }
 
-fun getResults(region: String, numberToGet: Int): List<Match> {
-    return getMatchesWithThreads(region).matches
+fun getResults(region: String, numberToGet: Int?): List<Match> {
+    val matches = getMatchesWithThreads(region).matches
         .sortedByDescending { it.date }.dropWhile {
             it.date > ZonedDateTime.now(ZoneId.of("UTC"))
-        }.take(numberToGet)
+        }
+    return if (numberToGet == null) {
+        val first = matches.first()
+        matches.takeWhile {
+            it.date.isAfter(first.date - Duration.ofHours(12))
+        }
+    } else {
+        matches.take(numberToGet)
+    }
 }
 
 fun getMatchesWithThreads(region: String): Split {
