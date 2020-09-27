@@ -12,17 +12,17 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
 
 ### Esports Commands
-!schedule <league> [number of matches] -> Displays the upcoming games for the region
+`!schedule \<league> [number of matches]` -> Displays the upcoming games for the region
 
-!results <league> [number of matches] -> Displays the most recent results for the region 
+`!results \<league> [number of matches]` -> Displays the most recent results for the region 
 
-!standings <league> -> Disaplys the standings for the region 
+`!standings \<league>` -> Disaplys the standings for the region 
 
 ### Predictions Commands
-!predict <league> [number of matches] -> Prints a message where you can set your predictions. Disappears after 5 mins.
+`!predict \<league> [number of matches]` -> Prints a message where you can set your predictions. Disappears after 5 mins.
 
-!predictions <league> [number of matches] -> Prints out he predictions for upcoming matches
+`!predictions \<league> [number of matches]` -> Prints out he predictions for upcoming matches
 
-!report <league> [number of matches] -> Reports the most recent matches and who predicted what
+`!report \<league> [number of matches]` -> Reports the most recent matches and who predicted what
 
-!stats <league> -> Displays the predictions standings
+`!stats \<league>` -> Displays the predictions standings
