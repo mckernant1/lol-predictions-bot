@@ -9,7 +9,7 @@ import org.litote.kmongo.`in`
 class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val results = getMatchesWithThreads(region).matches
-
+            .filter { it.winner == it.team1 || it.winner == it.team2 }
 
         val users = try {
             event.guild.members.map { it.id }
