@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim AS build
+FROM openjdk:8 AS build
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
