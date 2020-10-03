@@ -20,6 +20,8 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 !predictions <league> [number of matches] -> Prints out he predictions for upcoming matches
                 !report <league> [number of matches] -> Reports the most recent matches and who predicted what
                 !stats <league> -> Displays the predictions standings
+                **Extras**
+                File an issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
             """.trimIndent()
             ).queue()
         }
