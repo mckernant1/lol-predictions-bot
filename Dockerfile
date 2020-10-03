@@ -1,4 +1,4 @@
-FROM alpine:3.7 AS build
+FROM openjdk:8-jre-slim AS build
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
