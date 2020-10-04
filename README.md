@@ -25,4 +25,4 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 
 `!report \<league> [number of matches]` -> Reports the most recent matches and who predicted what
 
-`!stats \<league>` -> Displays the predictions standings
+`!stats \<league> [number of matches]` -> Displays the predictions standings. Default number of matches is the whole split

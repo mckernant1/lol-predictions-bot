@@ -19,7 +19,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 !predict <league> [number of matches] -> Prints a message where you can set your predictions. Disappears after 5 mins.
                 !predictions <league> [number of matches] -> Prints out he predictions for upcoming matches
                 !report <league> [number of matches] -> Reports the most recent matches and who predicted what
-                !stats <league> -> Displays the predictions standings
+                !stats <league> [number of matches] -> Displays the predictions standings. Default number of matches is the whole split
                 **Extras**
                 File an issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
             """.trimIndent()

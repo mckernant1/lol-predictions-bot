@@ -5,12 +5,20 @@ import com.github.mckernant1.runner.utils.collection
 import com.github.mckernant1.runner.utils.getMatchesWithThreads
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
-        val results = getMatchesWithThreads(region).matches
-            .filter { it.winner == it.team1 || it.winner == it.team2 }
-
+        var results = getMatchesWithThreads(region).matches
+            .sortedByDescending { it.date }.dropWhile {
+                it.date > ZonedDateTime.now(ZoneId.of("UTC"))
+            }
+        results = if (numToGet != null) {
+            results.take(numToGet!!)
+        } else {
+            results
+        }
         val users = try {
             event.guild.members.map { it.id }
         } catch (e: IllegalStateException) {
@@ -46,6 +54,6 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     )
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..2) && validateRegion(event, 1)
+        return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2)
     }
 }
