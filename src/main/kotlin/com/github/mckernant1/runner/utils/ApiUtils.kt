@@ -30,7 +30,7 @@ val scheduleClient = ScheduleClient(esportsApiConfig = esportsApiConfig)
 private val dbUser: String = System.getenv("MONGO_USER") ?: throw Exception("Environment variable MONGO_USER has not been specified")
 private val dbPassword: String = System.getenv("MONGO_PASSWORD") ?: throw Exception("Environment variable MONGO_PASSWORD has not been specified")
 
-private val client = KMongo.createClient("mongodb://$dbUser:$dbPassword@ds359118.mlab.com:59118/lol-prediction?retryWrites=false")
+private val client = KMongo.createClient("mongodb+srv://$dbUser:$dbPassword@lol-prediction.5wr2n.mongodb.net/lol-prediction?retryWrites=true&w=majority")
 val collection = client.getDatabase("lol-prediction").getCollection<Prediction>("discord-predictions")
 
 data class Prediction (

@@ -29,7 +29,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected fun validateNumberOfMatches(event: MessageReceivedEvent, position: Int): Boolean {
         val words = getWordsFromMessage(event.message)
         numToGet = words.getOrNull(position)?.toInt()
-        return (numToGet == null || numToGet!! > 1)
+        return (numToGet == null || numToGet!! >= 1)
             .also { logger.info("validateNumberOfMatches with number $numToGet and result: $it") }
     }
 
