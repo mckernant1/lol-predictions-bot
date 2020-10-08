@@ -22,7 +22,7 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             val message = event.channel.sendMessage(msg).complete()
             message.addReaction(BLUE_TEAM_EMOJI).complete()
             message.addReaction(RED_TEAM_EMOJI).complete()
-            timer.schedule(Duration.ofMinutes(1).toMillis()) {
+            timer.schedule(Duration.ofMinutes(5).toMillis()) {
                 val blueTeamUsers =
                     message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
                 val redTeamUsers =
