@@ -1,25 +1,32 @@
 package com.github.mckernant1.runner.utils
 
-import com.github.mckernant1.fs.FileHandler
+
+import com.github.mckernant1.fs.TimedFileCache
 import com.github.mckernant1.fs.startJobThread
 import com.github.mckernant1.lolapi.schedule.Match
 import com.github.mckernant1.lolapi.schedule.Split
 import com.github.mckernant1.lolapi.tournaments.Standing
 import net.dv8tion.jda.api.entities.Message
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Year
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.*
 
 
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
-val fileHandler = FileHandler(
+private val fileCacheLogger: Logger = LoggerFactory.getLogger("")
+
+private val fileHandler = TimedFileCache(
     duration = Duration.ofMinutes(60),
-    logger = System.out
+    logger = { fileCacheLogger.info(it) }
 )
 
-val schedules = mutableMapOf<String, Thread>()
+private val jobTimer = Timer()
+val schedules = mutableMapOf<String, TimerTask>()
 
 fun getSchedule(region: String, numberToGet: Int?): List<Match> {
     val matches = getMatchesWithThreads(region).matches
@@ -59,7 +66,7 @@ fun getMatchesWithThreads(region: String): Split {
     }
     if (!schedules.containsKey(scheduleId)) {
         println("Starting Thread for retrieving $scheduleId")
-        schedules[scheduleId] = startJobThread(Duration.ofHours(1)) {
+        schedules[scheduleId] = jobTimer.startJobThread(Duration.ofHours(1)) {
             fileHandler.getResult(scheduleId) {
                 getMatches(region)
             }
@@ -80,7 +87,7 @@ fun getStandings(region: String): List<Standing> {
     }
     if (!schedules.containsKey(leagueId)) {
         println("Starting Thread for retrieving $leagueId")
-        schedules[leagueId] = startJobThread(Duration.ofMinutes(5)) {
+        schedules[leagueId] = jobTimer.startJobThread(Duration.ofMinutes(5)) {
             fileHandler.getResult(leagueId) {
                 val list = arrayListOf<Standing>()
                 list.addAll(tournamentClient.getStandingsForLeague(league.id, Year.now().value))

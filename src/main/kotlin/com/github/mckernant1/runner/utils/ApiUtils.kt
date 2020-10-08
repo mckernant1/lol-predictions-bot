@@ -16,10 +16,10 @@ private val cacheConfig: CacheConfig = CacheConfig.custom()
     .setHeuristicDefaultLifetime(7200)
     .build()
 
-val logger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
+private val esportsLogger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
     cacheConfig = cacheConfig,
-    logger = { logger.info(it) },
+    logger = { esportsLogger.info(it) },
     endpointHost = HostUrl.ESPORTS_API_2
 )
 
