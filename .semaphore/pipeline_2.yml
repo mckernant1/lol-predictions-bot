@@ -12,9 +12,10 @@ blocks:
           commands:
             - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
             - checkout
+            - cache restore
             - 'docker pull "${DOCKER_USERNAME}"/lol-predictions-bot:latest || true'
-            - 'docker build --cache-from "${DOCKER_USERNAME}"/lol-predictions-bot:latest -t "${DOCKER_USERNAME}"/lol-predictions-bot:$SEMAPHORE_WORKFLOW_ID .'
+            - 'docker build --cache-from "${DOCKER_USERNAME}"/lol-predictions-bot:latest -t "${DOCKER_USERNAME}"/lol-predictions-bot:latest .'
             - docker images
-            - 'docker push "${DOCKER_USERNAME}"/lol-predictions-bot:$SEMAPHORE_WORKFLOW_ID'
+            - 'docker push "${DOCKER_USERNAME}"/lol-predictions-bot:latest'
       secrets:
         - name: Docker Secrets

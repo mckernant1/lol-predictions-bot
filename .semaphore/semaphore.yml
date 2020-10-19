@@ -12,13 +12,16 @@ blocks:
           commands:
             - checkout
             - ./gradlew build
+            - cache store
   - name: Gradle Test
     task:
       jobs:
         - name: test
           commands:
             - checkout
+            - cache restore
             - ./gradlew test
+            - cache store
 promotions:
   - name: Dockerize
     pipeline_file: pipeline_2.yml
