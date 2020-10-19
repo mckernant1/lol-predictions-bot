@@ -24,6 +24,6 @@ blocks:
             - cache store
 promotions:
   - name: Dockerize
-    pipeline_file: pipeline_2.yml
+    pipeline_file: push_to_docker_hub.yml
     auto_promote:
       when: branch = 'master' AND result = 'passed'
