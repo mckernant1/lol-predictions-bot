@@ -1,0 +1,21 @@
+version: v1.0
+name: Pipeline 2
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Docker Build
+    task:
+      jobs:
+        - name: Docker push
+          commands:
+            - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
+            - checkout
+            - cache restore
+            - 'docker pull "${DOCKER_USERNAME}"/lol-predictions-bot:latest || true'
+            - 'docker build --cache-from "${DOCKER_USERNAME}"/lol-predictions-bot:latest -t "${DOCKER_USERNAME}"/lol-predictions-bot:latest .'
+            - docker images
+            - 'docker push "${DOCKER_USERNAME}"/lol-predictions-bot:latest'
+      secrets:
+        - name: Docker Secrets
