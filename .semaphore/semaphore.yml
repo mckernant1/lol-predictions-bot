@@ -1,14 +1,26 @@
 version: v1.0
-name: Docker
+name: Gradle Build and Test
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Docker Build
+  - name: Gradle Build
     task:
       jobs:
-        - name: docker build
+        - name: build
           commands:
             - checkout
-            - docker build -t lol-predictions-bot .
+            - ./gradlew build
+  - name: Gradle Test
+    task:
+      jobs:
+        - name: test
+          commands:
+            - checkout
+            - ./gradlew test
+promotions:
+  - name: Dockerize
+    pipeline_file: pipeline_2.yml
+    auto_promote:
+      when: branch = 'master' AND result = 'passed'

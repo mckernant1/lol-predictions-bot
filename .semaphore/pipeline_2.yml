@@ -1,0 +1,18 @@
+version: v1.0
+name: Pipeline 2
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Docker Build
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
+            - checkout
+            - 'docker pull "${DOCKER_USERNAME}"/lol-predictions-bot:latest || true'
+            - 'docker build --cache-from "${DOCKER_USERNAME}"/lol-predictions-bot:latest -t "${DOCKER_USERNAME}"/lol-predictions-bot:$SEMAPHORE_WORKFLOW_ID .'
+            - docker images
+            - 'docker push "${DOCKER_USERNAME}"/lol-predictions-bot:$SEMAPHORE_WORKFLOW_ID'
