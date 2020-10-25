@@ -13,7 +13,8 @@ import java.time.Duration
 import java.time.Year
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
@@ -34,6 +35,8 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
             it.date < ZonedDateTime.now(ZoneId.of("UTC"))
         }
 
+    if (matches.isEmpty()) return emptyList()
+
     return if (numberToGet == null) {
         val first = matches.first()
         matches.takeWhile {
@@ -49,6 +52,9 @@ fun getResults(region: String, numberToGet: Int?): List<Match> {
         .sortedByDescending { it.date }.dropWhile {
             it.date > ZonedDateTime.now(ZoneId.of("UTC"))
         }
+
+    if (matches.isEmpty()) return emptyList()
+
     return if (numberToGet == null) {
         val first = matches.first()
         matches.takeWhile {
