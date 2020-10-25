@@ -9,6 +9,11 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val matches = getSchedule(region, numToGet)
+        if (matches.isEmpty()) {
+            val message = "There are no matches listed"
+            event.channel.sendMessage(message).complete()
+            return
+        }
         val replyString = formatScheduleReply(matches, region)
         event.channel.sendMessage(replyString).queue()
     }

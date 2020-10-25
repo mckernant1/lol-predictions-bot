@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import java.time.Duration
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.schedule
 
 
@@ -15,6 +15,12 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val matches = getSchedule(region, numToGet)
+        if (matches.isEmpty()) {
+            val message = "There are no matches to predict"
+            event.channel.sendMessage(message).complete()
+            return
+        }
+
         matches.forEach { match ->
             val date = match.date
             val msg = "${dateFormat.format(date)}: \uD83D\uDD35 **${match.team1}** vs **${match.team2}** \uD83D\uDD34\n" +

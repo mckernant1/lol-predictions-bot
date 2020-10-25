@@ -8,6 +8,11 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val matches = getResults(region, numToGet)
+        if (matches.isEmpty()) {
+            val message = "There are no results"
+            event.channel.sendMessage(message).complete()
+            return
+        }
         val replyString =
             formatResultsReply(matches, region)
         event.channel.sendMessage(replyString).queue()

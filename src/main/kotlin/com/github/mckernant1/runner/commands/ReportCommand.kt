@@ -18,6 +18,12 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val results = if (previous) getResults(region, numToGet) else getSchedule(region, numToGet)
 
+        if (results.isEmpty()) {
+            val message = "There are no matches to report"
+            event.channel.sendMessage(message).complete()
+            return
+        }
+
         val users = try {
             event.guild.members.map { it.id }
         } catch (e: IllegalStateException) {
