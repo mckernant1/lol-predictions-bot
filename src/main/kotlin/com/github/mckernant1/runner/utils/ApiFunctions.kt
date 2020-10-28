@@ -19,8 +19,8 @@ import java.util.TimerTask
 
 val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
-private val fileCacheLogger: Logger = LoggerFactory.getLogger("")
-
+private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
+private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")
 private val fileHandler = TimedFileCache(
     duration = Duration.ofMinutes(60),
     logger = { fileCacheLogger.info(it) }
@@ -34,7 +34,7 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
         .sortedBy { it.date }.dropWhile {
             it.date < ZonedDateTime.now(ZoneId.of("UTC"))
         }
-
+    retrievalLogger.info("matches: $matches")
     if (matches.isEmpty()) return emptyList()
 
     return if (numberToGet == null) {
