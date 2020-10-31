@@ -1,4 +1,4 @@
-package com.github.mckernant1.runner.utils
+package com.github.mckernant1.lol.predictions.bot.utils
 
 
 import com.github.mckernant1.fs.TimedFileCache
@@ -15,9 +15,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.Timer
 import java.util.TimerTask
-
-
-val BOT_TOKEN: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
 
 private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
 private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")

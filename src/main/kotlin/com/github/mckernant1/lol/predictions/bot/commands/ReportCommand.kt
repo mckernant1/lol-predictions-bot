@@ -1,9 +1,9 @@
-package com.github.mckernant1.runner.commands
+package com.github.mckernant1.lol.predictions.bot.commands
 
-import com.github.mckernant1.runner.utils.Prediction
-import com.github.mckernant1.runner.utils.collection
-import com.github.mckernant1.runner.utils.getResults
-import com.github.mckernant1.runner.utils.getSchedule
+import com.github.mckernant1.lol.predictions.bot.utils.Prediction
+import com.github.mckernant1.lol.predictions.bot.utils.collection
+import com.github.mckernant1.lol.predictions.bot.utils.getResults
+import com.github.mckernant1.lol.predictions.bot.utils.getSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 import org.litote.kmongo.and

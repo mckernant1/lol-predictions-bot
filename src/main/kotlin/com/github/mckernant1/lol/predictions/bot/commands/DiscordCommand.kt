@@ -1,7 +1,7 @@
-package com.github.mckernant1.runner.commands
+package com.github.mckernant1.lol.predictions.bot.commands
 
-import com.github.mckernant1.runner.utils.getLeagues
-import com.github.mckernant1.runner.utils.getWordsFromMessage
+import com.github.mckernant1.lol.predictions.bot.utils.getLeagues
+import com.github.mckernant1.lol.predictions.bot.utils.getWordsFromMessage
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

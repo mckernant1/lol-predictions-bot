@@ -9,7 +9,7 @@ group = "com.github.mckernant1"
 version = "0.0.1"
 
 application {
-    mainClassName = "com.github.mckernant1.runner.RunnerKt"
+    mainClassName = "com.github.mckernant1.lol.predictions.bot.RunnerKt"
 }
 
 repositories {
@@ -27,6 +27,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")
     implementation("org.litote.kmongo:kmongo:4.1.2")
+    testImplementation("org.testng:testng:7.3.0")
 }
 
 tasks {
@@ -38,6 +39,12 @@ tasks {
     }
 }
 
+task<Test>("test-integration") {
+    useTestNG {
+        suites("src/test/resources/testng.xml")
+        includeGroups("integration")
+    }
+}
 
 tasks.withType<ShadowJar>() {
     manifest {

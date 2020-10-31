@@ -1,7 +1,7 @@
-package com.github.mckernant1.runner.commands
+package com.github.mckernant1.lol.predictions.bot.commands
 
 import com.github.mckernant1.lolapi.schedule.Match
-import com.github.mckernant1.runner.utils.getSchedule
+import com.github.mckernant1.lol.predictions.bot.utils.getSchedule
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

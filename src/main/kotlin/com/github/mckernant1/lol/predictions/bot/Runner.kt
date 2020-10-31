@@ -1,12 +1,12 @@
-package com.github.mckernant1.runner
+package com.github.mckernant1.lol.predictions.bot
 
-import com.github.mckernant1.runner.commands.*
-import com.github.mckernant1.runner.utils.BOT_TOKEN
-import com.github.mckernant1.runner.utils.getWordsFromMessage
-import com.github.mckernant1.runner.utils.reactUserError
-import com.github.mckernant1.runner.utils.reactUserOk
+import com.github.mckernant1.lol.predictions.bot.commands.*
+import com.github.mckernant1.lol.predictions.bot.utils.getWordsFromMessage
+import com.github.mckernant1.lol.predictions.bot.utils.reactUserError
+import com.github.mckernant1.lol.predictions.bot.utils.reactUserOk
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -18,11 +18,15 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 
-
 fun main() {
+    val botToken: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
+    startBot(botToken)
+}
+
+fun startBot(token: String): JDA {
     File("store").mkdir()
-    JDABuilder.create(
-        BOT_TOKEN,
+    return JDABuilder.create(
+        token,
         GatewayIntent.GUILD_MEMBERS,
         GatewayIntent.GUILD_MESSAGES,
         GatewayIntent.GUILD_MESSAGE_TYPING,
@@ -47,7 +51,7 @@ fun main() {
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = getWordsFromMessage(event.message)
-        if (event.author.isBot || words.isEmpty()) return
+        if (words.isEmpty()) return
 
         val command = when (words[0]) {
             "!schedule" -> ScheduleCommand(event)

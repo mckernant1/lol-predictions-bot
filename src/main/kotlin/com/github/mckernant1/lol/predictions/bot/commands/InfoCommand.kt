@@ -1,12 +1,21 @@
-package com.github.mckernant1.runner.commands
+package com.github.mckernant1.lol.predictions.bot.commands
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
+
     override suspend fun execute() {
-        if (!event.author.isBot) {
+        if (event.author.id != event.jda.selfUser.id) {
             event.channel.sendMessage(
-                """
+                infoString
+            ).queue()
+        }
+    }
+
+    override fun validate(): Boolean = true
+
+    companion object {
+        val infoString = """
                 **Basic Info**
                 !info lists this menu
                 <league> refers to one of the league codes (lcs, lpl, lck, ...) 
@@ -23,11 +32,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 **Extras**
                 File an issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
             """.trimIndent()
-            ).queue()
-        }
     }
-
-    override fun validate(): Boolean = true
 
 }
 

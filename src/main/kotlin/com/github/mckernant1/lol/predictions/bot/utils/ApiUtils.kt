@@ -1,4 +1,4 @@
-package com.github.mckernant1.runner.utils
+package com.github.mckernant1.lol.predictions.bot.utils
 
 import com.github.mckernant1.lolapi.config.EsportsApiConfig
 import com.github.mckernant1.lolapi.config.HostUrl

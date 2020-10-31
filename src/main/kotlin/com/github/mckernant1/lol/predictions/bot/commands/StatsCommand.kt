@@ -1,8 +1,8 @@
-package com.github.mckernant1.runner.commands
+package com.github.mckernant1.lol.predictions.bot.commands
 
-import com.github.mckernant1.runner.utils.Prediction
-import com.github.mckernant1.runner.utils.collection
-import com.github.mckernant1.runner.utils.getMatchesWithThreads
+import com.github.mckernant1.lol.predictions.bot.utils.Prediction
+import com.github.mckernant1.lol.predictions.bot.utils.collection
+import com.github.mckernant1.lol.predictions.bot.utils.getMatchesWithThreads
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 import java.time.ZoneId
