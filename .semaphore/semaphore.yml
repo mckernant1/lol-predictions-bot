@@ -23,7 +23,7 @@ blocks:
             - ./gradlew test
             - cache store
 promotions:
-  - name: Dockerize
-    pipeline_file: push_to_docker_hub.yml
+  - name: Promote to integration test
+    pipeline_file: integration_test.yml
     auto_promote:
       when: branch = 'master' AND result = 'passed'
