@@ -14,13 +14,9 @@ blocks:
             - cache restore
             - ./gradlew test-integration
             - cache store
-      env_vars:
-        - name: TEST_BOT_TOKEN
-          value: NzcxOTQ0NjM1NTEzNzAwMzUz.X5zfdw.0YwOiAsNvHqxNQ5gHj3yXSSKb48
-        - name: MONGO_STRING
-          value: 'mongodb+srv://discord-bot:botpass1@lol-prediction.5wr2n.mongodb.net/lol-prediction?retryWrites=true&w=majority'
-        - name: BETA_BOT_TOKEN
-          value: NzcxOTQyOTg4OTEzMzExNzc1.X5zd7g.D76Q32mjDlc1vYGACVITzwlGHDA
+      env_vars: []
+      secrets:
+        - name: Integration Test Secrets
 promotions:
   - name: Dockerize
     pipeline_file: push_to_docker_hub.yml
