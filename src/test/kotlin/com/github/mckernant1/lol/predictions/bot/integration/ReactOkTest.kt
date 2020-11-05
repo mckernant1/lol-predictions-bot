@@ -1,6 +1,5 @@
 package com.github.mckernant1.lol.predictions.bot.integration
 
-import com.github.mckernant1.lol.predictions.bot.commands.InfoCommand
 import com.github.mckernant1.lol.predictions.bot.startBot
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -45,13 +44,13 @@ class ReactOkTest {
 
     @Test(groups = ["integration"])
     fun checkInfoCommand() {
-        testerBotChannel.sendMessage("!info").complete()
-        var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        val message = testerBotChannel.sendMessage("!info").complete()
+        var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentDisplay
         while (mostRecentMessage == "!info") {
             println("Waiting for responce")
-            mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+            mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentDisplay
         }
-        assertEquals(mostRecentMessage, InfoCommand.infoString)
+        assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
     }
 
     @Test(groups = ["integration"])
