@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent

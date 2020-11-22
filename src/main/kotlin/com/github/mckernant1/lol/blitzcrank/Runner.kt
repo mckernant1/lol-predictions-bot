@@ -1,9 +1,9 @@
-package com.github.mckernant1.lol.predictions.bot
+package com.github.mckernant1.lol.blitzcrank
 
-import com.github.mckernant1.lol.predictions.bot.commands.*
-import com.github.mckernant1.lol.predictions.bot.utils.getWordsFromMessage
-import com.github.mckernant1.lol.predictions.bot.utils.reactUserError
-import com.github.mckernant1.lol.predictions.bot.utils.reactUserOk
+import com.github.mckernant1.lol.blitzcrank.commands.*
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
+import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA

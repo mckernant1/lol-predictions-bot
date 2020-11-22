@@ -1,11 +1,11 @@
-package com.github.mckernant1.lol.predictions.bot.utils
+package com.github.mckernant1.lol.blitzcrank.utils
 
 
 import com.github.mckernant1.fs.TimedFileCache
 import com.github.mckernant1.fs.startJobThread
-import com.github.mckernant1.lolapi.schedule.Match
-import com.github.mckernant1.lolapi.schedule.Split
-import com.github.mckernant1.lolapi.tournaments.Standing
+import com.github.mckernant1.lol.heimerdinger.schedule.Match
+import com.github.mckernant1.lol.heimerdinger.schedule.Split
+import com.github.mckernant1.lol.heimerdinger.tournaments.Standing
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

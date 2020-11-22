@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
@@ -9,7 +9,7 @@ group = "com.github.mckernant1"
 version = "0.0.1"
 
 application {
-    mainClassName = "com.github.mckernant1.lol.predictions.bot.RunnerKt"
+    mainClassName = "com.github.mckernant1.lol.blitzcrank.RunnerKt"
 }
 
 repositories {
@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
     implementation("net.dv8tion:JDA:4.2.0_204")
     implementation("org.apache.httpcomponents:httpclient-cache:4.5.12")
-    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.15")
+    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.16_1")
     implementation("com.github.mckernant1:kotlin-file-cache:0.0.3")
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")

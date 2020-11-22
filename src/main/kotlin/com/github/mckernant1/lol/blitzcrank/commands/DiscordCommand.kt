@@ -1,7 +1,7 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lol.predictions.bot.utils.getLeagues
-import com.github.mckernant1.lol.predictions.bot.utils.getWordsFromMessage
+import com.github.mckernant1.lol.blitzcrank.utils.getLeagues
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

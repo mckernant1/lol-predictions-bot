@@ -1,7 +1,8 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lolapi.tournaments.Standing
-import com.github.mckernant1.lol.predictions.bot.utils.getStandings
+
+import com.github.mckernant1.lol.blitzcrank.utils.getStandings
+import com.github.mckernant1.lol.heimerdinger.tournaments.Standing
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

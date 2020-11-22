@@ -1,8 +1,8 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lol.predictions.bot.utils.Prediction
-import com.github.mckernant1.lol.predictions.bot.utils.collection
-import com.github.mckernant1.lol.predictions.bot.utils.getMatchesWithThreads
+import com.github.mckernant1.lol.blitzcrank.utils.Prediction
+import com.github.mckernant1.lol.blitzcrank.utils.collection
+import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.`in`
 import java.time.ZoneId

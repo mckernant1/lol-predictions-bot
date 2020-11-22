@@ -3,7 +3,7 @@
 <suite name="integration suite" parallel="false">
     <test name="integration">
         <classes>
-            <class name="com.github.mckernant1.lol.predictions.bot.integration.ReactOkTest"/>
+            <class name="com.github.mckernant1.lol.blitzcrank.integration.ReactOkTest"/>
         </classes>
     </test>
 </suite>

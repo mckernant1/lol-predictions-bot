@@ -1,7 +1,7 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lolapi.schedule.Match
-import com.github.mckernant1.lol.predictions.bot.utils.getResults
+import com.github.mckernant1.lol.blitzcrank.utils.getResults
+import com.github.mckernant1.lol.heimerdinger.schedule.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

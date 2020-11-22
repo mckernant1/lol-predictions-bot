@@ -1,7 +1,7 @@
-package com.github.mckernant1.lol.predictions.bot.commands
+package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lolapi.schedule.Match
-import com.github.mckernant1.lol.predictions.bot.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.heimerdinger.schedule.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

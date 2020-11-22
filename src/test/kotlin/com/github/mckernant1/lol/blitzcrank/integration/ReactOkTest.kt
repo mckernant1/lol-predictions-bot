@@ -1,6 +1,6 @@
-package com.github.mckernant1.lol.predictions.bot.integration
+package com.github.mckernant1.lol.blitzcrank.integration
 
-import com.github.mckernant1.lol.predictions.bot.startBot
+import com.github.mckernant1.lol.blitzcrank.startBot
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.TextChannel
