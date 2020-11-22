@@ -1,5 +1,7 @@
 ## League of legends esports bot
-[![Build Status](https://mckernant1.semaphoreci.com/badges/lol-predictions-bot/branches/master.svg?style=shields)](https://mckernant1.semaphoreci.com/projects/lol-predictions-bot)
+#### Semaphore Pipeline [![Build Status](https://mckernant1.semaphoreci.com/badges/lol-predictions-bot/branches/master.svg?style=shields)](https://mckernant1.semaphoreci.com/projects/lol-predictions-bot)
+
+
 
 This bot provides schedule, results, and standings for all regions listed in the esports api.
 To add this bot to your discord server [Click here](https://discord.com/api/oauth2/authorize?client_id=725169546633281628&permissions=2112&scope=bot)
