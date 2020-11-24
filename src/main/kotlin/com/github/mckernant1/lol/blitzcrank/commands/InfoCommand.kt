@@ -6,11 +6,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
-        if (event.author.id != event.jda.selfUser.id) {
-            event.channel.sendMessage(
-                infoMessage
-            ).queue()
-        }
+        event.channel.sendMessage(
+            infoMessage
+        ).queue()
     }
 
     override fun validate(): Boolean = true

@@ -51,7 +51,7 @@ fun startBot(token: String): JDA {
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val words = getWordsFromMessage(event.message)
-        if (words.isEmpty()) return
+        if (words.isEmpty() || event.author.id == event.jda.selfUser.id) return
 
         val command = when (words[0]) {
             "!schedule" -> ScheduleCommand(event)
