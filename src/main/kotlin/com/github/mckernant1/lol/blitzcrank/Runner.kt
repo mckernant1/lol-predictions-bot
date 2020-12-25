@@ -69,6 +69,7 @@ class MessageListener : ListenerAdapter() {
             .queue {
                 if (command.validate()) {
                     reactUserOk(event.message)
+                    logger.info("Launching Coroutine...")
                     GlobalScope.launch {
                         command.execute()
                     }
@@ -80,5 +81,8 @@ class MessageListener : ListenerAdapter() {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
+    }
+    init {
+        logger.info("MessageListener has been registered")
     }
 }
