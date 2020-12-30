@@ -1,5 +1,4 @@
 ## League of legends esports bot
-#### Semaphore Pipeline [![Build Status](https://mckernant1.semaphoreci.com/badges/lol-predictions-bot/branches/master.svg?style=shields)](https://mckernant1.semaphoreci.com/projects/lol-predictions-bot)
 
 
 
