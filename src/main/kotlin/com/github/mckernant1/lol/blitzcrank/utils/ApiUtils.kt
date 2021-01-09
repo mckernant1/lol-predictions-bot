@@ -5,20 +5,13 @@ import com.github.mckernant1.lol.heimerdinger.config.HostUrl
 import com.github.mckernant1.lol.heimerdinger.leagues.LeagueClient
 import com.github.mckernant1.lol.heimerdinger.schedule.ScheduleClient
 import com.github.mckernant1.lol.heimerdinger.tournaments.TournamentClient
-import org.apache.http.impl.client.cache.CacheConfig
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.getCollection
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-private val cacheConfig: CacheConfig = CacheConfig.custom()
-    .setSharedCache(false)
-    .setHeuristicDefaultLifetime(7200)
-    .build()
-
 private val esportsLogger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
-    cacheConfig = cacheConfig,
     logger = { esportsLogger.info(it) },
     endpointHost = HostUrl.ESPORTS_API_2
 )
