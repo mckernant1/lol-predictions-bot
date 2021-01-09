@@ -11,6 +11,10 @@ import org.testng.annotations.Test
 
 class ReactOkTest {
 
+    companion object {
+        private const val testTimeoutMillis = 120000L
+    }
+
     private lateinit var betaBot: JDA
     private lateinit var testerBot: JDA
     private lateinit var betaBotChannel: TextChannel
@@ -42,7 +46,7 @@ class ReactOkTest {
     }
 
 
-    @Test(groups = ["integration"])
+    @Test(groups = ["integration"], timeOut = testTimeoutMillis)
     fun checkInfoCommand() {
         val message = testerBotChannel.sendMessage("!info").complete()
         var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentDisplay
@@ -53,7 +57,7 @@ class ReactOkTest {
         assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
     }
 
-    @Test(groups = ["integration"])
+    @Test(groups = ["integration"], timeOut = testTimeoutMillis)
     fun checkResultsOk() {
         val message = testerBotChannel.sendMessage("!results worlds").complete()
         var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
@@ -64,8 +68,8 @@ class ReactOkTest {
         assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
     }
 
-    @Test(groups = ["integration"])
-    fun checkScheduleOk() {
+    @Test(groups = ["integration"], timeOut = testTimeoutMillis)
+    fun checkWorldsScheduleOk() {
         val message = testerBotChannel.sendMessage("!schedule worlds").complete()
         var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
         while (mostRecentMessage == "!schedule worlds") {
@@ -75,4 +79,25 @@ class ReactOkTest {
         assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
     }
 
+    @Test(groups = ["integration"], timeOut = testTimeoutMillis)
+    fun checkLCSScheduleOk() {
+        val message = testerBotChannel.sendMessage("!schedule worlds").complete()
+        var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        while (mostRecentMessage == "!schedule lcs") {
+            println("Waiting for responce")
+            mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        }
+        assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+    }
+
+    @Test(groups = ["integration"], timeOut = testTimeoutMillis)
+    fun checkLCKScheduleOk() {
+        val message = testerBotChannel.sendMessage("!schedule worlds").complete()
+        var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        while (mostRecentMessage == "!schedule lck") {
+            println("Waiting for responce")
+            mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        }
+        assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+    }
 }
