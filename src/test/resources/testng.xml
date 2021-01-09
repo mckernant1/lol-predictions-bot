@@ -2,8 +2,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="integration suite" parallel="false">
     <test name="integration">
-        <classes>
-            <class name="com.github.mckernant1.lol.blitzcrank.integration.ReactOkTest"/>
-        </classes>
+        <packages>
+            <package name="com.github.mckernant1.lol.blitzcrank.integration.*"/>
+        </packages>
     </test>
 </suite>
