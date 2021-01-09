@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
     implementation("net.dv8tion:JDA:4.2.0_204")
     implementation("org.apache.httpcomponents:httpclient-cache:4.5.12")
-    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.16_1")
+    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.17")
     implementation("com.github.mckernant1:kotlin-file-cache:0.0.3")
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")
