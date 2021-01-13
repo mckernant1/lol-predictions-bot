@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 
 private val esportsLogger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
-    logger = { esportsLogger.info(it) },
+    logger = { esportsLogger.debug(it) },
     endpointHost = HostUrl.ESPORTS_API_2
 )
 
