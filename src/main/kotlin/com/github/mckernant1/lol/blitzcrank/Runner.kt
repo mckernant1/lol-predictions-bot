@@ -65,23 +65,23 @@ class MessageListener : ListenerAdapter() {
             else -> return
         }
 
-        event.channel.sendTyping()
-            .queue {
-                if (command.validate()) {
-                    reactUserOk(event.message)
-                    logger.info("Launching Coroutine...")
-                    GlobalScope.launch {
-                        command.execute()
-                    }
-                } else {
-                    reactUserError(event.message)
-                }
+        event.channel.sendTyping().complete()
+        if (command.validate()) {
+            reactUserOk(event.message)
+            logger.info("Launching Coroutine...")
+            GlobalScope.launch {
+                command.execute()
             }
+        } else {
+            reactUserError(event.message)
+        }
+
     }
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
     }
+
     init {
         logger.info("MessageListener has been registered")
     }
