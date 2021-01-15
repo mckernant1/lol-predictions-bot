@@ -4,8 +4,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.*
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -17,6 +16,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import kotlin.concurrent.thread
 
 fun main() {
     val botToken: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
@@ -70,8 +70,10 @@ class MessageListener : ListenerAdapter() {
         if (command.validate()) {
             reactUserOk(event.message)
             logger.info("Launching Coroutine...")
-            GlobalScope.launch {
-                command.execute()
+            val commandThread = thread {
+                runBlocking {
+                    command.execute()
+                }
             }
         } else {
             reactUserError(event.message)
