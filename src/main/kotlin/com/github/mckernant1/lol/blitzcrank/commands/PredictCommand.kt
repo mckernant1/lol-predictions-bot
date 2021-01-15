@@ -4,6 +4,7 @@ import com.github.mckernant1.lol.blitzcrank.utils.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.collection
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.litote.kmongo.and
@@ -31,7 +32,7 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
             launch {
                 logger.info("Starting Thread to wait for 5 mins then check the result")
-                Thread.sleep(Duration.ofMinutes(5).toMillis())
+                delay(Duration.ofMinutes(5).toMillis())
                 logger.info("Done sleeping")
                 val blueTeamUsers =
                     message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
