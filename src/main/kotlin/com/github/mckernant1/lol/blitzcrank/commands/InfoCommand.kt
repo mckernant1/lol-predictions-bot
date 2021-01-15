@@ -25,7 +25,8 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             .addField("Esports Commands", """
                 !schedule <league> [number of matches] -> Displays the upcoming games for the region
                 !results <league> [number of matches] -> Displays the most recent results for the region
-                !standings <league> -> Disaplys the standings for the region
+                !standings <league> -> Displays the standings for the region
+                !roster <team code> -> Displays the roster for a team
             """.trimIndent(), false)
             .addField("Predictions Commands", """
                 !predict <league> [number of matches] -> Prints a message where you can set your predictions. Disappears after 5 mins.

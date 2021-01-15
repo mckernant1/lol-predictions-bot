@@ -62,6 +62,7 @@ class MessageListener : ListenerAdapter() {
             "!report" -> ReportCommand(event, true)
             "!predictions" -> ReportCommand(event, false)
             "!stats" -> StatsCommand(event)
+            "!roster" -> RosterCommand(event)
             else -> return
         }
 
