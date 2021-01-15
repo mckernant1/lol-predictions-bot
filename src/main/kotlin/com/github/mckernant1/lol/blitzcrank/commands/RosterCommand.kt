@@ -22,7 +22,7 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     private fun formatMessage(team: Team): String {
-        return "${team.name.toUpperCase()} Current Roster:\n" +
+        return "${team.name.capitalize()} Current Roster:\n" +
                 team.players
                     .sortedBy { RoleSort.valueOf(it.role.toUpperCase()).sorter }
                     .groupBy { it.role }
