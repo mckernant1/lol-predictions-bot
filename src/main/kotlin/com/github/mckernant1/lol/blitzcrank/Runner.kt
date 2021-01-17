@@ -69,7 +69,7 @@ class MessageListener : ListenerAdapter() {
         event.channel.sendTyping().complete()
         if (command.validate()) {
             reactUserOk(event.message)
-            logger.info("Running command='$command' in server='${event.guild.id}'")
+            logger.info("Running command='${command::class.simpleName}' in server='${event.guild.id}'")
             thread {
                 runBlocking {
                     command.execute()
