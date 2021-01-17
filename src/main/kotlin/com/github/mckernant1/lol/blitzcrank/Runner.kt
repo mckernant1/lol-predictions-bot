@@ -69,8 +69,8 @@ class MessageListener : ListenerAdapter() {
         event.channel.sendTyping().complete()
         if (command.validate()) {
             reactUserOk(event.message)
-            logger.info("Launching Coroutine...")
-            val commandThread = thread {
+            logger.info("Running command='$command' in server='${event.guild.id}'")
+            thread {
                 runBlocking {
                     command.execute()
                 }
