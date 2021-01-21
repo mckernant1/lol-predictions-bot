@@ -5,6 +5,7 @@ import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
 import kotlinx.coroutines.runBlocking
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -16,6 +17,8 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.concurrent.thread
 
 fun main() {
@@ -72,7 +75,12 @@ class MessageListener : ListenerAdapter() {
             logger.info("Running command='${command::class.simpleName}' in server='${event.guild.id}'")
             thread {
                 runBlocking {
-                    command.execute()
+                    try {
+                        command.execute()
+                    } catch (e: Exception) {
+                        logger.error("Caught exception while running command '$words': ", e)
+                        event.channel.sendMessage(createErrorMessage(e)).complete()
+                    }
                 }
             }
         } else {
@@ -80,6 +88,14 @@ class MessageListener : ListenerAdapter() {
         }
 
     }
+
+    private fun createErrorMessage(e: Exception) = EmbedBuilder()
+        .addField("Whoops!", "We have an encountered an error, you can file a github issue if you feel like it", true)
+        .addField("Include this message in issue",
+            "Timestamp: ${ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)}\n" +
+                    "Error message: ${e.message}", false)
+        .addField("File an issue", "[mckernant1/lol-predictions-bot](https://github.com/mckernant1/lol-predictions-bot/issues/new)", false)
+        .build()
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
