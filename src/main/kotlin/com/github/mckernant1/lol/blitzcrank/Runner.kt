@@ -92,7 +92,7 @@ class MessageListener : ListenerAdapter() {
     private fun createErrorMessage(e: Exception) = EmbedBuilder()
         .addField("Whoops!", "We have an encountered an error, you can file a github issue if you feel like it", true)
         .addField("Include this message in issue",
-            "Timestamp: ${ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)}\n" +
+            "Timestamp: ${ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)}\n" +
                     "Error message: ${e.message}", false)
         .addField("File an issue", "[mckernant1/lol-predictions-bot](https://github.com/mckernant1/lol-predictions-bot/issues/new)", false)
         .build()
