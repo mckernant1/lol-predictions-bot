@@ -1,6 +1,10 @@
 package com.github.mckernant1.lol.blitzcrank
 
+import com.github.mckernant1.lol.blitzcrank.aws.AWSCloudwatchMetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.aws.MetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.aws.NoMetricsMetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.commands.*
+import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
@@ -72,14 +76,19 @@ class MessageListener : ListenerAdapter() {
         event.channel.sendTyping().complete()
         if (command.validate()) {
             reactUserOk(event.message)
-            logger.info("Running command='${command::class.simpleName}' in server='${event.guild.id}'")
             thread {
                 runBlocking {
+                    val commandString = "${words[0].removePrefix("!").capitalize()}Command"
+
+                    logger.info("Running command='${commandString}' in server='${getServerIdOrUserId(event)}'")
+
+                    cwp.putCommandUsedMetric(commandString)
                     try {
                         command.execute()
                     } catch (e: Exception) {
                         logger.error("Caught exception while running command '$words': ", e)
                         event.channel.sendMessage(createErrorMessage(e)).complete()
+                        cwp.putErrorMetric()
                     }
                 }
             }
@@ -91,14 +100,25 @@ class MessageListener : ListenerAdapter() {
 
     private fun createErrorMessage(e: Exception) = EmbedBuilder()
         .addField("Whoops!", "We have an encountered an error, you can file a github issue if you feel like it", true)
-        .addField("Include this message in issue",
+        .addField(
+            "Include this message in issue",
             "Timestamp: ${ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)}\n" +
-                    "Error message: ${e.message}", false)
-        .addField("File an issue", "[mckernant1/lol-predictions-bot](https://github.com/mckernant1/lol-predictions-bot/issues/new)", false)
+                    "Error message: ${e.message}", false
+        )
+        .addField(
+            "File an issue",
+            "[mckernant1/lol-predictions-bot](https://github.com/mckernant1/lol-predictions-bot/issues/new)",
+            false
+        )
         .build()
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
+        private val cwp: MetricsPublisher =
+            if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true))
+                AWSCloudwatchMetricsPublisher()
+            else
+                NoMetricsMetricsPublisher()
     }
 
     init {

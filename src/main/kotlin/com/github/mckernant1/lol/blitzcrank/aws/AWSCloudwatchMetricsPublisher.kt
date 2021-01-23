@@ -11,18 +11,21 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 
-class AWSCloudwatchMetricsPublisher {
+class AWSCloudwatchMetricsPublisher : MetricsPublisher {
 
     private val cw = CloudWatchClient.builder().build()
 
-    fun putCommandUsed(commandName: String) {
+    companion object {
+        private const val NAMESPACE = "Discord-bots/Predictions-Bot"
+    }
+
+    override fun putCommandUsedMetric(commandName: String) {
         val dimension = Dimension.builder()
-            .name("COMMANDS")
-            .value("COUNT")
+            .name("Commands")
+            .value("Count")
             .build()
 
-        val time = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
-        val instant = Instant.parse(time)
+        val instant = getInstant()
 
         val datum = MetricDatum.builder()
             .metricName(commandName)
@@ -32,11 +35,32 @@ class AWSCloudwatchMetricsPublisher {
             .dimensions(dimension).build()
 
         val request = PutMetricDataRequest.builder()
-            .namespace("DISCORD-BOTS/PREDICTIONS-BOT")
+            .namespace(NAMESPACE)
             .metricData(datum).build()
-
-
         cw.putMetricData(request)
     }
+
+    override fun putErrorMetric() {
+        val dimension = Dimension.builder()
+            .name("ErrorCount")
+            .value("Count")
+            .build()
+
+        val instant = getInstant()
+
+        val datum = MetricDatum.builder()
+            .metricName("Error")
+            .unit(StandardUnit.COUNT)
+            .value(1.0)
+            .timestamp(instant)
+            .dimensions(dimension).build()
+
+        val request = PutMetricDataRequest.builder()
+            .namespace(NAMESPACE)
+            .metricData(datum).build()
+        cw.putMetricData(request)
+    }
+
+    private fun getInstant() = Instant.parse(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
 
 }
