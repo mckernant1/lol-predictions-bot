@@ -1,6 +1,7 @@
 ## League of legends esports bot
 
-[AWS Dashboard](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=Discord-Bots&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTY1MzUyODg3Mzk1MSIsIlUiOiJ1cy1lYXN0LTFfWWdlV3dsS0tGIiwiQyI6Ijc4OHJ1bGIzdDNvaTc3dTJjbGhoOTlzbGNpIiwiSSI6InVzLWVhc3QtMTo2Y2I0ZmQ2Yy04MWJlLTRmNjYtYmM1ZS01OTJmYzZmZjdhYWYiLCJNIjoiUHVibGljIn0=)
+[![Discord Chat](https://img.shields.io/discord/802610953396551720?label=support)](https://discord.gg/Dvq8f5KxZT)  
+[![Dashboard](https://img.shields.io/static/v1?label=AWS&message=Dashboard&color=green)](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=Discord-Bots&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTY1MzUyODg3Mzk1MSIsIlUiOiJ1cy1lYXN0LTFfWWdlV3dsS0tGIiwiQyI6Ijc4OHJ1bGIzdDNvaTc3dTJjbGhoOTlzbGNpIiwiSSI6InVzLWVhc3QtMTo2Y2I0ZmQ2Yy04MWJlLTRmNjYtYmM1ZS01OTJmYzZmZjdhYWYiLCJNIjoiUHVibGljIn0=)
 
 This bot provides schedule, results, and standings for all regions listed in the esports api.
 To add this bot to your discord server [Click here](https://discord.com/api/oauth2/authorize?client_id=725169546633281628&permissions=2112&scope=bot)
