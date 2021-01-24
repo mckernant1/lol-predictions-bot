@@ -33,6 +33,7 @@ dependencies {
 
     implementation(platform("software.amazon.awssdk:bom:2.15.0"))
     implementation("software.amazon.awssdk:cloudwatch")
+    implementation("software.amazon.awssdk:dynamodb")
 
     testImplementation("org.testng:testng:7.3.0")
 }

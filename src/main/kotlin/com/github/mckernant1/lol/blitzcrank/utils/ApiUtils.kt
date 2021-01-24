@@ -1,5 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
+import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.heimerdinger.config.EsportsApiConfig
 import com.github.mckernant1.lol.heimerdinger.config.HostUrl
 import com.github.mckernant1.lol.heimerdinger.leagues.LeagueClient
@@ -29,9 +30,4 @@ private val connectionString: String = System.getenv("MONGO_STRING")
 private val client = KMongo.createClient(connectionString)
 val collection = client.getDatabase("lol-prediction").getCollection<Prediction>("discord-predictions")
 
-data class Prediction (
-    val matchId: String,
-    val userId: String,
-    val prediction: String
-)
 

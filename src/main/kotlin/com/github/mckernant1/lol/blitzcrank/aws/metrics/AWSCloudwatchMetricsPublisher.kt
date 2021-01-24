@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.blitzcrank.aws
+package com.github.mckernant1.lol.blitzcrank.aws.metrics
 
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
 import software.amazon.awssdk.services.cloudwatch.model.Dimension
