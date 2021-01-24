@@ -1,8 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank
 
-import com.github.mckernant1.lol.blitzcrank.aws.AWSCloudwatchMetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.MetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.NoMetricsMetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.aws.metrics.AWSCloudwatchMetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.aws.metrics.MetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.aws.metrics.NoMetricsMetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.commands.*
 import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage

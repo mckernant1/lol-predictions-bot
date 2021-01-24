@@ -29,10 +29,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
-    implementation("org.litote.kmongo:kmongo:4.1.2")
-
-    implementation(platform("software.amazon.awssdk:bom:2.15.0"))
+    implementation(platform("software.amazon.awssdk:bom:2.15.69"))
     implementation("software.amazon.awssdk:cloudwatch")
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
 
     testImplementation("org.testng:testng:7.3.0")
 }

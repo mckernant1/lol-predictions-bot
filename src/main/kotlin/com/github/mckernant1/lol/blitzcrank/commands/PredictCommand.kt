@@ -1,14 +1,12 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lol.blitzcrank.utils.Prediction
-import com.github.mckernant1.lol.blitzcrank.utils.collection
+import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import org.litote.kmongo.and
-import org.litote.kmongo.eq
 import java.time.Duration
 
 
@@ -40,16 +38,11 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
                 val predictions =
                     mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers).map { (team, users) ->
-                        users.map { Prediction(match.id, it, team) }
+                        users.map { Prediction(matchId = match.id, userId = it, prediction = team) }
                     }.flatten().also { logger.info("Saving prediction: $it") }
                 predictions.forEach {
-                    collection.deleteMany(
-                        and(
-                            Prediction::userId eq it.userId,
-                            Prediction::matchId eq it.matchId
-                        )
-                    )
-                    collection.insertOne(it)
+                    predictionsTable.deletePrediction(it.userId, it.matchId)
+                    predictionsTable.addItem(it)
                 }
                 message.delete().complete()
             }

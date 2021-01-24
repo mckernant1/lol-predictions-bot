@@ -1,12 +1,9 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lol.blitzcrank.utils.Prediction
-import com.github.mckernant1.lol.blitzcrank.utils.collection
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import org.litote.kmongo.`in`
-import org.litote.kmongo.and
 
 class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     private var previous: Boolean = false
@@ -31,12 +28,10 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             listOf(event.message.author.id)
         }.also { logger.info("User Ids in server: $it") }
 
-        val predictions = collection.find(
-            and(
-                Prediction::userId `in` users,
-                Prediction::matchId `in` results.map { it.id }
-            )
-        )
+        val predictions = users
+            .flatMap { predictionsTable.getUsersPredictions(it) }
+            .filter { userPrediction -> results.map { it.id }.contains(userPrediction.matchId) }
+
         val predictionString = results.joinToString("\n\n") { match ->
             "Match **${match.team1}** vs **${match.team2}**:\n" +
                     "${

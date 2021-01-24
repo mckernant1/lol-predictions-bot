@@ -1,10 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
-import com.github.mckernant1.lol.blitzcrank.utils.Prediction
-import com.github.mckernant1.lol.blitzcrank.utils.collection
 import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
+import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import org.litote.kmongo.`in`
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -25,9 +23,10 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             listOf(event.message.author.id)
         }
 
-        val serverMatches = collection.find(
-            Prediction::userId `in` users
-        )
+
+        val serverMatches = users.flatMap {
+            predictionsTable.getUsersPredictions(it)
+        }
 
         val resultString = users.map { userId ->
             val numberPredicted = serverMatches.count { prediction ->
