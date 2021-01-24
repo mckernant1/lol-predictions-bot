@@ -87,8 +87,8 @@ class MessageListener : ListenerAdapter() {
                         command.execute()
                     } catch (e: Exception) {
                         logger.error("Caught exception while running command '$words': ", e)
-                        event.channel.sendMessage(createErrorMessage(e)).complete()
                         cwp.putErrorMetric()
+                        event.channel.sendMessage(createErrorMessage(e)).complete()
                     }
                 }
             }
