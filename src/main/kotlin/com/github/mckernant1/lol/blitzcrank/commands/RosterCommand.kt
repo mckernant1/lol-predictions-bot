@@ -36,7 +36,8 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         JUNGLE(2),
         MID(3),
         BOTTOM(4),
-        SUPPORT(5)
+        SUPPORT(5),
+        NONE(6);
     }
 
 }
