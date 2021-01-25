@@ -34,7 +34,8 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 !report <league> [number of matches] -> Reports the most recent matches and who predicted what
                 !stats <league> [number of matches] -> Displays the predictions standings. Default number of matches is the whole split
             """.trimIndent(), false)
-            .addField("File an issue", "[Github](https://github.com/mckernant1/lol-predictions-bot/issues/new)", true)
+            .addField("File an issue", "[Github](https://github.com/mckernant1/lol-predictions-bot/issues/new)", false)
+            .addField("See Dashboard", "[AWS Dashboard](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=Predictions-Bot-Dashboard&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTY1MzUyODg3Mzk1MSIsIlUiOiJ1cy1lYXN0LTFfWWdlV3dsS0tGIiwiQyI6Ijc4OHJ1bGIzdDNvaTc3dTJjbGhoOTlzbGNpIiwiSSI6InVzLWVhc3QtMTo0ODhlOWRmNi1hOThlLTQzMTItOGE0YS0zMzZkYTVkNzI2ZWMiLCJNIjoiUHVibGljIn0=)", false)
             .build()
 
     }
