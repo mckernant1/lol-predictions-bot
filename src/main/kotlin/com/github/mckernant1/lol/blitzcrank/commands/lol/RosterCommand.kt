@@ -1,5 +1,6 @@
-package com.github.mckernant1.lol.blitzcrank.commands
+package com.github.mckernant1.lol.blitzcrank.commands.lol
 
+import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.teamClient
 import com.github.mckernant1.lol.heimerdinger.team.Team

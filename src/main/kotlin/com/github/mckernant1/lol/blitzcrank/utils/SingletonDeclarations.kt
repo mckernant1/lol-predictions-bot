@@ -1,6 +1,7 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
 import com.github.mckernant1.lol.blitzcrank.aws.ddb.PredictionTableAccess
+import com.github.mckernant1.lol.blitzcrank.aws.ddb.UserSettingsTableAccess
 import com.github.mckernant1.lol.heimerdinger.config.EsportsApiConfig
 import com.github.mckernant1.lol.heimerdinger.config.HostUrl
 import com.github.mckernant1.lol.heimerdinger.leagues.LeagueClient
@@ -22,4 +23,5 @@ val scheduleClient = ScheduleClient(esportsApiConfig = esportsApiConfig)
 val teamClient = TeamClient(esportsApiConfig = esportsApiConfig)
 
 val predictionsTable = PredictionTableAccess()
+val userSettingsTable = UserSettingsTableAccess()
 

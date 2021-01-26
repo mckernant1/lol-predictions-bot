@@ -3,7 +3,9 @@ package com.github.mckernant1.lol.blitzcrank
 import com.github.mckernant1.lol.blitzcrank.aws.metrics.AWSCloudwatchMetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.aws.metrics.MetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.aws.metrics.NoMetricsMetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.commands.*
+import com.github.mckernant1.lol.blitzcrank.commands.lol.*
+import com.github.mckernant1.lol.blitzcrank.commands.util.InfoCommand
+import com.github.mckernant1.lol.blitzcrank.commands.util.SetTimezoneCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
@@ -70,6 +72,7 @@ class MessageListener : ListenerAdapter() {
             "!predictions" -> ReportCommand(event, false)
             "!stats" -> StatsCommand(event)
             "!roster" -> RosterCommand(event)
+            "!setTimezone" -> SetTimezoneCommand(event)
             else -> return
         }
 

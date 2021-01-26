@@ -1,5 +1,6 @@
-package com.github.mckernant1.lol.blitzcrank.commands
+package com.github.mckernant1.lol.blitzcrank.commands.lol
 
+import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
 import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
