@@ -89,7 +89,7 @@ fun getStandings(region: String): List<Standing> {
         list
     }
     if (!schedules.containsKey(leagueId)) {
-        println("Starting Thread for retrieving $leagueId")
+        fileCacheLogger.info("Starting Thread for retrieving $leagueId")
         schedules[leagueId] = jobTimer.startJobThread(Duration.ofMinutes(5)) {
             fileHandler.getResult(leagueId) {
                 val list = arrayListOf<Standing>()
