@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.concurrent.thread
 
 fun main() {
-    val botToken: String = System.getenv("BOT_TOKEN") ?: throw Exception("BOT_TOKEN environment variable required")
+    val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
     startBot(botToken)
 }
 

@@ -8,8 +8,10 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema
 class UserSettingsTableAccess {
 
     companion object {
+        private val TABLE_NAME = System.getenv("USER_SETTINGS_TABLE_NAME")
+            ?: error("Environment variable 'USER_SETTINGS_TABLE_NAME' is now defined")
         private val table: DynamoDbTable<UserSettings> =
-            ddbClient.table("user-settings", TableSchema.fromClass(UserSettings::class.java))
+            ddbClient.table(TABLE_NAME, TableSchema.fromClass(UserSettings::class.java))
     }
 
     fun getSettingsForUser(discordId: String): UserSettings =

@@ -8,8 +8,10 @@ import java.util.stream.Collectors
 class PredictionTableAccess {
 
     companion object {
+        private val TABLE_NAME = System.getenv("PREDICTIONS_TABLE_NAME")
+            ?: error("Environment variable 'PREDICTIONS_TABLE_NAME' is now defined")
         private val table: DynamoDbTable<Prediction> =
-            ddbClient.table("discord-predictions", TableSchema.fromImmutableClass(Prediction::class.java))
+            ddbClient.table(TABLE_NAME, TableSchema.fromImmutableClass(Prediction::class.java))
     }
 
 
