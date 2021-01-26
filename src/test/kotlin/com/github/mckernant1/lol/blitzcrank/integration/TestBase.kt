@@ -11,7 +11,6 @@ internal open class TestBase {
         const val testTimeoutMillis = 120000L
     }
     protected lateinit var testerBot: JDA
-    protected lateinit var betaBotChannel: TextChannel
     protected lateinit var testerBotChannel: TextChannel
 
     @BeforeClass(groups = ["integration"])
@@ -23,8 +22,6 @@ internal open class TestBase {
             .awaitReady()
         val testerBotGuild = testerBot.guilds.find { it.idLong == 725179342631600158 }!!
         testerBotChannel = testerBotGuild.textChannels.find { it.name == "beta-testing" }!!
-
-        betaBotChannel.sendMessage("BetaBot Ready").complete()
         testerBotChannel.sendMessage("TesterBot Ready").complete()
     }
 
