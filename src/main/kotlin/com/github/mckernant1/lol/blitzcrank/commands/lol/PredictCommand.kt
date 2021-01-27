@@ -42,7 +42,6 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                         users.map { Prediction(matchId = match.id, userId = it, prediction = team) }
                     }.flatten().also { logger.info("Saving prediction: $it") }
                 predictions.forEach {
-                    predictionsTable.deletePrediction(it.userId, it.matchId)
                     predictionsTable.addItem(it)
                 }
                 message.delete().complete()
