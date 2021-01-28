@@ -6,7 +6,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 
 @DynamoDbBean
 class UserSettings(
-    var timezone: String? = null,
     @get:DynamoDbPartitionKey
     @get:DynamoDbAttribute("discordId") var discordId: String? = null,
-)
+    var timezone: String? = null
+) {
+    override fun toString(): String = "[discordId=$discordId, timezone=$timezone]"
+}

@@ -12,7 +12,7 @@ class PredictionTableAccess {
 
     companion object {
         private val TABLE_NAME = System.getenv("PREDICTIONS_TABLE_NAME")
-            ?: error("Environment variable 'PREDICTIONS_TABLE_NAME' is now defined")
+            ?: error("Environment variable 'PREDICTIONS_TABLE_NAME' is not defined")
         private val table: DynamoDbTable<Prediction> =
             ddbClient.table(TABLE_NAME, TableSchema.fromImmutableClass(Prediction::class.java))
     }
@@ -28,5 +28,5 @@ class PredictionTableAccess {
         return table.query(query).items().stream().collect(Collectors.toList())
     }
 
-    fun addItem(prediction: Prediction) = table.putItem(prediction)
+    fun putItem(prediction: Prediction) = table.putItem(prediction)
 }

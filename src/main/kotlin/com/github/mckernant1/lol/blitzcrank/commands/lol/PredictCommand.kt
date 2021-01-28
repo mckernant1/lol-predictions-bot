@@ -29,21 +29,21 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             message.addReaction(BLUE_TEAM_EMOJI).complete()
             message.addReaction(RED_TEAM_EMOJI).complete()
 
-            launch {
+            return@map launch {
                 logger.info("Starting Thread to wait for 5 mins then check the result")
+//                delay(Duration.ofSeconds(30).toMillis()) // For Testing
                 delay(Duration.ofMinutes(5).toMillis())
+
                 logger.info("Done sleeping")
                 val blueTeamUsers =
                     message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
                 val redTeamUsers =
                     message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
-                val predictions =
-                    mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers).map { (team, users) ->
+                val predictions = mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers)
+                    .map { (team, users) ->
                         users.map { Prediction(matchId = match.id, userId = it, prediction = team) }
                     }.flatten().also { logger.info("Saving prediction: $it") }
-                predictions.forEach {
-                    predictionsTable.addItem(it)
-                }
+                predictions.forEach { predictionsTable.putItem(it) }
                 message.delete().complete()
             }
         }.forEach { it.join() }
