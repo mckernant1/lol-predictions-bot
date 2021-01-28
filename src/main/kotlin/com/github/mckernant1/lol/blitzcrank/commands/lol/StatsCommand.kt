@@ -1,5 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
+import com.github.mckernant1.collections.cartesianProduct
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
 import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
@@ -25,9 +26,10 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         }
 
 
-        val serverMatches = users.flatMap {
-            predictionsTable.getUsersPredictions(it)
-        }
+        val serverMatches = users.cartesianProduct(results)
+            .mapNotNull { (userId, match) ->
+                predictionsTable.getItem(userId, match.id)
+            }
 
         val resultString = users.map { userId ->
             val numberPredicted = serverMatches.count { prediction ->

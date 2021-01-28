@@ -1,5 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
+import com.github.mckernant1.collections.cartesianProduct
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
@@ -29,9 +30,10 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             listOf(event.message.author.id)
         }.also { logger.info("User Ids in server: $it") }
 
-        val predictions = users
-            .flatMap { predictionsTable.getUsersPredictions(it) }
-            .filter { userPrediction -> results.map { it.id }.contains(userPrediction.matchId) }
+        val predictions = users.cartesianProduct(results)
+            .mapNotNull { (userId, result) ->
+                predictionsTable.getItem(userId, result.id)
+            }
 
         val predictionString = results.joinToString("\n\n") { match ->
             "Match **${match.team1}** vs **${match.team2}**:\n" +
