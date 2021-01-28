@@ -41,9 +41,11 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 !stats <league> [number of matches] -> Displays the predictions standings. Default number of matches is the whole split
             """.trimIndent(), false
             )
-            .addField("User Settings",
-            "!setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles. If you try PST or a code it will tell your what it should be",
-            false)
+            .addField(
+                "User Settings",
+                "!setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles. If you try PST or a code it will tell your what it should be",
+                false
+            )
             .addField(
                 "Useful Links",
                 "[File a github issue](https://github.com/mckernant1/lol-predictions-bot/issues/new)\n[Join Discord Support Server](https://discord.gg/Dvq8f5KxZT)\n[AWS Dashboard](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=Predictions-Bot-Dashboard&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTY1MzUyODg3Mzk1MSIsIlUiOiJ1cy1lYXN0LTFfWWdlV3dsS0tGIiwiQyI6Ijc4OHJ1bGIzdDNvaTc3dTJjbGhoOTlzbGNpIiwiSSI6InVzLWVhc3QtMTo0ODhlOWRmNi1hOThlLTQzMTItOGE0YS0zMzZkYTVkNzI2ZWMiLCJNIjoiUHVibGljIn0=)",

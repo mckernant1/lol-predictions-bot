@@ -9,7 +9,7 @@ class UserSettingsTableAccess {
 
     companion object {
         private val TABLE_NAME = System.getenv("USER_SETTINGS_TABLE_NAME")
-            ?: error("Environment variable 'USER_SETTINGS_TABLE_NAME' is now defined")
+            ?: error("Environment variable 'USER_SETTINGS_TABLE_NAME' is not defined")
         private val table: DynamoDbTable<UserSettings> =
             ddbClient.table(TABLE_NAME, TableSchema.fromClass(UserSettings::class.java))
     }
