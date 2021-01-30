@@ -83,11 +83,9 @@ class MessageListener : ListenerAdapter() {
                 runBlocking {
                     val commandString = "${words[0].removePrefix("!").capitalize()}Command"
 
-                    logger.info("Running command='${commandString}' in from='${try {
-                        "server"
-                    } catch (e: IllegalStateException) {
-                        "user"
-                    }}' with id='${getServerIdOrUserId(event)}'")
+                    val serverOrUser = if (event.isFromGuild) "server" else "user"
+
+                    logger.info("Running command='${commandString}' from='${serverOrUser}' with id='${getServerIdOrUserId(event)}'")
 
                     cwp.putCommandUsedMetric(commandString)
                     try {
