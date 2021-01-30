@@ -39,4 +39,4 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 
 ### User Settings
 
-`!setTimezone <Timezone>` -> This will set your timezone. Timezone should be formatted like America/Los_Angeles. If you try PST or a code it will tell your what it should be
+`!setTimezone <Timezone>` -> !setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles or a timezone code such as PST or CET. Example: !setTimezone PST

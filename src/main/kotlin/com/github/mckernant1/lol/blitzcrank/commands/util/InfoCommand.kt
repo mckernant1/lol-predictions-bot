@@ -43,7 +43,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             )
             .addField(
                 "User Settings",
-                "!setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles. If you try PST or a code it will tell your what it should be",
+                "!setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles or a timezone code such as PST or CET. Example: !setTimezone PST",
                 false
             )
             .addField(
