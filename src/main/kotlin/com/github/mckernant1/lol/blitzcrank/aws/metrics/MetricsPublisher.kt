@@ -5,4 +5,6 @@ interface MetricsPublisher {
     fun putCommandUsedMetric(commandName: String)
 
     fun putErrorMetric()
+
+    fun putNoErrorMetric()
 }

@@ -88,8 +88,10 @@ class MessageListener : ListenerAdapter() {
                     logger.info("Running command='${commandString}' from='${serverOrUser}' with id='${getServerIdOrUserId(event)}'")
 
                     cwp.putCommandUsedMetric(commandString)
+
                     try {
                         command.execute()
+                        cwp.putNoErrorMetric()
                     } catch (e: Exception) {
                         logger.error("Caught exception while running command '$words': ", e)
                         cwp.putErrorMetric()
