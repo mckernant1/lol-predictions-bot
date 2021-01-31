@@ -47,6 +47,8 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 message.delete().complete()
             }
         }.forEach { it.join() }
+        event.channel.sendMessage(
+            "Predictions have been recorded for ${matches.size} ${if (matches.size == 1) "match" else "matches"} in the $region").complete()
     }
 
     override fun validate(): Boolean {
