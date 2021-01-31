@@ -1,6 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.integration
 
-import org.testng.Assert
+import org.testng.Assert.assertEquals
 import org.testng.annotations.Test
 
 internal class LCKSchedule : TestBase() {
@@ -12,6 +12,7 @@ internal class LCKSchedule : TestBase() {
             println("Waiting for responce")
             mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
         }
-        Assert.assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+        assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+        assertEquals(message.retrieveReactionUsers("❌").complete().size, 0)
     }
 }

@@ -14,6 +14,7 @@ internal class InfoCommand : TestBase() {
             mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentDisplay
         }
         assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+        assertEquals(message.retrieveReactionUsers("❌").complete().size, 0)
     }
 
 }

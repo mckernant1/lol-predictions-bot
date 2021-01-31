@@ -6,10 +6,7 @@ import com.github.mckernant1.lol.blitzcrank.aws.metrics.NoMetricsMetricsPublishe
 import com.github.mckernant1.lol.blitzcrank.commands.lol.*
 import com.github.mckernant1.lol.blitzcrank.commands.util.InfoCommand
 import com.github.mckernant1.lol.blitzcrank.commands.util.SetTimezoneCommand
-import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
-import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
-import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
-import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
+import com.github.mckernant1.lol.blitzcrank.utils.*
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
@@ -95,6 +92,7 @@ class MessageListener : ListenerAdapter() {
                     } catch (e: Exception) {
                         logger.error("Caught exception while running command '$words': ", e)
                         cwp.putErrorMetric()
+                        reactInternalError(event.message)
                         event.channel.sendMessage(createErrorMessage(e)).complete()
                     }
                 }
