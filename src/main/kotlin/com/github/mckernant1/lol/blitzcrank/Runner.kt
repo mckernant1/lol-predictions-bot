@@ -1,8 +1,5 @@
 package com.github.mckernant1.lol.blitzcrank
 
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.AWSCloudwatchMetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.MetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.NoMetricsMetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.commands.lol.*
 import com.github.mckernant1.lol.blitzcrank.commands.util.InfoCommand
 import com.github.mckernant1.lol.blitzcrank.commands.util.SetTimezoneCommand
@@ -20,13 +17,17 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.concurrent.scheduleAtFixedRate
 import kotlin.concurrent.thread
 
 fun main() {
     val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
-    startBot(botToken)
+    val bot = startBot(botToken)
+    publishBotMetrics(bot)
 }
 
 fun startBot(token: String): JDA {
@@ -51,6 +52,13 @@ fun startBot(token: String): JDA {
         .addEventListeners(MessageListener())
         .build()
         .awaitReady()
+}
+
+fun publishBotMetrics(bot: JDA) {
+    val timer = Timer()
+    timer.scheduleAtFixedRate(0, Duration.ofMinutes(5).toMillis()) {
+        cwp.putNumServers(bot.guilds.size)
+    }
 }
 
 
@@ -119,11 +127,6 @@ class MessageListener : ListenerAdapter() {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
-        private val cwp: MetricsPublisher =
-            if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true))
-                AWSCloudwatchMetricsPublisher()
-            else
-                NoMetricsMetricsPublisher()
     }
 
     init {

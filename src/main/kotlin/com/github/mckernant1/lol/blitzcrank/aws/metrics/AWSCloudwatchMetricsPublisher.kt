@@ -19,6 +19,27 @@ class AWSCloudwatchMetricsPublisher : MetricsPublisher {
         private const val NAMESPACE = "Discord-bots/Predictions-Bot"
     }
 
+    override fun putNumServers(number: Int) {
+        val dimension = Dimension.builder()
+            .name("Servers")
+            .value("Count")
+            .build()
+
+        val instant = getInstant()
+
+        val datum = MetricDatum.builder()
+            .metricName("count")
+            .unit(StandardUnit.COUNT)
+            .value(number.toDouble())
+            .timestamp(instant)
+            .dimensions(dimension).build()
+
+        val request = PutMetricDataRequest.builder()
+            .namespace(NAMESPACE)
+            .metricData(datum).build()
+        cw.putMetricData(request)
+    }
+
     override fun putCommandUsedMetric(commandName: String) {
         val dimension = Dimension.builder()
             .name("Commands")
