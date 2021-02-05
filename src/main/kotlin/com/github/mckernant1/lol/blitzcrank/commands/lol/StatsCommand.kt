@@ -42,18 +42,24 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
             return@map PredictionRatio(userId, numberPredicted, numberCorrect)
         }.filter { it.numberPredicted != 0 }
-            .sortedByDescending { it.numberCorrect / it.numberPredicted.toDouble() }
+            .sortedByDescending { it.getPredictionPercentage() }
             .joinToString("\n") {
-                "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${100 * it.numberCorrect / it.numberPredicted.toDouble()}%**"
+                "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
             }
-        event.channel.sendMessage("Prediction results are:\n$resultString").complete()
+        if (resultString.isBlank()) {
+            event.channel.sendMessage("There are no past matches for this tournament").complete()
+        } else {
+            event.channel.sendMessage("Prediction results for $region are:\n$resultString").complete()
+        }
     }
 
     private data class PredictionRatio(
         val userId: String,
         val numberPredicted: Int,
         val numberCorrect: Int
-    )
+    ) {
+        fun getPredictionPercentage() = 100 * numberCorrect / numberPredicted.toDouble()
+    }
 
     override fun validate(): Boolean {
         return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2)
