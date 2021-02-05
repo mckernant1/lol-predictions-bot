@@ -1,6 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank
 
-import com.github.mckernant1.lol.blitzcrank.utils.MessageListener
+import com.github.mckernant1.lol.blitzcrank.core.MessageListener
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder

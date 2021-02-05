@@ -1,5 +1,6 @@
-package com.github.mckernant1.lol.blitzcrank.utils
+package com.github.mckernant1.lol.blitzcrank.core
 
+import com.github.mckernant1.lol.blitzcrank.utils.*
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
