@@ -23,7 +23,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected val dateFormat: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.LONG)
         .withZone(
-            ZoneId.of(userSettings.timezone ?: "America/Los_Angeles")
+            ZoneId.of(userSettings.timezone)
         )
 
     abstract suspend fun execute()

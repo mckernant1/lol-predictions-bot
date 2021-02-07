@@ -8,7 +8,8 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 class UserSettings(
     @get:DynamoDbPartitionKey
     @get:DynamoDbAttribute("discordId") var discordId: String? = null,
-    var timezone: String? = null
+    var timezone: String = "America/Los_Angeles"
 ) {
+
     override fun toString(): String = "[discordId=$discordId, timezone=$timezone]"
 }
