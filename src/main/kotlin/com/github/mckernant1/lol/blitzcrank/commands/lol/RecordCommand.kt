@@ -34,7 +34,6 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             .sortedByDescending { it.getWinRatio() }
             .joinToString("\n") { "${it.team}: ${it.numWins}W, ${it.getLosses()}L - ${it.getWinRatio()}%" }
         val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode}:\n$teamStrings"
-        println(messageString)
         event.channel.sendMessage(messageString).complete()
     }
 
