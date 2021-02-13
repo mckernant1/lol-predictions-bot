@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.Duration
-import java.time.Year
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.Timer
@@ -81,7 +80,7 @@ fun getMatchesWithThreads(region: String): Split {
 
 fun getStandings(region: String): List<Standing> {
     val league = leagueClient.getLeagueByName(region)
-    return tournamentClient.getStandingsForLeague(league.id, Year.now().value)
+    return tournamentClient.getStandingsForMostRecentTournamentInLeague(league.id)
 }
 
 fun getTeamFromName(teamName: String): Team {
