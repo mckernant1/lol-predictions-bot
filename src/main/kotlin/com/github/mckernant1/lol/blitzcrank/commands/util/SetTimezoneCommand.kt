@@ -35,7 +35,7 @@ class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         userSettingsTable.putSettings(userSettings)
 
         event.channel.sendMessage(
-            "Your timezone has now been set to ${zoneId.id}. Your current time should be ${dateFormat.withZone(zoneId).format(ZonedDateTime.now())}"
+            "Your timezone has now been set to ${zoneId.id}. Your current time should be ${longDateFormat.withZone(zoneId).format(ZonedDateTime.now())}"
         ).complete()
     }
 

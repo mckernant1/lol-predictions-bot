@@ -4,7 +4,9 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getTeamFromName
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import com.github.mckernant1.lol.heimerdinger.schedule.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import java.time.ZonedDateTime
 
 class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
@@ -29,16 +31,26 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
         val teamStrings = matchesGroupedByTeam
             .map { (teamName, matches) ->
-                Record(teamName, matches.count { it.winner.equals(team1.name, ignoreCase = true) }, matches.size)
+                Record(
+                    teamName,
+                    matches.first().date,
+                    matches,
+                    matches.count { it.winner.equals(team1.name, ignoreCase = true) },
+                    matches.size
+                )
             }
-            .sortedByDescending { it.getWinRatio() }
-            .joinToString("\n") { "${it.team}: ${it.numWins}W, ${it.getLosses()}L - ${it.getWinRatio()}%" }
+            .sortedByDescending { it.mostRecentMatchDate }
+            .joinToString("\n") { record ->
+                "${record.team} - ${record.getWinRatio()}%: \n" +
+                        record.matches.joinToString("\n") { "\t ${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}" } }
         val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode}:\n$teamStrings"
         event.channel.sendMessage(messageString).complete()
     }
 
     data class Record(
         val team: String,
+        val mostRecentMatchDate: ZonedDateTime,
+        val matches: List<Match>,
         val numWins: Int,
         val totalGames: Int
     ) {

@@ -29,6 +29,7 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 
 `!standings <league>` -> Displays the standings for the region 
 `!roster <team code>` -> Displays the teams roster
+`!record <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
 
 ### Predictions Commands
 `!predict <league> [number of matches]` -> Prints a message where you can set your predictions. Disappears after 5 mins.

@@ -24,7 +24,7 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         matches.map { match ->
             val date = match.date
             val msg =
-                "${dateFormat.format(date)}: \uD83D\uDD35 **${match.team1}** vs **${match.team2}** \uD83D\uDD34\n(This message will delete itself in 5 mins. DO NOT delete yourself)"
+                "${longDateFormat.format(date)}: \uD83D\uDD35 **${match.team1}** vs **${match.team2}** \uD83D\uDD34\n(This message will delete itself in 5 mins. DO NOT delete yourself)"
             val message = event.channel.sendMessage(msg).complete()
             message.addReaction(BLUE_TEAM_EMOJI).complete()
             message.addReaction(RED_TEAM_EMOJI).complete()

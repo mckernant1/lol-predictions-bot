@@ -21,7 +21,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected val userSettings = userSettingsTable.getSettingsForUser(event.author.id)
 
-    protected val dateFormat: DateTimeFormatter = DateTimeFormatter
+    protected val longDateFormat: DateTimeFormatter = DateTimeFormatter
         .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.LONG)
         .withZone(
             ZoneId.of(userSettings.timezone)
