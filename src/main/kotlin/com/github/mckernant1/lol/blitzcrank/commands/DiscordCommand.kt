@@ -1,6 +1,7 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
 import com.github.mckernant1.lol.blitzcrank.utils.getLeagues
+import com.github.mckernant1.lol.blitzcrank.utils.getTeams
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.userSettingsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -43,8 +44,15 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
             .also { logger.info("validateRegion with region: $region and result: $it") }
     }
 
+    protected fun validateTeam(event: MessageReceivedEvent, position: Int): Boolean {
+        val teamName = getWordsFromMessage(event.message)[position]
+        return getTeams().any { it.code.equals(teamName, ignoreCase = true) }
+            .also { logger.info("validateTeam returned result $it") }
+    }
+
     protected fun validateWordCount(event: MessageReceivedEvent, range: IntRange): Boolean {
-        return getWordsFromMessage(event.message).size in range
+        return (getWordsFromMessage(event.message).size in range)
+            .also { logger.info("validateWordCount returned result $it ") }
     }
 
 }

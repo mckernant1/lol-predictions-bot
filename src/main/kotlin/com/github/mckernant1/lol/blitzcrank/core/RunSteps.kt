@@ -27,6 +27,7 @@ fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when
     "!stats" -> StatsCommand(event)
     "!roster" -> RosterCommand(event)
     "!setTimezone" -> SetTimezoneCommand(event)
+    "!record" -> RecordCommand(event)
     else -> null
 }
 

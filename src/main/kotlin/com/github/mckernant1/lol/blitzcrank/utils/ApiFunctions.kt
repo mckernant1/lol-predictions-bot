@@ -5,6 +5,7 @@ import com.github.mckernant1.fs.TimedFileCache
 import com.github.mckernant1.fs.startJobThread
 import com.github.mckernant1.lol.heimerdinger.schedule.Match
 import com.github.mckernant1.lol.heimerdinger.schedule.Split
+import com.github.mckernant1.lol.heimerdinger.team.Team
 import com.github.mckernant1.lol.heimerdinger.tournaments.Standing
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
@@ -79,27 +80,12 @@ fun getMatchesWithThreads(region: String): Split {
 }
 
 fun getStandings(region: String): List<Standing> {
-
     val league = leagueClient.getLeagueByName(region)
-    val leagueId = "${league.id}-standings"
+    return tournamentClient.getStandingsForLeague(league.id, Year.now().value)
+}
 
-    val standings = fileHandler.getResult(leagueId) {
-        val list = arrayListOf<Standing>()
-        list.addAll(tournamentClient.getStandingsForLeague(league.id, Year.now().value))
-        list
-    }
-    if (!schedules.containsKey(leagueId)) {
-        fileCacheLogger.info("Starting Thread for retrieving $leagueId")
-        schedules[leagueId] = jobTimer.startJobThread(Duration.ofMinutes(5)) {
-            fileHandler.getResult(leagueId) {
-                val list = arrayListOf<Standing>()
-                list.addAll(tournamentClient.getStandingsForLeague(league.id, Year.now().value))
-                list
-            }
-        }
-    }
-
-    return standings
+fun getTeamFromName(teamName: String): Team {
+    return teamClient.getTeamByCode(teamName)
 }
 
 fun getMatches(region: String): Split {
@@ -107,6 +93,8 @@ fun getMatches(region: String): Split {
     val tourney = tournamentClient.getMostRecentTournament(league.id)
     return scheduleClient.getSplitByTournament(league.id, tourney)
 }
+
+fun getTeams() = teamClient.getAllTeams()
 
 fun getLeagues() = leagueClient.getLeagues()
 
