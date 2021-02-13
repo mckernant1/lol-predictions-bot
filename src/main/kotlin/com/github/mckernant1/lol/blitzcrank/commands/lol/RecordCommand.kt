@@ -9,30 +9,32 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
         val words = getWordsFromMessage(event.message)
-        val team1 = words[1].toUpperCase()
-        val team2 = words.getOrNull(2)?.toUpperCase()
-        val team = getTeamFromName(team1)
-        val matches = getResults(team.homeLeagueCode, Int.MAX_VALUE)
+        val team1Words = words[1].toUpperCase()
+        val team2Words = words.getOrNull(2)?.toUpperCase()
+        val team1 = getTeamFromName(team1Words)
+        val matches = getResults(team1.homeLeagueCode, Int.MAX_VALUE)
 
         var matchesGroupedByTeam = matches
-            .filter { it.team1.equals(team1, ignoreCase = true) || it.team2.equals(team1, ignoreCase = true) }
+            .filter { it.team1.equals(team1.name, ignoreCase = true) || it.team2.equals(team1.name, ignoreCase = true) }
             .groupBy {
-                if (it.team1.equals(team1, ignoreCase = true)) it.team2 else it.team1
+                if (it.team1.equals(team1.name, ignoreCase = true)) it.team2 else it.team1
             }
 
-        if (team2 != null) {
+        if (team2Words != null) {
+            val team2 = getTeamFromName(team2Words)
             matchesGroupedByTeam = matchesGroupedByTeam.filter { (teamName, _) ->
-                teamName.equals(team2, ignoreCase = true)
+                teamName.equals(team2.name, ignoreCase = true)
             }
         }
 
         val teamStrings = matchesGroupedByTeam
             .map { (teamName, matches) ->
-                Record(teamName, matches.count { it.winner.equals(team1, ignoreCase = true) }, matches.size)
+                Record(teamName, matches.count { it.winner.equals(team1.name, ignoreCase = true) }, matches.size)
             }
             .sortedByDescending { it.getWinRatio() }
             .joinToString("\n") { "${it.team}: ${it.numWins}W, ${it.getLosses()}L - ${it.getWinRatio()}%" }
-        val messageString = "Record for $team1 in ${team.homeLeagueCode}:\n$teamStrings"
+        val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode}:\n$teamStrings"
+        println(messageString)
         event.channel.sendMessage(messageString).complete()
     }
 
