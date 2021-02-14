@@ -36,7 +36,7 @@ fun commandValidMetricsAndLogging(words: List<String>, event: MessageReceivedEve
     val commandString = "${words[0].removePrefix("!").capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
     logger.info(
-        "Running command='${commandString}' from='${serverOrUser}' with id='${
+        "Running command='${commandString}' with arguments='$words' from='${serverOrUser}' with id='${
             getServerIdOrUserId(
                 event
             )
