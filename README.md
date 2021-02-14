@@ -7,7 +7,7 @@
 
 
 ## Bot Usage
-This bot stores user data about predictions and various settings the user specifies. You can request this data at any time.
+This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored. You can request this data at any time.
 
 ## Info
 This bot provides schedule, results, and standings for all regions listed in the esports api.
@@ -19,6 +19,8 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 !info lists this menu
 
 \<league\> refers to one of the league codes (lcs, lpl, lck, ...) 
+
+\<team code\> refers to the 2 or three letter acronym for a team. example: C9 (cloud9), FPX (FunPlus Phoenix)
 
 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
 
