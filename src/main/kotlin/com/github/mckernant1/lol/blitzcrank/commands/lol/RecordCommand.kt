@@ -53,9 +53,9 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                         record.matches.joinToString("\n") {
                             "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}"
                         }
-            }
+            }.ifEmpty { "There are no previous matches here :[" }
         val messageString =
-            "Record for ${team1.name} in ${team1.homeLeagueCode} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
+            "Record for ${team1.name} ${if (team2Words != null) "vs ${getTeamFromName(team2Words).name} " else ""}in ${team1.homeLeagueCode} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
         event.channel.sendMessage(messageString).complete()
     }
 

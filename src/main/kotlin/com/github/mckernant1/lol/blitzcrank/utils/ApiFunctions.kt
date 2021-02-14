@@ -46,6 +46,7 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
 
 fun getResults(region: String, numberToGet: Int?): List<Match> {
     val matches = getMatchesWithThreads(region).matches
+        .filter { it.winner == it.team1 || it.winner == it.team2}
         .sortedByDescending { it.date }.dropWhile {
             it.date > ZonedDateTime.now(ZoneId.of("UTC"))
         }
