@@ -29,7 +29,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
         }
 
-        val teamStrings = matchesGroupedByTeam
+        val records = matchesGroupedByTeam
             .map { (teamName, matches) ->
                 Record(
                     teamName,
@@ -39,11 +39,14 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     matches.size
                 )
             }
+        val totalTeamWins = records.sumBy { it.numWins }
+        val totalTeamLosses = records.sumBy { it.getLosses() }
+        val teamStrings = records
             .sortedByDescending { it.mostRecentMatchDate }
             .joinToString("\n") { record ->
-                "${record.team} - ${record.getWinRatio()}%: \n" +
-                        record.matches.joinToString("\n") { "\t ${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}" } }
-        val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode}:\n$teamStrings"
+                "${record.team} - (${record.numWins}W - ${record.getLosses()}): \n" +
+                        record.matches.joinToString("\n") { "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}" } }
+        val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode} (${totalTeamWins}W - ${totalTeamLosses}L):\n$teamStrings"
         event.channel.sendMessage(messageString).complete()
     }
 
