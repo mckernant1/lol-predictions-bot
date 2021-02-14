@@ -22,6 +22,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 "Basic Info", """
                 !info lists this menu
                 <league> refers to one of the league codes (lcs, lpl, lck, ...)
+                <team code> refers to the 2 or three letter acronym for a team. example: C9 (cloud9), FPX (FunPlus Phoenix)
                 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
             """.trimIndent(), false
             )

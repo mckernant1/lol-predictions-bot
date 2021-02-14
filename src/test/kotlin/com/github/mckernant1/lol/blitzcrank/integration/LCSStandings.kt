@@ -2,9 +2,10 @@ package com.github.mckernant1.lol.blitzcrank.integration
 
 import org.testng.annotations.Test
 
-internal class LCKSchedule : TestBase() {
+internal class LCSStandings : TestBase() {
+
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
-    fun checkLCKScheduleOk() {
-        runGenericTest("!schedule lck")
+    fun checkLCSStandings() {
+        runGenericTest("!standings lcs")
     }
 }

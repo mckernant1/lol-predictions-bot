@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..2)
+        return validateWordCount(event, 2..2) && validateTeam(event, 1)
     }
 
 

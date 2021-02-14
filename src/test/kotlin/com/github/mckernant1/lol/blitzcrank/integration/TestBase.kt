@@ -3,6 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.integration
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.TextChannel
+import org.testng.Assert
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
 
@@ -29,4 +30,18 @@ internal open class TestBase {
     fun shutdown() {
         testerBot.shutdownNow()
     }
+
+
+    fun runGenericTest(commandString: String) {
+        val message = testerBotChannel.sendMessage(commandString).complete()
+        var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        while (mostRecentMessage == commandString) {
+            println("Waiting for responce")
+            mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
+        }
+        Assert.assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
+        Assert.assertEquals(message.retrieveReactionUsers("❌").complete().size, 0)
+        Assert.assertEquals(message.retrieveReactionUsers("⛔").complete().size, 0)
+    }
+
 }

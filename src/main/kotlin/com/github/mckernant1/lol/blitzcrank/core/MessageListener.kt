@@ -26,6 +26,7 @@ class MessageListener : ListenerAdapter() {
                     }
                 } else {
                     reactUserError(event.message)
+                    event.channel.sendMessage("Your input was invalid. Please check `!info` to see proper command formatting").complete()
                 }
             }.onFailure {
                 logger.error("Caught exception while running command '$words': ", it)
