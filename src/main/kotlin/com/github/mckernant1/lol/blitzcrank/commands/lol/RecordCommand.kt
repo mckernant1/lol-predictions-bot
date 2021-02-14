@@ -9,6 +9,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZonedDateTime
 
 class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
+
+    companion object {
+        private const val LINE_SEPARATOR = "\n---------------------------------------------------\n"
+    }
+
     override suspend fun execute() {
         val words = getWordsFromMessage(event.message)
         val team1Words = words[1].toUpperCase()
@@ -43,10 +48,14 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val totalTeamLosses = records.sumBy { it.getLosses() }
         val teamStrings = records
             .sortedByDescending { it.mostRecentMatchDate }
-            .joinToString("\n") { record ->
+            .joinToString(LINE_SEPARATOR) { record ->
                 "${record.team} (${record.numWins}W - ${record.getLosses()}): \n" +
-                        record.matches.joinToString("\n") { "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}" } }
-        val messageString = "Record for ${team1.name} in ${team1.homeLeagueCode} (${totalTeamWins}W - ${totalTeamLosses}L):\n$teamStrings"
+                        record.matches.joinToString("\n") {
+                            "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}"
+                        }
+            }
+        val messageString =
+            "Record for ${team1.name} in ${team1.homeLeagueCode} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
         event.channel.sendMessage(messageString).complete()
     }
 
