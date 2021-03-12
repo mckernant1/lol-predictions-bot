@@ -49,7 +49,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val teamStrings = records
             .sortedByDescending { it.mostRecentMatchDate }
             .joinToString(LINE_SEPARATOR) { record ->
-                "${record.team} (${record.numWins}W - ${record.getLosses()}): \n" +
+                "${record.team} (${record.numWins}W - ${record.getLosses()}L): \n" +
                         record.matches.joinToString("\n") {
                             "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.date)}"
                         }
