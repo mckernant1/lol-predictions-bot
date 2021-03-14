@@ -5,7 +5,6 @@
 [![Discord Bots](https://top.gg/api/widget/status/725169546633281628.svg)](https://top.gg/bot/725169546633281628)
 
 
-
 ## Bot Usage
 This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored. You can request this data at any time.
 
