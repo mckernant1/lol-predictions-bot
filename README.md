@@ -6,7 +6,10 @@
 
 
 ## Bot Usage
-This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored. You can request this data at any time.
+This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored.
+Features such as !predict and !setTimezone will store your data
+
+You can request this data at any time.
 
 ## Info
 This bot provides schedule, results, and standings for all regions listed in the esports api.
