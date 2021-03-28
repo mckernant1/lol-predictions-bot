@@ -4,10 +4,13 @@ import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
+import kotlin.streams.toList
 
 class PredictionTableAccess {
 
     companion object {
+        const val MATCH_ID_INDEX_NAME = "games-by-match-id-index"
         private val TABLE_NAME = System.getenv("PREDICTIONS_TABLE_NAME")
             ?: error("Environment variable 'PREDICTIONS_TABLE_NAME' is not defined")
         private val table: DynamoDbTable<Prediction> =
@@ -18,4 +21,15 @@ class PredictionTableAccess {
         table.getItem(Key.builder().partitionValue(userId).sortValue(matchId).build())
 
     fun putItem(prediction: Prediction) = table.putItem(prediction)
+
+
+    fun getAllPredictionsForMatch(matchId: String): List<Prediction> =
+        table.index(MATCH_ID_INDEX_NAME).query { it ->
+            it.queryConditional(
+                QueryConditional.keyEqualTo(
+                    Key.builder().partitionValue(matchId).build()
+                )
+            )
+        }.stream().flatMap { it.items().stream() }.toList()
+
 }

@@ -19,13 +19,25 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    protected val userSettings = userSettingsTable.getSettingsForUser(event.author.id)
+    protected val userSettings by lazy {
+        userSettingsTable.getSettingsForUser(event.author.id)
+    }
 
-    protected val longDateFormat: DateTimeFormatter = DateTimeFormatter
-        .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.LONG)
-        .withZone(
-            ZoneId.of(userSettings.timezone)
-        )
+    protected val longDateFormat: DateTimeFormatter by lazy {
+        DateTimeFormatter
+            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.LONG)
+            .withZone(
+                ZoneId.of(userSettings.timezone)
+            )
+    }
+
+    protected val shortDateFormat: DateTimeFormatter by lazy {
+        DateTimeFormatter
+            .ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT)
+            .withZone(
+                ZoneId.of(userSettings.timezone)
+            )
+    }
 
     abstract suspend fun execute()
 

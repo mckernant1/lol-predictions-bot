@@ -2,6 +2,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.collections.cartesianProduct
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
@@ -35,27 +36,41 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 predictionsTable.getItem(userId, result.id)
             }
 
+
+
         val predictionString = results.joinToString("\n\n") { match ->
-            "Match **${match.team1}** vs **${match.team2}**:\n" +
+            val globalPredictions = predictionsTable.getAllPredictionsForMatch(match.id)
+            "On ${shortDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
                     "${
                         if (match.winner == match.team1)
                             "\uD83D\uDC51 " else ""
                     }${match.team1}: ${
                         predictions.filter { it.matchId == match.id && it.prediction == match.team1 }
                             .joinToString(", ") { "<@${it.userId}>" }
-                    }\n" +
+                    }${
+                        getGlobalPredictionRate(globalPredictions, match.team1)
+                    }" +
+                    "\n" +
                     "${
                         if (match.winner == match.team2)
                             "\uD83D\uDC51 " else ""
                     }${match.team2}: ${
                         predictions.filter { it.matchId == match.id && it.prediction == match.team2 }
                             .joinToString(", ") { "<@${it.userId}>" }
+                    }${
+                        getGlobalPredictionRate(globalPredictions, match.team2)
                     }"
         }
 
         if (predictionString.isNotEmpty()) {
             event.channel.sendMessage(predictionString).complete()
         }
+    }
+
+    private fun getGlobalPredictionRate(predictions: List<Prediction>, teamName: String): String {
+        return runCatching {
+            if (predictions.isNotEmpty()) ", ${100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()}% of all users" else ""
+        }.getOrElse { "" }
     }
 
     override fun validate(): Boolean {

@@ -19,18 +19,19 @@ private val esportsApiConfig = EsportsApiConfig(
     endpointHost = HostUrl.ESPORTS_API_2
 )
 
-val leagueClient = LeagueClient(esportsApiConfig = esportsApiConfig)
-val tournamentClient = TournamentClient(esportsApiConfig = esportsApiConfig)
-val scheduleClient = ScheduleClient(esportsApiConfig = esportsApiConfig)
-val teamClient = TeamClient(esportsApiConfig = esportsApiConfig)
+val leagueClient by lazy { LeagueClient(esportsApiConfig = esportsApiConfig) }
+val tournamentClient by lazy { TournamentClient(esportsApiConfig = esportsApiConfig) }
+val scheduleClient by lazy { ScheduleClient(esportsApiConfig = esportsApiConfig) }
+val teamClient by lazy { TeamClient(esportsApiConfig = esportsApiConfig) }
 
-val predictionsTable = PredictionTableAccess()
-val userSettingsTable = UserSettingsTableAccess()
+val predictionsTable by lazy { PredictionTableAccess() }
+val userSettingsTable by lazy { UserSettingsTableAccess() }
 
-val cwp: MetricsPublisher =
+val cwp: MetricsPublisher by lazy {
     if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true))
         AWSCloudwatchMetricsPublisher()
     else
         NoMetricsMetricsPublisher()
+}
 
 

@@ -1,17 +1,17 @@
 package com.github.mckernant1.lol.blitzcrank.model
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbImmutable
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
+import com.github.mckernant1.lol.blitzcrank.aws.ddb.PredictionTableAccess
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
 
 @DynamoDbImmutable(builder = Prediction.Builder::class)
 class Prediction(
     @get:DynamoDbPartitionKey
     @get:DynamoDbAttribute("discordId")
+    @get:DynamoDbSecondarySortKey(indexNames = [PredictionTableAccess.MATCH_ID_INDEX_NAME])
     val userId: String,
     @get:DynamoDbAttribute("matchId")
     @get:DynamoDbSortKey
+    @get:DynamoDbSecondaryPartitionKey(indexNames = [PredictionTableAccess.MATCH_ID_INDEX_NAME])
     val matchId: String,
     val prediction: String,
 ) {
