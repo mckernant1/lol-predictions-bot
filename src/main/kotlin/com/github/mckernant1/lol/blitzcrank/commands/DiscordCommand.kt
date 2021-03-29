@@ -57,7 +57,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected fun validateRegion(event: MessageReceivedEvent, position: Int): Boolean {
         region = getWordsFromMessage(event.message)[position]
         return (getLeagues().find { it.name.equals(region, ignoreCase = true) } != null)
-            .also { logger.info("validateRegion with region: $region and result: $it") }
+            .also { logger.info("validateRegion with region: ${region.toUpperCase()} and result: $it") }
     }
 
     protected fun validateTeam(event: MessageReceivedEvent, position: Int): Boolean {
