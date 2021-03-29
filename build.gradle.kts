@@ -26,7 +26,6 @@ dependencies {
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.20")
     implementation("com.github.mckernant1:kotlin-utils:0.0.4")
 
-    implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
     implementation(platform("software.amazon.awssdk:bom:2.15.69"))
