@@ -74,7 +74,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..3) && validateRegion(event, 1) && validateNumberOfMatches(event, 2)
+        return validateWordCount(2..3) && validateRegion(1) && validateNumberOfMatches(2)
     }
 
 }

@@ -1,8 +1,10 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
 import com.github.mckernant1.lol.blitzcrank.commands.lol.*
-import com.github.mckernant1.lol.blitzcrank.commands.util.InfoCommand
-import com.github.mckernant1.lol.blitzcrank.commands.util.SetTimezoneCommand
+import com.github.mckernant1.lol.blitzcrank.commands.misc.InfoCommand
+import com.github.mckernant1.lol.blitzcrank.commands.misc.PastaCommand
+import com.github.mckernant1.lol.blitzcrank.commands.misc.SetPastaCommand
+import com.github.mckernant1.lol.blitzcrank.commands.misc.SetTimezoneCommand
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
@@ -28,6 +30,8 @@ fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when
     "!roster" -> RosterCommand(event)
     "!setTimezone" -> SetTimezoneCommand(event)
     "!record" -> RecordCommand(event)
+    "!setPasta" -> SetPastaCommand(event)
+    "!pasta" -> PastaCommand(event)
     else -> null
 }
 

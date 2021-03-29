@@ -1,7 +1,6 @@
-package com.github.mckernant1.lol.blitzcrank.commands.util
+package com.github.mckernant1.lol.blitzcrank.commands.misc
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
-import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.userSettingsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZoneId
@@ -9,7 +8,7 @@ import java.time.ZonedDateTime
 
 class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     override suspend fun execute() {
-        val userSpecifiedTimezone = getWordsFromMessage(event.message)[1]
+        val userSpecifiedTimezone = words[1]
 
         val userZoneIdIsValid: Result<ZoneId> = userSpecifiedTimezone.runCatching {
             ZoneId.of(this)
@@ -40,6 +39,6 @@ class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..2)
+        return validateWordCount(2..2)
     }
 }

@@ -14,7 +14,7 @@ class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..2) && validateRegion(event, 1)
+        return validateWordCount(2..2) && validateRegion(1)
     }
 
 

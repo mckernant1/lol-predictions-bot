@@ -3,7 +3,6 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getTeamFromName
-import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.heimerdinger.schedule.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZonedDateTime
@@ -15,7 +14,6 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override suspend fun execute() {
-        val words = getWordsFromMessage(event.message)
         val team1Words = words[1].toUpperCase()
         val team2Words = words.getOrNull(2)?.toUpperCase()
         val team1 = getTeamFromName(team1Words)
@@ -72,7 +70,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override fun validate(): Boolean =
-        validateWordCount(event, 2..3)
-                && validateTeam(event, 1)
-                && if (getWordsFromMessage(event.message).size == 3) validateTeam(event, 2) else true
+        validateWordCount(2..3)
+                && validateTeam(1)
+                && if (words.size == 3) validateTeam(2) else true
 }

@@ -1,7 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
-import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.teamClient
 import com.github.mckernant1.lol.heimerdinger.team.Team
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -9,12 +8,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override fun validate(): Boolean {
-        return validateWordCount(event, 2..2) && validateTeam(event, 1)
+        return validateWordCount(2..2) && validateTeam(1)
     }
 
 
     override suspend fun execute() {
-        val teamToGet = getWordsFromMessage(event.message)[1]
+        val teamToGet = words[1]
         val team = teamClient.getTeamByCode(teamToGet)
 
         val message = formatMessage(team)
