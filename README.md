@@ -8,7 +8,7 @@
 
 ## Bot Usage
 This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored.
-Features such as !predict and !setTimezone will store your data
+Features such as !predict, !setPasta and !setTimezone will store your data
 
 You can request this data at any time.
 
