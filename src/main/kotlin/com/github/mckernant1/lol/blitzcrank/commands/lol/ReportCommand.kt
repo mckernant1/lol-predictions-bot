@@ -46,7 +46,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                             "\uD83D\uDC51 " else ""
                     }${match.team1}: ${
                         predictions.filter { it.matchId == match.id && it.prediction == match.team1 }
-                            .joinToString(", ") { "<@${it.userId}>" }
+                            .joinToString(" ") { "<@${it.userId}>" }
                     }${
                         getGlobalPredictionRate(globalPredictions, match.team1)
                     }" +
@@ -56,7 +56,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                             "\uD83D\uDC51 " else ""
                     }${match.team2}: ${
                         predictions.filter { it.matchId == match.id && it.prediction == match.team2 }
-                            .joinToString(", ") { "<@${it.userId}>" }
+                            .joinToString(" ") { "<@${it.userId}>" }
                     }${
                         getGlobalPredictionRate(globalPredictions, match.team2)
                     }"
@@ -69,7 +69,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun getGlobalPredictionRate(predictions: List<Prediction>, teamName: String): String {
         return runCatching {
-            if (predictions.isNotEmpty()) ", ${100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()}% of all users" else ""
+            if (predictions.isNotEmpty()) " ${100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()}% of all users" else ""
         }.getOrElse { "" }
     }
 
