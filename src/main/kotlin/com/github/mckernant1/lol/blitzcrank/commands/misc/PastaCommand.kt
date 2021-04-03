@@ -9,7 +9,11 @@ class PastaCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val messageToSend = (1..numberOfTimes).joinToString("") {
             userSettings.pasta + " "
         }
-        event.channel.sendMessage(messageToSend).complete()
+        if (messageToSend.length >= 2000) {
+            event.channel.sendMessage("Your message is too long. Your message must be less the 2000 characters").complete()
+        } else {
+            event.channel.sendMessage(messageToSend).complete()
+        }
     }
 
     override fun validate(): Boolean = validateWordCount(1..2) && validateNumberPositive(1)
