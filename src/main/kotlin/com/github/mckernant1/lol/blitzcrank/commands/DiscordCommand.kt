@@ -43,7 +43,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     abstract fun validate(): Boolean
 
-    protected fun validateNumberOfMatches(position: Int): Boolean {
+    protected fun validateNumberPositive(position: Int): Boolean {
         numToGet = try {
             words.getOrNull(position)?.toInt()
         } catch (e: NumberFormatException) {

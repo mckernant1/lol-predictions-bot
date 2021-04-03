@@ -52,7 +52,7 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     override fun validate(): Boolean {
-        return validateWordCount(2..3) && validateRegion(1) && validateNumberOfMatches(2)
+        return validateWordCount(2..3) && validateRegion(1) && validateNumberPositive(2)
     }
 
     companion object {

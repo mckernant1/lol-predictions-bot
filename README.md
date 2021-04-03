@@ -52,4 +52,5 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 `!setTimezone <Timezone>` -> !setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles or a timezone code such as PST or CET. Example: !setTimezone PST
 
 `!setPasta <Pasta>` -> Sets your personal pasta. You can use your servers emotes, but private server emotes that this bot is not in will not work.
-`!pasta` -> Prints out your pasta that you have saved
+
+`!pasta [number of times]` -> Prints out your pasta that you have saved the specified number of times
