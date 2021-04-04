@@ -1,10 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
-import com.github.mckernant1.lol.blitzcrank.aws.ddb.PredictionTableAccess
-import com.github.mckernant1.lol.blitzcrank.aws.ddb.UserSettingsTableAccess
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.AWSCloudwatchMetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.MetricsPublisher
-import com.github.mckernant1.lol.blitzcrank.aws.metrics.NoMetricsMetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.metrics.AWSCloudwatchMetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.metrics.MetricsPublisher
+import com.github.mckernant1.lol.blitzcrank.metrics.NoMetricsMetricsPublisher
 import com.github.mckernant1.lol.heimerdinger.config.EsportsApiConfig
 import com.github.mckernant1.lol.heimerdinger.config.HostUrl
 import com.github.mckernant1.lol.heimerdinger.leagues.LeagueClient
@@ -13,6 +11,8 @@ import com.github.mckernant1.lol.heimerdinger.team.TeamClient
 import com.github.mckernant1.lol.heimerdinger.tournaments.TournamentClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 
 private val esportsLogger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
@@ -24,8 +24,13 @@ val tournamentClient by lazy { TournamentClient(esportsApiConfig = esportsApiCon
 val scheduleClient by lazy { ScheduleClient(esportsApiConfig = esportsApiConfig) }
 val teamClient by lazy { TeamClient(esportsApiConfig = esportsApiConfig) }
 
-val predictionsTable by lazy { PredictionTableAccess() }
-val userSettingsTable by lazy { UserSettingsTableAccess() }
+private val dc by lazy { DynamoDbClient.builder().build() }
+internal val ddbClient: DynamoDbEnhancedClient by lazy {
+    DynamoDbEnhancedClient.builder()
+        .dynamoDbClient(dc)
+        .build()
+}
+
 
 val cwp: MetricsPublisher by lazy {
     if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true))
@@ -33,5 +38,6 @@ val cwp: MetricsPublisher by lazy {
     else
         NoMetricsMetricsPublisher()
 }
+
 
 

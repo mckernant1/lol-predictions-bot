@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.blitzcrank.aws.metrics
+package com.github.mckernant1.lol.blitzcrank.metrics
 
 class NoMetricsMetricsPublisher : MetricsPublisher {
     override fun putNumServers(number: Int) = Unit

@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.blitzcrank.aws.metrics
+package com.github.mckernant1.lol.blitzcrank.metrics
 
 interface MetricsPublisher {
 

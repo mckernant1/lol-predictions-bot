@@ -1,9 +1,9 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
+import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.getLeagues
 import com.github.mckernant1.lol.blitzcrank.utils.getTeams
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
-import com.github.mckernant1.lol.blitzcrank.utils.userSettingsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     protected val userSettings by lazy {
-        userSettingsTable.getSettingsForUser(event.author.id)
+        UserSettings.getSettingsForUser(event.author.id)
     }
 
     protected val longDateFormat: DateTimeFormatter by lazy {

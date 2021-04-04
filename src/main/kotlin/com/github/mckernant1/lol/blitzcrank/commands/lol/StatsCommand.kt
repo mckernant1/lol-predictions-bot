@@ -2,8 +2,8 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.collections.cartesianProduct
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
-import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -28,7 +28,7 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
         val serverMatches = users.cartesianProduct(results)
             .mapNotNull { (userId, match) ->
-                predictionsTable.getItem(userId, match.id)
+                Prediction.getItem(userId, match.id)
             }
 
         val resultString = users.map { userId ->

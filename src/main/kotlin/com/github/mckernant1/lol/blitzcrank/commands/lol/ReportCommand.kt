@@ -5,7 +5,6 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
-import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -33,13 +32,13 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
         val predictions = users.cartesianProduct(results)
             .mapNotNull { (userId, result) ->
-                predictionsTable.getItem(userId, result.id)
+                Prediction.getItem(userId, result.id)
             }
 
 
 
         val predictionString = results.joinToString("\n\n") { match ->
-            val globalPredictions = predictionsTable.getAllPredictionsForMatch(match.id)
+            val globalPredictions = Prediction.getAllPredictionsForMatch(match.id)
             "On ${shortDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
                     "${
                         if (match.winner == match.team1)

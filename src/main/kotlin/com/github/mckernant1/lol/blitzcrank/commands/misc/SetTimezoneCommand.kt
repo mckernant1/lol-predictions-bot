@@ -1,7 +1,7 @@
 package com.github.mckernant1.lol.blitzcrank.commands.misc
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
-import com.github.mckernant1.lol.blitzcrank.utils.userSettingsTable
+import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -29,9 +29,9 @@ class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             return
         }
 
-        val userSettings = userSettingsTable.getSettingsForUser(event.author.id)
+        val userSettings = UserSettings.getSettingsForUser(event.author.id)
         userSettings.timezone = zoneId.id
-        userSettingsTable.putSettings(userSettings)
+        UserSettings.putSettings(userSettings)
 
         event.channel.sendMessage(
             "Your timezone has now been set to ${zoneId.id}. Your current time should be ${longDateFormat.withZone(zoneId).format(ZonedDateTime.now())}"

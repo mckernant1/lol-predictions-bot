@@ -3,7 +3,6 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
-import com.github.mckernant1.lol.blitzcrank.utils.predictionsTable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,7 +42,7 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     .map { (team, users) ->
                         users.map { Prediction(matchId = match.id, userId = it, prediction = team) }
                     }.flatten().also { logger.info("Saving prediction: $it") }
-                predictions.forEach { predictionsTable.putItem(it) }
+                predictions.forEach { Prediction.putItem(it) }
                 message.delete().complete()
             }
         }.forEach { it.join() }
