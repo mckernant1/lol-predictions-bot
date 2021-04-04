@@ -10,7 +10,7 @@ class PastaCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             userSettings.pasta + " "
         }
         if (messageToSend.length >= 2000) {
-            event.channel.sendMessage("Your message is too long. Your message must be less the 2000 characters").complete()
+            event.channel.sendMessage("Your pasta must be less than 2000 characters").complete()
         } else {
             event.channel.sendMessage(messageToSend).complete()
         }
