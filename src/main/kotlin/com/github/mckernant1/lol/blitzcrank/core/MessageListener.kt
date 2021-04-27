@@ -1,6 +1,10 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
-import com.github.mckernant1.lol.blitzcrank.utils.*
+import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
+import com.github.mckernant1.lol.blitzcrank.utils.cwp
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import com.github.mckernant1.lol.blitzcrank.utils.reactInternalError
+import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -18,15 +22,19 @@ class MessageListener : ListenerAdapter() {
                 ?: return@thread
 
             event.channel.sendTyping().complete()
+
+            try {
+                command.validate()
+            } catch (e: InvalidCommandException) {
+                reactUserError(event.message)
+                event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
+                return@thread
+            }
+
             runCatching {
-                if (command.validate()) {
-                    commandValidMetricsAndLogging(words, event)
-                    runBlocking {
-                        command.execute()
-                    }
-                } else {
-                    reactUserError(event.message)
-                    event.channel.sendMessage("Your input was invalid. Please check `!info` to see proper command formatting").complete()
+                commandValidMetricsAndLogging(words, event)
+                runBlocking {
+                    command.execute()
                 }
             }.onFailure {
                 logger.error("Caught exception while running command '$words': ", it)

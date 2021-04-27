@@ -12,7 +12,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         ).queue()
     }
 
-    override fun validate(): Boolean = true
+    override fun validate() = Unit
 
     companion object {
 

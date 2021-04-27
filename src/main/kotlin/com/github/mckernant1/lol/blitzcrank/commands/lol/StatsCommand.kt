@@ -56,12 +56,14 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     private data class PredictionRatio(
         val userId: String,
         val numberPredicted: Int,
-        val numberCorrect: Int
+        val numberCorrect: Int,
     ) {
         fun getPredictionPercentage() = 100 * numberCorrect / numberPredicted.toDouble()
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..3) && validateRegion(1) && validateNumberPositive(2)
+    override fun validate() {
+        validateWordCount(2..3)
+        validateRegion(1)
+        validateNumberPositive(2)
     }
 }

@@ -13,14 +13,15 @@ class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         event.channel.sendMessage(replyString).queue()
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..2) && validateRegion(1)
+    override fun validate() {
+        validateWordCount(2..2)
+        validateRegion(1)
     }
 
 
     private fun formatStandingsReply(
         standings: List<Standing>,
-        region: String
+        region: String,
     ): String {
         val sb = StringBuilder()
         sb.appendLine("Standings for $region:")

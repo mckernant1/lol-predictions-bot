@@ -36,7 +36,6 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
 
 
-
         val predictionString = results.joinToString("\n\n") { match ->
             val globalPredictions = Prediction.getAllPredictionsForMatch(match.id)
             "On ${shortDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
@@ -72,8 +71,10 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         }.getOrElse { "" }
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..3) && validateRegion(1) && validateNumberPositive(2)
+    override fun validate() {
+        validateWordCount(2..3)
+        validateRegion(1)
+        validateNumberPositive(2)
     }
 
 }

@@ -47,11 +47,14 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
         }.forEach { it.join() }
         event.channel.sendMessage(
-            "Predictions have been recorded for ${matches.size} ${if (matches.size == 1) "match" else "matches"} in the $region").complete()
+            "Predictions have been recorded for ${matches.size} ${if (matches.size == 1) "match" else "matches"} in the $region")
+            .complete()
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..3) && validateRegion(1) && validateNumberPositive(2)
+    override fun validate() {
+        validateWordCount(2..3)
+        validateRegion(1)
+        validateNumberPositive(2)
     }
 
     companion object {

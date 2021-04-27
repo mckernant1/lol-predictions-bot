@@ -62,15 +62,16 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val mostRecentMatchDate: ZonedDateTime,
         val matches: List<Match>,
         val numWins: Int,
-        val totalGames: Int
+        val totalGames: Int,
     ) {
         fun getWinRatio() = 100 * numWins / totalGames.toDouble()
 
         fun getLosses() = totalGames - numWins
     }
 
-    override fun validate(): Boolean =
+    override fun validate() {
         validateWordCount(2..3)
-                && validateTeam(1)
-                && if (words.size == 3) validateTeam(2) else true
+        validateTeam(1)
+        if (words.size == 3) validateTeam(2)
+    }
 }

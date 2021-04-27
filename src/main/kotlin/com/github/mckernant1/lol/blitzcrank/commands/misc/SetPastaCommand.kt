@@ -11,5 +11,7 @@ class SetPastaCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         event.channel.sendMessage("Your Pasta has been set to ${userSettings.pasta}").complete()
     }
 
-    override fun validate(): Boolean = validateWordCount(2..100)
+    override fun validate() {
+        validateWordCount(2..100)
+    }
 }

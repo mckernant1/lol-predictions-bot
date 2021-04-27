@@ -7,8 +7,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..2) && validateTeam(1)
+    override fun validate() {
+        validateWordCount(2..2)
+        validateTeam(1)
     }
 
 
@@ -26,8 +27,9 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 team.players
                     .sortedBy { RoleSort.valueOf(it.role.toUpperCase()).sorter }
                     .groupBy { it.role }
-                    .map { role -> "${role.key.capitalize()}:\n" +
-                            role.value.joinToString("\n") { " -${it.summonerName}" }
+                    .map { role ->
+                        "${role.key.capitalize()}:\n" +
+                                role.value.joinToString("\n") { " -${it.summonerName}" }
                     }.joinToString("\n") { it }
     }
 

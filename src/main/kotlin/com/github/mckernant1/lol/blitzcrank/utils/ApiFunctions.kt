@@ -13,8 +13,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
 private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")
@@ -80,7 +79,7 @@ fun getMatchesWithThreads(region: String): Split {
 }
 
 fun getStandings(region: String): List<Standing> {
-    val league = leagueClient.getLeagueByName(region)
+    val league = leagueClient.getLeagueBySlug(region)
     return tournamentClient.getStandingsForMostRecentTournamentInLeague(league.id)
 }
 
@@ -89,7 +88,7 @@ fun getTeamFromName(teamName: String): Team {
 }
 
 fun getMatches(region: String): Split {
-    val league = leagueClient.getLeagueByName(region)
+    val league = leagueClient.getLeagueBySlug(region)
     val tourney = tournamentClient.getMostRecentTournament(league.id)
     return scheduleClient.getSplitByTournament(league.id, tourney)
 }

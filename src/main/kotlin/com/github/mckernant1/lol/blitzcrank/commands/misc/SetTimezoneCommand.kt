@@ -38,7 +38,7 @@ class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         ).complete()
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..2)
+    override fun validate() {
+        validateWordCount(2..2)
     }
 }

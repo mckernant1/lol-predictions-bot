@@ -19,9 +19,10 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         event.channel.sendMessage(replyString).queue()
     }
 
-    override fun validate(): Boolean {
-        return validateWordCount(2..3) && validateRegion(1) && validateNumberPositive(2)
-
+    override fun validate() {
+        validateWordCount(2..3)
+        validateRegion(1)
+        validateNumberPositive(2)
     }
 
     private fun formatScheduleReply(matches: List<Match>, region: String): String {

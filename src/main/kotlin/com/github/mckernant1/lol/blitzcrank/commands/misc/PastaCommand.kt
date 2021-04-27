@@ -16,5 +16,8 @@ class PastaCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         }
     }
 
-    override fun validate(): Boolean = validateWordCount(1..2) && validateNumberPositive(1)
+    override fun validate() {
+        validateWordCount(1..2)
+        validateNumberPositive(1)
+    }
 }

@@ -1,5 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.commands
 
+import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
+import com.github.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException
+import com.github.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.getLeagues
 import com.github.mckernant1.lol.blitzcrank.utils.getTeams
@@ -39,35 +42,51 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
             )
     }
 
-    abstract suspend fun execute()
+    abstract suspend fun execute(): Unit
 
-    abstract fun validate(): Boolean
+    @Throws(InvalidCommandException::class)
+    abstract fun validate(): Unit
 
-    protected fun validateNumberPositive(position: Int): Boolean {
+    protected fun validateNumberPositive(position: Int) {
         numToGet = try {
             words.getOrNull(position)?.toInt()
         } catch (e: NumberFormatException) {
-            return false
+            throw InvalidCommandException("Input must be a number")
         }
-        return (numToGet == null || numToGet!! >= 1)
-            .also { logger.info("validateNumberOfMatches with number $numToGet and result: $it") }
+
+        if (numToGet == null || numToGet!! >= 1) {
+            logger.info("validateNumberOfMatches with number $numToGet")
+        } else {
+            throw InvalidCommandException("Number cannot be negative")
+        }
     }
 
-    protected fun validateRegion(position: Int): Boolean {
+    protected fun validateRegion(position: Int) {
         region = words[position]
-        return (getLeagues().find { it.name.equals(region, ignoreCase = true) } != null)
-            .also { logger.info("validateRegion with region: ${region.toUpperCase()} and result: $it") }
+        if (getLeagues().find { it.slug.equals(region, ignoreCase = true) } != null) {
+            logger.info("validateRegion with region: ${region.toUpperCase()}")
+        } else {
+            throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
+                getLeagues().joinToString(", ") { it.slug.capitalize() }
+            }")
+        }
+
     }
 
-    protected fun validateTeam(position: Int): Boolean {
+    protected fun validateTeam(position: Int) {
         val teamName = words[position]
-        return getTeams().any { it.code.equals(teamName, ignoreCase = true) }
-            .also { logger.info("validateTeam returned result $it") }
+        if (getTeams().any { it.code.equals(teamName, ignoreCase = true) }) {
+            logger.info("Team '$teamName' has been selected")
+        } else {
+            throw TeamDoesNotExistException("Team '$teamName' does not exists")
+        }
+
     }
 
-    protected fun validateWordCount(range: IntRange): Boolean {
-        return (words.size in range)
-            .also { logger.info("validateWordCount returned result $it ") }
+    protected fun validateWordCount(range: IntRange) {
+        if (words.size !in range) {
+            throw InvalidCommandException("Invalid word count. There should be between $range words, but there are '${words.size}'")
+        }
     }
 
 }
