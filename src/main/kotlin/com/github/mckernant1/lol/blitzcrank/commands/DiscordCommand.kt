@@ -34,9 +34,9 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
             )
     }
 
-    protected val shortDateFormat: DateTimeFormatter by lazy {
+    protected val mediumDateFormat: DateTimeFormatter by lazy {
         DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT)
+            .ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)
             .withZone(
                 ZoneId.of(userSettings.timezone)
             )

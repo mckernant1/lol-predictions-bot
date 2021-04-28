@@ -38,7 +38,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
         val predictionString = results.joinToString("\n\n") { match ->
             val globalPredictions = Prediction.getAllPredictionsForMatch(match.id)
-            "On ${shortDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
+            "On ${mediumDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
                     "${
                         if (match.winner == match.team1)
                             "\uD83D\uDC51 " else ""
