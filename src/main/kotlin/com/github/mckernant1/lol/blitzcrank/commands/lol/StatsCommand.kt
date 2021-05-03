@@ -4,6 +4,7 @@ import com.github.mckernant1.collections.cartesianProduct
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getMatchesWithThreads
+import com.github.mckernant1.math.round
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -58,7 +59,7 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val numberPredicted: Int,
         val numberCorrect: Int,
     ) {
-        fun getPredictionPercentage() = 100 * numberCorrect / numberPredicted.toDouble()
+        fun getPredictionPercentage() = (100 * numberCorrect / numberPredicted.toDouble()).round(1)
     }
 
     override fun validate() {

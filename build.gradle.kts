@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.20"
     id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
@@ -19,16 +19,16 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.+")
 
     implementation("net.dv8tion:JDA:4.2.0_204")
 
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.20")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.4")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.6")
 
     implementation("org.slf4j:slf4j-simple:1.7.30")
 
-    implementation(platform("software.amazon.awssdk:bom:2.15.69"))
+    implementation(platform("software.amazon.awssdk:bom:2.15.+"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 

@@ -4,6 +4,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getTeamFromName
 import com.github.mckernant1.lol.heimerdinger.schedule.Match
+import com.github.mckernant1.math.round
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.ZonedDateTime
 
@@ -64,7 +65,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val numWins: Int,
         val totalGames: Int,
     ) {
-        fun getWinRatio() = 100 * numWins / totalGames.toDouble()
+        fun getWinRatio() = (100 * numWins / totalGames.toDouble()).round(1)
 
         fun getLosses() = totalGames - numWins
     }

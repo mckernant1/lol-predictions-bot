@@ -5,6 +5,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.math.round
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -67,7 +68,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun getGlobalPredictionRate(predictions: List<Prediction>, teamName: String): String {
         return runCatching {
-            if (predictions.isNotEmpty()) " ${100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()}% of all users" else ""
+            if (predictions.isNotEmpty()) " ${(100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()).round(1)}% of all users" else ""
         }.getOrElse { "" }
     }
 
