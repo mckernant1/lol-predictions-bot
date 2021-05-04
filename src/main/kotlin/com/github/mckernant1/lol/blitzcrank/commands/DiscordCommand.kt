@@ -20,7 +20,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected var numToGet: Int? = null
     protected val words = getWordsFromMessage(event.message)
 
-    protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
+    protected val logger: Logger = LoggerFactory.getLogger("${event.author.id}-${words}")
 
     protected val userSettings by lazy {
         UserSettings.getSettingsForUser(event.author.id)
@@ -64,7 +64,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
     protected fun validateRegion(position: Int) {
         region = words[position]
         if (getLeagues().find { it.slug.equals(region, ignoreCase = true) } != null) {
-            logger.info("validateRegion with region: ${region.toUpperCase()}")
+            logger.info("validateRegion with region: '${region.toUpperCase()}'")
         } else {
             throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
                 getLeagues().joinToString(", ") { it.slug.capitalize() }
