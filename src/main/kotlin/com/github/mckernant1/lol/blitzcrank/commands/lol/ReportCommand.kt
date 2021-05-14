@@ -61,14 +61,20 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     }"
         }
 
-        if (predictionString.isNotEmpty()) {
+        if (predictionString.isNotEmpty() && predictionString.length < 2000) {
             event.channel.sendMessage(predictionString).complete()
+        } else {
+            logger.error("predictionString was invalid: '$predictionString'")
         }
     }
 
     private fun getGlobalPredictionRate(predictions: List<Prediction>, teamName: String): String {
         return runCatching {
-            if (predictions.isNotEmpty()) " ${(100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()).round(1)}% of all users" else ""
+            if (predictions.isNotEmpty()) " ${
+                (100 * predictions.count { it.prediction == teamName } / predictions.size.toDouble()).round(
+                    1
+                )
+            }% of all users" else ""
         }.getOrElse { "" }
     }
 
