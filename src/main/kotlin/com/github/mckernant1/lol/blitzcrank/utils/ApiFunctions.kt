@@ -30,7 +30,6 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
         .sortedBy { it.date }.dropWhile {
             it.date < ZonedDateTime.now(ZoneId.of("UTC"))
         }
-    retrievalLogger.info("matches: $matches")
     if (matches.isEmpty()) return emptyList()
 
     return if (numberToGet == null) {
