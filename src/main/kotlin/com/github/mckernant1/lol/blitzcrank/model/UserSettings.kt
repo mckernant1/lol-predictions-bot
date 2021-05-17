@@ -57,7 +57,7 @@ class Reminder(
     var lastReminderSentEpochMillis: Long = 0
 ) {
     fun shouldSendMessage(): Boolean {
-        if (Instant.ofEpochMilli(lastReminderSentEpochMillis) + Duration.ofHours(12) > Instant.now()) {
+        if (Instant.ofEpochMilli(lastReminderSentEpochMillis) + Duration.ofHours(hoursBeforeMatches) + Duration.ofHours(12) > Instant.now()) {
             return false
         }
         val firstMatch = getSchedule(leagueSlug, 1)
