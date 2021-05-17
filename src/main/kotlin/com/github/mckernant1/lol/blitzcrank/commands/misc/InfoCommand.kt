@@ -51,7 +51,11 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 !pasta [number of times] -> Prints out your pasta that you have saved the specified number of times
                 """.trimIndent(),
                 false
-            )
+            ).addField("Reminders", """
+                !addReminder <league> <number of hours> -> Will ping you x amount of hours before the league starts
+                !listReminders -> Will list all of your current reminders
+                !deleteReminder <league> <number of hours> -> Deletes a reminder with the specified league and number of hours beforehand 
+            """.trimIndent(), false)
             .addField(
                 "Useful Links",
                 "[File a github issue](https://github.com/mckernant1/lol-predictions-bot/issues/new)\n[Join Discord Support Server](https://discord.gg/Dvq8f5KxZT)\n[AWS Dashboard](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=Predictions-Bot-Dashboard&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTY1MzUyODg3Mzk1MSIsIlUiOiJ1cy1lYXN0LTFfWWdlV3dsS0tGIiwiQyI6Ijc4OHJ1bGIzdDNvaTc3dTJjbGhoOTlzbGNpIiwiSSI6InVzLWVhc3QtMTo0ODhlOWRmNi1hOThlLTQzMTItOGE0YS0zMzZkYTVkNzI2ZWMiLCJNIjoiUHVibGljIn0=)",

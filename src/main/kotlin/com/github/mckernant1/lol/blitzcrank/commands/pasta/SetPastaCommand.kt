@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.blitzcrank.commands.misc
+package com.github.mckernant1.lol.blitzcrank.commands.pasta
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings

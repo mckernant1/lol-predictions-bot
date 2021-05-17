@@ -89,4 +89,5 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
         }
     }
 
+    protected fun reply(message: String) = event.channel.sendMessage(message).complete()
 }

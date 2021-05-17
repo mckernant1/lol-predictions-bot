@@ -1,4 +1,4 @@
-package com.github.mckernant1.lol.blitzcrank.commands.misc
+package com.github.mckernant1.lol.blitzcrank.commands.pasta
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent

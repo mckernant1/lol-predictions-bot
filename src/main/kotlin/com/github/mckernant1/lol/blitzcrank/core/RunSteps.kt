@@ -1,10 +1,20 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
-import com.github.mckernant1.lol.blitzcrank.commands.lol.*
+import com.github.mckernant1.lol.blitzcrank.commands.lol.PredictCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.RecordCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.ReportCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.ResultsCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.RosterCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.ScheduleCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.StandingsCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.StatsCommand
 import com.github.mckernant1.lol.blitzcrank.commands.misc.InfoCommand
-import com.github.mckernant1.lol.blitzcrank.commands.misc.PastaCommand
-import com.github.mckernant1.lol.blitzcrank.commands.misc.SetPastaCommand
 import com.github.mckernant1.lol.blitzcrank.commands.misc.SetTimezoneCommand
+import com.github.mckernant1.lol.blitzcrank.commands.pasta.PastaCommand
+import com.github.mckernant1.lol.blitzcrank.commands.pasta.SetPastaCommand
+import com.github.mckernant1.lol.blitzcrank.commands.reminder.AddReminderCommand
+import com.github.mckernant1.lol.blitzcrank.commands.reminder.ListRemindersCommand
+import com.github.mckernant1.lol.blitzcrank.commands.reminder.RemoveReminderCommand
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
@@ -32,6 +42,9 @@ fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when
     "!record" -> RecordCommand(event)
     "!setPasta" -> SetPastaCommand(event)
     "!pasta" -> PastaCommand(event)
+    "!addReminder" -> AddReminderCommand(event)
+    "!listReminders" -> ListRemindersCommand(event)
+    "!deleteReminder" -> RemoveReminderCommand(event)
     else -> null
 }
 

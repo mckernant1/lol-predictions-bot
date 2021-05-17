@@ -13,6 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import java.util.*
 
 private val esportsLogger: Logger = LoggerFactory.getLogger("EsportsAPIWrapper")
 private val esportsApiConfig = EsportsApiConfig(
@@ -31,13 +32,12 @@ internal val ddbClient: DynamoDbEnhancedClient by lazy {
         .build()
 }
 
-
-val cwp: MetricsPublisher by lazy {
+internal val cwp: MetricsPublisher by lazy {
     if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true))
         AWSCloudwatchMetricsPublisher()
     else
         NoMetricsMetricsPublisher()
 }
 
-
+internal val globalTimer by lazy { Timer() }
 

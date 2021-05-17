@@ -54,3 +54,11 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 `!setPasta <Pasta>` -> Sets your personal pasta. You can use your servers emotes, but private server emotes that this bot is not in will not work.
 
 `!pasta [number of times]` -> Prints out your pasta that you have saved the specified number of times
+
+### Reminders
+
+`!addReminder <league> <number of hours>` -> Will ping you x amount of hours before the league starts
+
+`!listReminders` -> Will list all of your current reminders
+
+`!deleteReminder <league> <number of hours>` -> Deletes a reminder with the specified league and number of hours beforehand 

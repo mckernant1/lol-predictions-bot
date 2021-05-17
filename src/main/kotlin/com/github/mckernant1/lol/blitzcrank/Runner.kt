@@ -1,7 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank
 
 import com.github.mckernant1.lol.blitzcrank.core.MessageListener
-import com.github.mckernant1.lol.blitzcrank.utils.cwp
+import com.github.mckernant1.lol.blitzcrank.timers.publishBotMetrics
+import com.github.mckernant1.lol.blitzcrank.timers.reminderChecker
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -9,14 +10,12 @@ import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import java.io.File
-import java.time.Duration
-import java.util.*
-import kotlin.concurrent.scheduleAtFixedRate
 
 fun main() {
     val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
     val bot = startBot(botToken)
     publishBotMetrics(bot)
+    reminderChecker(bot)
 }
 
 fun startBot(token: String): JDA {
@@ -42,12 +41,4 @@ fun startBot(token: String): JDA {
         .build()
         .awaitReady()
 }
-
-fun publishBotMetrics(bot: JDA) {
-    val timer = Timer()
-    timer.scheduleAtFixedRate(0, Duration.ofMinutes(5).toMillis()) {
-        cwp.putNumServers(bot.guilds.size)
-    }
-}
-
 
