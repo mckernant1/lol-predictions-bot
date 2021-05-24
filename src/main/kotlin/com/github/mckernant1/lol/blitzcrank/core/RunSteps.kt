@@ -8,7 +8,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.lol.RosterCommand
 import com.github.mckernant1.lol.blitzcrank.commands.lol.ScheduleCommand
 import com.github.mckernant1.lol.blitzcrank.commands.lol.StandingsCommand
 import com.github.mckernant1.lol.blitzcrank.commands.lol.StatsCommand
-import com.github.mckernant1.lol.blitzcrank.commands.misc.InfoCommand
+import com.github.mckernant1.lol.blitzcrank.commands.info.InfoCommand
 import com.github.mckernant1.lol.blitzcrank.commands.misc.SetTimezoneCommand
 import com.github.mckernant1.lol.blitzcrank.commands.pasta.PastaCommand
 import com.github.mckernant1.lol.blitzcrank.commands.pasta.SetPastaCommand
