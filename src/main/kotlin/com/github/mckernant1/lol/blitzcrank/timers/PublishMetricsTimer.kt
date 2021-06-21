@@ -16,7 +16,7 @@ fun publishBotMetrics(bot: JDA) {
         runCatching {
             cwp.putNumServers(bot.guilds.size)
         }.onFailure {
-            logger.error("An error occurred while posting metrics")
+            logger.error("An error occurred while posting metrics", it)
         }
     }
 }
