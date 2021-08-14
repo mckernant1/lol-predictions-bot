@@ -3,6 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.timers
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.globalTimer
 import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
@@ -36,7 +37,19 @@ fun reminderChecker(bot: JDA) {
                     UserSettings.putSettings(user)
                 }
         }.onFailure {
-            logger.error("An error occurred while sending reminders", it)
+            when (it) {
+                is ErrorResponseException -> {
+                    val knownErrorCodes = when (it.errorCode) {
+                        50001 -> "Bot does not have permission to channel it was called from"
+                        50007 -> "User does not have PMs enabled"
+                        else -> "Unknown Code"
+                    }
+                    logger.warn("This is an ErrorResponseException from discord API. Details: $knownErrorCodes, Error Code: ${it.errorCode}, Message: ${it.meaning}")
+                }
+                else -> {
+                    logger.warn("An error occurred while sending reminders. This is not an ErrorResponseException", it)
+                }
+            }
         }
     }
 }

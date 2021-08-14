@@ -62,3 +62,15 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 `!listReminders` -> Will list all of your current reminders
 
 `!deleteReminder <league> <number of hours>` -> Deletes a reminder with the specified league and number of hours beforehand 
+
+
+## Known Issues
+
+#### User does not have PMs Enabled
+the reminders command direct messages a user with a reminder. If the user does not have PMs enable you will see this.
+```
+ErrorResponseException: 50007: Cannot send messages to this user
+```
+
+#### Message is too long
+If a server has too many users making predictions there will be too much text to output. Discord has a limit of 2000 characters per message, and some commands will not work.
