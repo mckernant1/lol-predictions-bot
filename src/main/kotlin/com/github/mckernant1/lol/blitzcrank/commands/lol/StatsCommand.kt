@@ -44,13 +44,19 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             return@map PredictionRatio(userId, numberPredicted, numberCorrect)
         }.filter { it.numberPredicted != 0 }
             .sortedByDescending { it.getPredictionPercentage() }
-            .joinToString("\n") {
+            .map {
                 "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
             }
-        if (resultString.isBlank()) {
+        val str = resultString.joinToString("\n") { it }
+        if (str.isBlank()) {
             event.channel.sendMessage("There are no past matches for this tournament").complete()
-        } else {
+        } else if (str.length < 2000) {
             event.channel.sendMessage("Prediction results for $region are:\n$resultString").complete()
+        } else {
+            event.channel.sendMessage("Prediction results for $region are:").complete()
+            resultString.forEach {
+                event.channel.sendMessage(it).complete()
+            }
         }
     }
 
