@@ -18,7 +18,7 @@ import java.util.*
 private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
 private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")
 private val fileHandler = TimedFileCache(
-    duration = Duration.ofMinutes(60),
+    duration = Duration.ofMinutes(30),
     logger = { fileCacheLogger.info(it) }
 )
 
