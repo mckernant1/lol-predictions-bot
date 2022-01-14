@@ -37,7 +37,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
 
 
-        val predictionString = results.joinToString("\n\n") { match ->
+        val predictionStrings = results.map { match ->
             val globalPredictions = Prediction.getAllPredictionsForMatch(match.id)
             "On ${mediumDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
                     "${
@@ -60,11 +60,13 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                         getGlobalPredictionRate(globalPredictions, match.team2)
                     }"
         }
-
-        if (predictionString.isNotEmpty() && predictionString.length < 2000) {
-            event.channel.sendMessage(predictionString).complete()
-        } else {
-            logger.error("predictionString was invalid: '$predictionString'")
+        val str = predictionStrings.joinToString("\n\n")
+        when {
+            predictionStrings.isEmpty() -> return
+            str.length < 2000 -> event.channel.sendMessage(str).complete()
+            else -> predictionStrings.forEach {
+                event.channel.sendMessage(it).complete()
+            }
         }
     }
 

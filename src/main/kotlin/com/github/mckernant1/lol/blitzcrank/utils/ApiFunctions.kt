@@ -68,9 +68,13 @@ fun getMatchesWithThreads(region: String): Split {
     }
     if (!schedules.containsKey(scheduleId)) {
         fileCacheLogger.info("Starting Thread for retrieving $scheduleId")
-        schedules[scheduleId] = jobTimer.startJobThread(Duration.ofHours(1)) {
-            fileHandler.getResult(scheduleId) {
-                getMatches(region)
+        schedules[scheduleId] = jobTimer.startJobThread(Duration.ofMinutes(30)) {
+            try {
+                fileHandler.getResult(scheduleId) {
+                    getMatches(region)
+                }
+            } catch(e: Exception) {
+                fileCacheLogger.warn("Hit error getting matches", e)
             }
         }
     }
