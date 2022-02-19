@@ -51,7 +51,7 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         if (str.isBlank()) {
             event.channel.sendMessage("There are no past matches for this tournament").complete()
         } else if (str.length < 2000) {
-            event.channel.sendMessage("Prediction results for $region are:\n$resultString").complete()
+            event.channel.sendMessage("Prediction results for $region are:\n$str").complete()
         } else {
             event.channel.sendMessage("Prediction results for $region are:").complete()
             resultString.forEach {
