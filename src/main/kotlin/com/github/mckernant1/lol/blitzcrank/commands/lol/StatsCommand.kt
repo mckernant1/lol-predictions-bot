@@ -43,7 +43,7 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             }
             return@map PredictionRatio(userId, numberPredicted, numberCorrect)
         }.filter { it.numberPredicted != 0 }
-            .sortedByDescending { it.getPredictionPercentage() }
+            .sortedByDescending { it.numberCorrect }
             .map {
                 "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
             }
