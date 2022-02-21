@@ -5,6 +5,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.github.mckernant1.math.round
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
@@ -33,31 +34,31 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
         val predictions = users.cartesianProduct(results)
             .mapNotNull { (userId, result) ->
-                Prediction.getItem(userId, result.id)
+                Prediction.getItem(userId, result.matchId)
             }
 
 
         val predictionStrings = results.map { match ->
-            val globalPredictions = Prediction.getAllPredictionsForMatch(match.id)
-            "On ${mediumDateFormat.format(match.date)} **${match.team1}** vs **${match.team2}**:\n" +
+            val globalPredictions = Prediction.getAllPredictionsForMatch(match.matchId)
+            "On ${mediumDateFormat.format(match.startTimeAsInstant())} **${match.blueTeamId}** vs **${match.redTeamId}**:\n" +
                     "${
-                        if (match.winner == match.team1)
+                        if (match.winner == match.blueTeamId)
                             "\uD83D\uDC51 " else ""
-                    }${match.team1}: ${
-                        predictions.filter { it.matchId == match.id && it.prediction == match.team1 }
+                    }${match.blueTeamId}: ${
+                        predictions.filter { it.matchId == match.matchId && it.prediction == match.blueTeamId }
                             .joinToString(" ") { "<@${it.userId}>" }
                     }${
-                        getGlobalPredictionRate(globalPredictions, match.team1)
+                        getGlobalPredictionRate(globalPredictions, match.blueTeamId)
                     }" +
                     "\n" +
                     "${
-                        if (match.winner == match.team2)
+                        if (match.winner == match.redTeamId)
                             "\uD83D\uDC51 " else ""
-                    }${match.team2}: ${
-                        predictions.filter { it.matchId == match.id && it.prediction == match.team2 }
+                    }${match.redTeamId}: ${
+                        predictions.filter { it.matchId == match.matchId && it.prediction == match.redTeamId }
                             .joinToString(" ") { "<@${it.userId}>" }
                     }${
-                        getGlobalPredictionRate(globalPredictions, match.team2)
+                        getGlobalPredictionRate(globalPredictions, match.redTeamId)
                     }"
         }
         val str = predictionStrings.joinToString("\n\n")

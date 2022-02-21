@@ -4,8 +4,7 @@ import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
-import com.github.mckernant1.lol.blitzcrank.utils.getLeagues
-import com.github.mckernant1.lol.blitzcrank.utils.getTeams
+import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
@@ -63,11 +62,11 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateRegion(position: Int) {
         region = words[position]
-        if (getLeagues().find { it.slug.equals(region, ignoreCase = true) } != null) {
+        if (apiClient.leagues.find { it.leagueId.equals(region, ignoreCase = true) } != null) {
             logger.info("validateRegion with region: '${region.toUpperCase()}'")
         } else {
             throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
-                getLeagues().joinToString(", ") { it.slug.capitalize() }
+                apiClient.leagues.joinToString(", ") { it.leagueId.toUpperCase() }
             }")
         }
 
@@ -75,7 +74,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateTeam(position: Int) {
         val teamName = words[position]
-        if (getTeams().any { it.code.equals(teamName, ignoreCase = true) }) {
+        if (apiClient.teams.any { it.teamId.equals(teamName, ignoreCase = true) }) {
             logger.info("Team '$teamName' has been selected")
         } else {
             throw TeamDoesNotExistException("Team '$teamName' does not exists")

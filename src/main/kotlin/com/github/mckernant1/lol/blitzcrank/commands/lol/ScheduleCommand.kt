@@ -2,7 +2,8 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
-import com.github.mckernant1.lol.heimerdinger.schedule.Match
+import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
+import com.github.mckernant1.lol.esports.api.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -29,7 +30,7 @@ class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         val sb = StringBuilder()
         sb.appendLine("The next ${matches.size} matches in $region are: ")
         matches.forEach {
-            sb.appendLine("${longDateFormat.format(it.date)}: **${it.team1}** vs **${it.team2}**")
+            sb.appendLine("${longDateFormat.format(it.startTimeAsInstant())}: **${it.blueTeamId}** vs **${it.redTeamId}**")
         }
         return sb.toString()
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.mckernant1.lol.blitzcrank.utils.ddbClient
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import software.amazon.awssdk.enhanced.dynamodb.AttributeConverter
 import software.amazon.awssdk.enhanced.dynamodb.AttributeValueType
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
@@ -64,7 +65,7 @@ class Reminder(
             .firstOrNull() ?: return false
 
         return Instant.now() + Duration.ofHours(hoursBeforeMatches) >
-                firstMatch.date.toInstant()
+                firstMatch.startTimeAsInstant()
     }
 
     override fun toString(): String =
