@@ -27,7 +27,7 @@ dependencies {
     implementation("net.dv8tion:JDA:4.2.0_204")
 
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.21")
-    implementation("com.github.mckernant1.lol:esports-api:0.0.3")
+    implementation("com.github.mckernant1.lol:esports-api:0.0.4")
     implementation("com.github.mckernant1:kotlin-utils:0.0.6")
 
     implementation("org.slf4j:slf4j-simple:1.7.30")

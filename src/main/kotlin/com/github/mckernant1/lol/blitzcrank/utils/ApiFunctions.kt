@@ -2,9 +2,9 @@ package com.github.mckernant1.lol.blitzcrank.utils
 
 
 import com.github.mckernant1.fs.TimedFileCache
+import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.github.mckernant1.lol.esports.api.Match
-import com.github.mckernant1.lol.heimerdinger.team.Team
-import com.github.mckernant1.lol.heimerdinger.tournaments.Standing
+import com.github.mckernant1.lol.esports.api.Team
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,12 +57,18 @@ fun getResults(region: String, numberToGet: Int?): List<Match> {
 }
 
 fun getStandings(region: String): List<Standing> {
-    val league = leagueClient.getLeagueBySlug(region)
-    return tournamentClient.getStandingsForMostRecentTournamentInLeague(league.id)
-}
+    val tourney = apiClient.getMostRecentTournament(region)
+    val matches = apiClient.getMatchesForTournament(tourney.tournamentId)
+        .filterPastMatches()
+        .filter { it.winner != null }
 
-fun getTeamFromName(teamName: String): Team {
-    return teamClient.getTeamByCode(teamName)
+    val standings: Map<String, Standing> = matches.flatMap { listOf(it.blueTeamId, it.redTeamId) }
+        .associateWith { Standing(it) }
+    matches.forEach {
+        standings[it.winner]!!.wins.add(it.getLoser())
+        standings[it.getLoser()]!!.losses.add(it.winner!!)
+    }
+    return standings.values.toList()
 }
 
 fun getWordsFromMessage(message: Message) = message.contentRaw.replace("\\s+".toRegex(), " ").split(" ")
