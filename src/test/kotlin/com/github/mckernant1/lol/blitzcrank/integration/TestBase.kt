@@ -1,16 +1,20 @@
 package com.github.mckernant1.lol.blitzcrank.integration
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.TextChannel
 import org.testng.Assert
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
+import java.time.Duration
 
 internal open class TestBase {
     companion object {
         const val testTimeoutMillis = 120000L
     }
+
     protected lateinit var testerBot: JDA
     protected lateinit var testerBotChannel: TextChannel
 
@@ -32,8 +36,9 @@ internal open class TestBase {
     }
 
 
-    fun runGenericTest(commandString: String) {
+    fun runGenericTest(commandString: String) = runBlocking {
         val message = testerBotChannel.sendMessage(commandString).complete()
+        delay(Duration.ofSeconds(10).toMillis())
         var mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
         while (mostRecentMessage == commandString) {
             println("Waiting for responce")
