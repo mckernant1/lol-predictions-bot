@@ -6,6 +6,6 @@ internal class TSMRecord : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkTSMRecord() {
-        runGenericTest("!record tsm")
+        runGenericTest("!record lcs tsm")
     }
 }
