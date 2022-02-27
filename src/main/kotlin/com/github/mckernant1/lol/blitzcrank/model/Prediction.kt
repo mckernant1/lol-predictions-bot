@@ -4,7 +4,12 @@ import com.github.mckernant1.lol.blitzcrank.utils.ddbClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbImmutable
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
 import kotlin.streams.toList
 
@@ -37,6 +42,7 @@ class Prediction(
 
         fun putItem(prediction: Prediction) = table.putItem(prediction)
 
+        fun scan(): Iterable<Prediction> = table.scan().items()
 
         fun getAllPredictionsForMatch(matchId: String): List<Prediction> =
             table.index(MATCH_ID_INDEX_NAME).query { it ->

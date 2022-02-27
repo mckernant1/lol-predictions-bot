@@ -4,7 +4,6 @@ package com.github.mckernant1.lol.blitzcrank.utils
 import com.github.mckernant1.fs.TimedFileCache
 import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.github.mckernant1.lol.esports.api.Match
-import com.github.mckernant1.lol.esports.api.Team
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

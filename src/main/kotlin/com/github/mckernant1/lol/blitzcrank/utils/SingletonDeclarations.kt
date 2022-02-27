@@ -27,7 +27,7 @@ val tournamentClient by lazy { TournamentClient(esportsApiConfig = esportsApiCon
 val scheduleClient by lazy { ScheduleClient(esportsApiConfig = esportsApiConfig) }
 val teamClient by lazy { TeamClient(esportsApiConfig = esportsApiConfig) }
 
-private val dc by lazy { DynamoDbClient.builder().build() }
+internal val dc by lazy { DynamoDbClient.builder().build() }
 internal val ddbClient: DynamoDbEnhancedClient by lazy {
     DynamoDbEnhancedClient.builder()
         .dynamoDbClient(dc)
