@@ -33,8 +33,8 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                 "${
                     if (it.winner == it.blueTeamId)
                         "\uD83D\uDC51 " else ""
-                }**${it.blueTeamId}** vs **${it.blueTeamId}**${
-                    if (it.winner == it.blueTeamId)
+                }**${it.blueTeamId}** vs **${it.redTeamId}**${
+                    if (it.winner == it.redTeamId)
                         " \uD83D\uDC51" else ""
                 }"
             )
