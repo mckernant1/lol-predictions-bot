@@ -25,9 +25,10 @@ internal val cwp: MetricsPublisher by lazy {
 
 internal val globalTimer by lazy { Timer() }
 
-internal val apiClient by lazy {
-    DefaultApi(ApiClient().apply {
-        setApiKey(System.getenv("ESPORTS_API_KEY") ?: error("ESPORTS_API_KEY environment variable is missing"))
-    })
-}
+internal val apiClient = DefaultApi(ApiClient().apply {
+    setApiKey(
+        System.getenv("ESPORTS_API_KEY")
+            ?: error("ESPORTS_API_KEY environment variable is missing")
+    )
+})
 

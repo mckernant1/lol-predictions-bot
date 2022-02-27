@@ -3,6 +3,7 @@ package com.github.mckernant1.lol.blitzcrank
 import com.github.mckernant1.lol.blitzcrank.core.MessageListener
 import com.github.mckernant1.lol.blitzcrank.timers.publishBotMetrics
 import com.github.mckernant1.lol.blitzcrank.timers.reminderChecker
+import com.github.mckernant1.lol.blitzcrank.utils.validateEnvironment
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -13,6 +14,7 @@ import java.io.File
 
 fun main() {
 //    convertPredictions()
+    validateEnvironment()
     val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
     val bot = startBot(botToken)
     publishBotMetrics(bot)
