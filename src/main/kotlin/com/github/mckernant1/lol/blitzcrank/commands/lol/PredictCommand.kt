@@ -3,6 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,9 +22,9 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         }
 
         matches.map { match ->
-            val date = match.date
+            val date = match.startTimeAsInstant()
             val msg =
-                "${longDateFormat.format(date)}: \uD83D\uDD35 **${match.team1}** vs **${match.team2}** \uD83D\uDD34\n(This message will delete itself in 5 mins. DO NOT delete yourself)"
+                "${longDateFormat.format(date)}: \uD83D\uDD35 **${match.blueTeamId}** vs **${match.redTeamId}** \uD83D\uDD34\n(This message will delete itself in 5 mins. DO NOT delete yourself)"
             val message = event.channel.sendMessage(msg).complete()
             message.addReaction(BLUE_TEAM_EMOJI).complete()
             message.addReaction(RED_TEAM_EMOJI).complete()
@@ -38,9 +39,9 @@ class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
                 val redTeamUsers =
                     message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
-                val predictions = mapOf(match.team1 to blueTeamUsers, match.team2 to redTeamUsers)
+                val predictions = mapOf(match.blueTeamId to blueTeamUsers, match.redTeamId to redTeamUsers)
                     .map { (team, users) ->
-                        users.map { Prediction(matchId = match.id, userId = it, prediction = team) }
+                        users.map { Prediction(matchId = match.matchId, userId = it, prediction = team) }
                     }.flatten().also { logger.info("Saving prediction: $it") }
                 predictions.forEach { Prediction.putItem(it) }
                 message.delete().complete()

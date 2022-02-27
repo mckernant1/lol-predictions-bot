@@ -2,7 +2,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
-import com.github.mckernant1.lol.heimerdinger.schedule.Match
+import com.github.mckernant1.lol.esports.api.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -31,10 +31,10 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         matches.forEach {
             sb.appendLine(
                 "${
-                    if (it.winner == it.team1)
+                    if (it.winner == it.blueTeamId)
                         "\uD83D\uDC51 " else ""
-                }**${it.team1}** (${it.team1NumWins}) vs (${it.team2NumWins}) **${it.team2}**${
-                    if (it.winner == it.team2)
+                }**${it.blueTeamId}** vs **${it.blueTeamId}**${
+                    if (it.winner == it.blueTeamId)
                         " \uD83D\uDC51" else ""
                 }"
             )

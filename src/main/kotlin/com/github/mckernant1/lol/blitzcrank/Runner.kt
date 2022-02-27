@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import java.io.File
 
 fun main() {
+//    convertPredictions()
     val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
     val bot = startBot(botToken)
     publishBotMetrics(bot)

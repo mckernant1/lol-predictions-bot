@@ -3,6 +3,7 @@ plugins {
     application
     kotlin("jvm") version "1.4.20"
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 group = "com.github.mckernant1"
@@ -15,15 +16,21 @@ application {
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url = uri("http://mckernant1-mvn.s3-website-us-west-2.amazonaws.com/release")
+    }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.+")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("com.google.code.gson:gson:2.9.0")
 
     implementation("net.dv8tion:JDA:4.2.0_204")
 
     implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.21")
+    implementation("com.github.mckernant1.lol:esports-api:0.0.5")
     implementation("com.github.mckernant1:kotlin-utils:0.0.6")
 
     implementation("org.slf4j:slf4j-simple:1.7.30")

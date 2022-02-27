@@ -3,7 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getStandings
-import com.github.mckernant1.lol.heimerdinger.tournaments.Standing
+import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -25,10 +25,10 @@ class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     ): String {
         val sb = StringBuilder()
         sb.appendLine("Standings for $region:")
-        return standings.sortedByDescending { it.wins / it.losses.toDouble() }
+        return standings.sortedByDescending { it.wins.size / it.losses.size.toDouble() }
             .fold(sb) { stringBuilder: StringBuilder, standing: Standing ->
-                if (standing.teamName != "TBD") {
-                    stringBuilder.appendLine("${standing.teamName}: ${standing.wins}-${standing.losses}")
+                if (standing.teamCode != "TBD") {
+                    stringBuilder.appendLine("${standing.teamCode}: ${standing.wins.size}-${standing.losses.size}")
                 }
                 return@fold stringBuilder
             }.toString()
