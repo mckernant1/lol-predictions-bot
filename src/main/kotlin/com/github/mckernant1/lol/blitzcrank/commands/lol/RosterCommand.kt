@@ -1,8 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
-import com.github.mckernant1.lol.blitzcrank.utils.teamClient
-import com.github.mckernant1.lol.heimerdinger.team.Team
+import com.github.mckernant1.lol.blitzcrank.utils.apiClient
+import com.github.mckernant1.lol.esports.api.Team
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
@@ -15,7 +15,7 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         val teamToGet = words[1]
-        val team = teamClient.getTeamByCode(teamToGet)
+        val team = apiClient.getTeamByCode(teamToGet.toUpperCase())
 
         val message = formatMessage(team)
 
@@ -24,12 +24,14 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun formatMessage(team: Team): String {
         return "${team.name.capitalize()} Current Roster:\n" +
-                team.players
-                    .sortedBy { RoleSort.valueOf(it.role.toUpperCase()).sorter }
+                apiClient.playersTeamIdGet(team.teamId)
+                    .asSequence()
+                    .filter { player -> RoleSort.values().any { it.name.equals(player.role, true) } }
+                    .sortedBy { RoleSort.valueOf(it.role!!.toUpperCase()).sorter }
                     .groupBy { it.role }
                     .map { role ->
-                        "${role.key.capitalize()}:\n" +
-                                role.value.joinToString("\n") { " -${it.summonerName}" }
+                        "${role.key!!.capitalize()}:\n" +
+                                role.value.joinToString("\n") { " -${it.id}" }
                     }.joinToString("\n") { it }
     }
 
@@ -37,9 +39,10 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         TOP(1),
         JUNGLE(2),
         MID(3),
-        BOTTOM(4),
+        BOT(4),
         SUPPORT(5),
-        NONE(6);
+        COACH(6),
+        NONE(7);
     }
 
 }
