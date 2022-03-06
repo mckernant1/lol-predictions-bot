@@ -41,7 +41,7 @@ val esportsInfoMessage = EmbedBuilder()
                 `!results <league>` [number of matches] -> Displays the most recent results for the region
                 `!standings <league>` -> Displays the standings for the region
                 `!roster <team code>` -> Displays the roster for a team
-                `!record <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
+                `!record <league> <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
             """.trimIndent(), false
     )
     .build()
