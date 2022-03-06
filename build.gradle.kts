@@ -19,6 +19,10 @@ repositories {
     maven {
         url = uri("http://mckernant1-mvn.s3-website-us-west-2.amazonaws.com/release")
     }
+    maven {
+        name = "m2-dv8tion"
+        url = uri( "https://m2.dv8tion.net/releases")
+    }
 }
 
 dependencies {
@@ -27,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("com.google.code.gson:gson:2.9.0")
 
-    implementation("net.dv8tion:JDA:4.2.0_204")
+    implementation("net.dv8tion:JDA:4.4.0_350")
 
 //    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.21")
     implementation("com.github.mckernant1.lol:esports-api:0.0.5")
