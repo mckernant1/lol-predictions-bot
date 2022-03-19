@@ -24,7 +24,7 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun formatMessage(team: Team): String {
         return "${team.name.capitalize()} Current Roster:\n" +
-                apiClient.playersTeamIdGet(team.teamId)
+                apiClient.playersTeamIdGet(team.teamId.toUpperCase())
                     .asSequence()
                     .filter { player -> RoleSort.values().any { it.name.equals(player.role, true) } }
                     .sortedBy { RoleSort.valueOf(it.role!!.toUpperCase()).sorter }

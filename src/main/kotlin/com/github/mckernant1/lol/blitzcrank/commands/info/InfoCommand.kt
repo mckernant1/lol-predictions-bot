@@ -13,7 +13,7 @@ class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             "settings" -> userSettingsInfoMessage
             else -> baseInfoMessage
         }
-        event.channel.sendMessage(message).complete()
+        event.channel.sendMessageEmbeds(message).complete()
     }
 
     override fun validate() = Unit

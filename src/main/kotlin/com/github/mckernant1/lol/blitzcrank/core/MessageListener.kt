@@ -5,12 +5,12 @@ import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactInternalError
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
+import kotlin.concurrent.thread
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kotlin.concurrent.thread
 
 class MessageListener : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
@@ -40,7 +40,7 @@ class MessageListener : ListenerAdapter() {
                 logger.error("Caught exception while running command '$words': ", it)
                 cwp.putErrorMetric()
                 reactInternalError(event.message)
-                event.channel.sendMessage(createErrorMessage(it)).complete()
+                event.channel.sendMessageEmbeds(createErrorMessage(it)).complete()
             }.onSuccess {
                 cwp.putNoErrorMetric()
             }
