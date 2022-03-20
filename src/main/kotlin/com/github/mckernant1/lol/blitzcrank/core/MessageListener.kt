@@ -26,7 +26,8 @@ class MessageListener : ListenerAdapter() {
                 command.validate()
             } catch (e: Exception) {
                 reactUserError(event.message)
-                event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
+                cwp.putErrorMetric()
+                event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
                 return@thread
             }
 
