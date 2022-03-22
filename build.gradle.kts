@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url = uri("http://mckernant1-mvn.s3-website-us-west-2.amazonaws.com/release")
+        url = uri("https://mvn.mckernant1.com/release")
     }
     maven {
         name = "m2-dv8tion"
