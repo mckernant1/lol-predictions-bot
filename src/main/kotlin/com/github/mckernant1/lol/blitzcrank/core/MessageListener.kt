@@ -1,5 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
+import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactInternalError
@@ -24,8 +25,12 @@ class MessageListener : ListenerAdapter() {
 
             try {
                 command.validate()
-            } catch (e: Exception) {
+            } catch (e: InvalidCommandException) {
                 reactUserError(event.message)
+                event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
+                return@thread
+            } catch (e: Exception) {
+                logger.error("Caught exception while running command '$words': ", e)
                 cwp.putErrorMetric()
                 event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
                 return@thread

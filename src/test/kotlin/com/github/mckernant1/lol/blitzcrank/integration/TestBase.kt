@@ -12,7 +12,7 @@ import java.time.Duration
 
 internal open class TestBase {
     companion object {
-        const val testTimeoutMillis = 120000L
+        const val testTimeoutMillis = 120_000L
     }
 
     protected lateinit var testerBot: JDA
