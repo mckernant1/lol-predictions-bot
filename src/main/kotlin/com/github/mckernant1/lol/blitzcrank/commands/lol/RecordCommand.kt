@@ -17,9 +17,9 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     override suspend fun execute() {
         // Todo: Need to update this to match the new api spec. We should specify a league here
-        val region = words[1].toUpperCase()
-        val team1Words = words[2].toUpperCase()
-        val team2Words = words.getOrNull(3)?.toUpperCase()
+        val region = words[1].uppercase()
+        val team1Words = words[2].uppercase()
+        val team2Words = words.getOrNull(3)?.uppercase()
         val team1 = apiClient.getTeamByCode(team1Words)
         val matches = getResults(region, Int.MAX_VALUE)
 
@@ -46,8 +46,8 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                     matches.size
                 )
             }
-        val totalTeamWins = records.sumBy { it.numWins }
-        val totalTeamLosses = records.sumBy { it.getLosses() }
+        val totalTeamWins: Int = records.sumOf { it.numWins }
+        val totalTeamLosses: Int = records.sumOf { it.getLosses() }
         val teamStrings = records
             .sortedByDescending { it.mostRecentMatchDate }
             .joinToString(LINE_SEPARATOR) { record ->
@@ -57,7 +57,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
                         }
             }.ifEmpty { "There are no previous matches here :[" }
         val messageString =
-            "Record for ${team1.name} ${if (team2Words != null) "vs ${apiClient.getTeamByCode(team2Words).name} " else ""}in ${region.toUpperCase()} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
+            "Record for ${team1.name} ${if (team2Words != null) "vs ${apiClient.getTeamByCode(team2Words).name} " else ""}in ${region.uppercase()} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
         messageString.chunked(2000).forEach {
             event.channel.sendMessage(it).complete()
         }

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 
 abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
@@ -62,11 +63,11 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateRegion(position: Int) {
         region = words[position]
-        if (apiClient.getLeagueByCode(region.toUpperCase()) != null) {
-            logger.info("validateRegion with region: '${region.toUpperCase()}'")
+        if (apiClient.getLeagueByCode(region.uppercase()) != null) {
+            logger.info("validateRegion with region: '${region.uppercase()}'")
         } else {
             throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
-                apiClient.leagues.joinToString(", ") { it.leagueId.toUpperCase() }
+                apiClient.leagues.joinToString(", ") { it.leagueId.uppercase() }
             }")
         }
 
@@ -74,7 +75,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateTeam(position: Int) {
         val teamName = words[position]
-        if (apiClient.getTeamByCode(teamName.toUpperCase()) != null) {
+        if (apiClient.getTeamByCode(teamName.uppercase()) != null) {
             logger.info("Team '$teamName' has been selected")
         } else {
             throw TeamDoesNotExistException("Team '$teamName' does not exists")

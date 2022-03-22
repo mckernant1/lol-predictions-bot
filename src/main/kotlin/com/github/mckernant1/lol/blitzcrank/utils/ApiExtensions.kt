@@ -11,7 +11,7 @@ import java.util.Date
 private val apiLogger = LoggerFactory.getLogger("ApiLogger")
 
 fun DefaultApi.getMostRecentTournament(league: String): Tournament {
-    return this.getTournamentsForLeague(league.toUpperCase())
+    return this.getTournamentsForLeague(league.uppercase())
         .filter { it.startDateAsDate()?.before(Date.from(Instant.now())) ?: false }
         .maxByOrNull { it.startDateAsDate()!! }
         ?: error("Could not get a tournament for league '$league'")

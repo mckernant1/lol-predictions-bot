@@ -1,9 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
-    kotlin("jvm") version "1.4.20"
+    kotlin("jvm") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "5.1.0"
-    kotlin("plugin.serialization") version "1.4.10"
 }
 
 group = "com.github.mckernant1"
@@ -27,8 +26,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.+")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation("com.google.code.gson:gson:2.9.0")
 
     implementation("net.dv8tion:JDA:4.4.0_350")
@@ -37,13 +35,13 @@ dependencies {
     implementation("com.github.mckernant1.lol:esports-api:0.0.5")
     implementation("com.github.mckernant1:kotlin-utils:0.0.6")
 
-    implementation("org.slf4j:slf4j-simple:1.7.30")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
 
     implementation(platform("software.amazon.awssdk:bom:2.15.+"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
-    testImplementation("org.testng:testng:7.3.0")
+    testImplementation("org.testng:testng:7.5")
 }
 
 tasks {
