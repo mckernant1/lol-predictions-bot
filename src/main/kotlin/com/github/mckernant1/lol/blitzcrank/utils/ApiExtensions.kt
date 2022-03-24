@@ -6,14 +6,19 @@ import org.openapitools.client.api.DefaultApi
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.Date
 
 private val apiLogger = LoggerFactory.getLogger("ApiLogger")
 
 fun DefaultApi.getMostRecentTournament(league: String): Tournament {
     return this.getTournamentsForLeague(league.uppercase())
-        .filter { it.startDateAsDate()?.before(Date.from(Instant.now())) ?: false }
-        .maxByOrNull { it.startDateAsDate()!! }
+        .filter { it.startDateAsDate()
+            ?.toInstant()
+            ?.minus(7, ChronoUnit.DAYS)
+            ?.isBefore(Instant.now())
+            ?: false
+        }.maxByOrNull { it.startDateAsDate()!! }
         ?: error("Could not get a tournament for league '$league'")
 }
 

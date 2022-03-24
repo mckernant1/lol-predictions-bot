@@ -63,9 +63,10 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateRegion(position: Int) {
         region = words[position]
-        if (apiClient.getLeagueByCode(region.uppercase()) != null) {
+        try {
+            apiClient.getLeagueByCode(region.uppercase())
             logger.info("validateRegion with region: '${region.uppercase()}'")
-        } else {
+        } catch (e: Exception) {
             throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
                 apiClient.leagues.joinToString(", ") { it.leagueId.uppercase() }
             }")
@@ -75,9 +76,10 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
     protected fun validateTeam(position: Int) {
         val teamName = words[position]
-        if (apiClient.getTeamByCode(teamName.uppercase()) != null) {
+        try  {
+            apiClient.getTeamByCode(teamName.uppercase())
             logger.info("Team '$teamName' has been selected")
-        } else {
+        } catch(e: Exception) {
             throw TeamDoesNotExistException("Team '$teamName' does not exists")
         }
 
