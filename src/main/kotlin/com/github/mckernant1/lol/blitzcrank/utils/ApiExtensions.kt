@@ -38,6 +38,14 @@ fun Tournament.startDateAsDate(): Date? {
     }
 }
 
+fun Tournament.endDateAsDate(): Date? {
+    return try {
+        SimpleDateFormat("yyyy-MM-dd").parse(this.endDate)
+    } catch (e: Exception) {
+        null
+    }
+}
+
 fun Match.startTimeAsInstant(): Instant =
     Instant.ofEpochMilli(this.startTime.longValueExact())
 

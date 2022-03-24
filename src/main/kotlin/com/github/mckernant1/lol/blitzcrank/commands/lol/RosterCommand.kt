@@ -25,7 +25,7 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun formatMessage(team: Team): String {
         return "${team.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }} Current Roster:\n" +
-                apiClient.playersTeamIdGet(team.teamId.uppercase())
+                apiClient.getPlayersOnTeam(team.teamId.uppercase())
                     .asSequence()
                     .filter { player -> RoleSort.values().any { it.name.equals(player.role, true) } }
                     .sortedBy { RoleSort.valueOf(it.role!!.uppercase()).sorter }
