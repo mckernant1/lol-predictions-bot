@@ -27,7 +27,7 @@ class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
     private fun formatResultsReply(matches: List<Match>, region: String): String {
         val sb = StringBuilder()
-        sb.appendLine("The last ${matches.size} matches in $region were: ")
+        sb.appendLine("The last ${matches.size} matches in ${region.uppercase()} were: ")
         matches.forEach {
             sb.appendLine(
                 "${
