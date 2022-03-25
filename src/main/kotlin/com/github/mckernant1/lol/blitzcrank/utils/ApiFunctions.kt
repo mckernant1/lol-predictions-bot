@@ -1,7 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
 
-import com.github.mckernant1.fs.TimedFileCache
 import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.github.mckernant1.lol.esports.api.Match
 import net.dv8tion.jda.api.entities.Message
@@ -12,10 +11,6 @@ import java.time.Instant
 
 private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
 private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")
-private val fileHandler = TimedFileCache(
-    duration = Duration.ofMinutes(30),
-    logger = { fileCacheLogger.info(it) }
-)
 
 fun getSchedule(region: String, numberToGet: Int?): List<Match> {
     val mostRecentTourney = apiClient.getMostRecentTournament(region)
