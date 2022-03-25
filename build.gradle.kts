@@ -2,19 +2,18 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
     kotlin("jvm") version "1.6.10"
-    id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.github.mckernant1"
 version = "0.0.1"
 
 application {
-    mainClassName = "com.github.mckernant1.lol.blitzcrank.RunnerKt"
+    mainClass.set("com.github.mckernant1.lol.blitzcrank.RunnerKt")
 }
 
 repositories {
     mavenCentral()
-    jcenter()
     maven {
         url = uri("https://mvn.mckernant1.com/release")
     }
@@ -31,9 +30,8 @@ dependencies {
 
     implementation("net.dv8tion:JDA:4.4.0_350")
 
-//    implementation("com.github.mckernant1:lol-esports-api-wrapper:0.1.21")
     implementation("com.github.mckernant1.lol:esports-api:0.0.7")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.6")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.8")
 
     implementation("org.slf4j:slf4j-simple:1.7.36")
 
