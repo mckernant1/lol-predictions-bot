@@ -37,7 +37,8 @@ fun startBot(token: String): JDA {
             CacheFlag.ACTIVITY,
             CacheFlag.VOICE_STATE,
             CacheFlag.EMOTE,
-            CacheFlag.CLIENT_STATUS
+            CacheFlag.CLIENT_STATUS,
+            CacheFlag.ONLINE_STATUS
         ).setChunkingFilter(ChunkingFilter.exclude(264445053596991498))
         .setMemberCachePolicy(MemberCachePolicy.ALL)
         .addEventListeners(MessageListener())

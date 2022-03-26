@@ -1,13 +1,13 @@
 package com.github.mckernant1.lol.blitzcrank.timers
 
+import com.github.mckernant1.extensions.executor.scheduleAtFixedRate
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
-import com.github.mckernant1.lol.blitzcrank.utils.globalTimer
+import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
-import kotlin.concurrent.scheduleAtFixedRate
 import kotlin.streams.asSequence
 
 private val logger by lazy {
@@ -15,7 +15,7 @@ private val logger by lazy {
 }
 
 fun reminderChecker(bot: JDA) {
-    globalTimer.scheduleAtFixedRate(0, Duration.ofMinutes(5).toMillis()) {
+    globalThreadPool.scheduleAtFixedRate(Duration.ofMinutes(5)) {
         runCatching {
             UserSettings.scan().asSequence().flatMap { it.reminders }
                 .filter { it.shouldSendMessage() }
