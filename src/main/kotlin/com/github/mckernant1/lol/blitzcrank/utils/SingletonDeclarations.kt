@@ -27,7 +27,7 @@ internal val cwp: MetricsPublisher by lazy {
 }
 
 internal val globalThreadPool by lazy {
-    ScheduledThreadPoolExecutor(1)
+    ScheduledThreadPoolExecutor(2)
 }
 
 internal val apiClient = DefaultApi(
