@@ -6,13 +6,13 @@ import com.github.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
 
 abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
 
@@ -91,5 +91,5 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
         }
     }
 
-    protected fun reply(message: String) = event.channel.sendMessage(message).complete()
+    protected fun reply(message: String): Message = event.channel.sendMessage(message).complete()
 }

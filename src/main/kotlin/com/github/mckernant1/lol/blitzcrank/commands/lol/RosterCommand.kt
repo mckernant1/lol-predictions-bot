@@ -1,10 +1,10 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
+import com.github.mckernant1.extensions.strings.capitalize
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import com.github.mckernant1.lol.esports.api.Team
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import java.util.*
 
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
@@ -24,14 +24,14 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
     private fun formatMessage(team: Team): String {
-        return "${team.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }} Current Roster:\n" +
+        return "${team.name.capitalize()} Current Roster:\n" +
                 apiClient.getPlayersOnTeam(team.teamId.uppercase())
                     .asSequence()
                     .filter { player -> RoleSort.values().any { it.name.equals(player.role, true) } }
                     .sortedBy { RoleSort.valueOf(it.role!!.uppercase()).sorter }
                     .groupBy { it.role }
                     .map { role ->
-                        "${role.key!!.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}:\n" +
+                        "${role.key!!.capitalize()}:\n" +
                                 role.value.joinToString("\n") { " -${it.id}" }
                     }.joinToString("\n") { it }
     }

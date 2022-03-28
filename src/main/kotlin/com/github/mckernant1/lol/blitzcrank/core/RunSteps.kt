@@ -1,5 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
+import com.github.mckernant1.extensions.strings.capitalize
 import com.github.mckernant1.lol.blitzcrank.commands.lol.PredictCommand
 import com.github.mckernant1.lol.blitzcrank.commands.lol.RecordCommand
 import com.github.mckernant1.lol.blitzcrank.commands.lol.ReportCommand
@@ -24,7 +25,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 private val logger: Logger = LoggerFactory.getLogger("RunCommandLogger")
@@ -51,8 +51,7 @@ fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when
 
 fun commandValidMetricsAndLogging(words: List<String>, event: MessageReceivedEvent) {
     reactUserOk(event.message)
-    val commandString = "${words[0].removePrefix("!")
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}Command"
+    val commandString = "${words[0].removePrefix("!").capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
     logger.info(
         "Running command='${commandString}' with arguments='$words' from='${serverOrUser}' with id='${
