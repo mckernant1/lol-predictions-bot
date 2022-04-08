@@ -1,15 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
 import com.github.mckernant1.extensions.strings.capitalize
-import com.github.mckernant1.lol.blitzcrank.commands.lol.PredictCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.RecordCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.ReportCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.ResultsCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.RosterCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.ScheduleCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.StandingsCommand
-import com.github.mckernant1.lol.blitzcrank.commands.lol.StatsCommand
 import com.github.mckernant1.lol.blitzcrank.commands.info.InfoCommand
+import com.github.mckernant1.lol.blitzcrank.commands.lol.*
 import com.github.mckernant1.lol.blitzcrank.commands.misc.SetTimezoneCommand
 import com.github.mckernant1.lol.blitzcrank.commands.pasta.PastaCommand
 import com.github.mckernant1.lol.blitzcrank.commands.pasta.SetPastaCommand
@@ -46,6 +39,7 @@ fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when
     "!addReminder" -> AddReminderCommand(event)
     "!listReminders" -> ListRemindersCommand(event)
     "!deleteReminder" -> RemoveReminderCommand(event)
+    "!ongoing" -> OngoingTournamentsCommand(event)
     else -> null
 }
 

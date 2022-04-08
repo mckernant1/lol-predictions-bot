@@ -3,7 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.extensions.strings.capitalize
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
-import com.github.mckernant1.lol.esports.api.Team
+import com.github.mckernant1.lol.esports.api.models.Team
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

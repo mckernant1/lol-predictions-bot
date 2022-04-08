@@ -28,6 +28,8 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
 
 ### Esports Commands
+`!ongoing` -> Display all the leagues with ongoing tournaments
+
 `!schedule <league> [number of matches]` -> Displays the upcoming games for the region
 
 `!results <league> [number of matches]` -> Displays the most recent results for the region 

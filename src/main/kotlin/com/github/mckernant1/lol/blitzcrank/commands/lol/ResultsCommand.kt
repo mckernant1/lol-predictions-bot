@@ -2,7 +2,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
-import com.github.mckernant1.lol.esports.api.Match
+import com.github.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {

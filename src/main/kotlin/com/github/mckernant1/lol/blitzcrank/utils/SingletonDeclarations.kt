@@ -3,13 +3,12 @@ package com.github.mckernant1.lol.blitzcrank.utils
 import com.github.mckernant1.lol.blitzcrank.metrics.AWSCloudwatchMetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.metrics.MetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.metrics.NoMetricsMetricsPublisher
-import com.github.mckernant1.lol.esports.ApiClient
+import com.github.mckernant1.lol.esports.api.ApiClient
+import com.github.mckernant1.lol.esports.api.client.DefaultApi
 import okhttp3.OkHttpClient
-import org.openapitools.client.api.DefaultApi
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.time.Duration
-import java.util.Timer
 import java.util.concurrent.ScheduledThreadPoolExecutor
 
 internal val dc by lazy { DynamoDbClient.builder().build() }

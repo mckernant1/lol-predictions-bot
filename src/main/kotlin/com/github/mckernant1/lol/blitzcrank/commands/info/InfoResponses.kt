@@ -37,6 +37,7 @@ val esportsInfoMessage = EmbedBuilder()
     )
     .addField(
         "Esports Commands", """
+                `!ongoing` -> Display all the leagues with ongoing tournaments
                 `!schedule <league>` [number of matches] -> Displays the upcoming games for the region
                 `!results <league>` [number of matches] -> Displays the most recent results for the region
                 `!standings <league>` -> Displays the standings for the region

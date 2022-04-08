@@ -1,8 +1,9 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
-import com.github.mckernant1.lol.esports.api.Match
-import com.github.mckernant1.lol.esports.api.Tournament
-import org.openapitools.client.api.DefaultApi
+
+import com.github.mckernant1.lol.esports.api.client.DefaultApi
+import com.github.mckernant1.lol.esports.api.models.Match
+import com.github.mckernant1.lol.esports.api.models.Tournament
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.time.Instant

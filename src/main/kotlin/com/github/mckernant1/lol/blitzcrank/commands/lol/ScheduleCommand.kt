@@ -3,7 +3,7 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
-import com.github.mckernant1.lol.esports.api.Match
+import com.github.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
