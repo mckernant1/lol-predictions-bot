@@ -1,10 +1,10 @@
-FROM 653528873951.dkr.ecr.us-west-2.amazonaws.com/openjdk:11 AS build
+FROM 653528873951.dkr.ecr.us-west-2.amazonaws.com/arm64v8/openjdk:11 AS build
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
 RUN ./gradlew build --no-daemon
 
-FROM 653528873951.dkr.ecr.us-west-2.amazonaws.com/openjdk:11-jre-slim
+FROM 653528873951.dkr.ecr.us-west-2.amazonaws.com/arm64v8/openjdk:11-jre-slim
 
 RUN mkdir /app
 
