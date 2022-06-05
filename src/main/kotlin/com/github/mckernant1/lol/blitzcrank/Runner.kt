@@ -1,28 +1,29 @@
 package com.github.mckernant1.lol.blitzcrank
 
+import com.github.mckernant1.assertions.Assertions.assertEnvironmentVariablesExist
 import com.github.mckernant1.lol.blitzcrank.core.MessageListener
 import com.github.mckernant1.lol.blitzcrank.timers.publishBotMetrics
 import com.github.mckernant1.lol.blitzcrank.timers.reminderChecker
-import com.github.mckernant1.lol.blitzcrank.utils.validateEnvironment
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
-import java.io.File
 
 fun main() {
 //    convertPredictions()
-    validateEnvironment()
-    val botToken: String = System.getenv("BOT_TOKEN") ?: error("BOT_TOKEN environment variable required")
-    val bot = startBot(botToken)
+    assertEnvironmentVariablesExist("BOT_TOKEN",
+        "ESPORTS_API_KEY",
+        "PREDICTIONS_TABLE_NAME",
+        "USER_SETTINGS_TABLE_NAME"
+    )
+    val bot = startBot(System.getenv("BOT_TOKEN"))
     publishBotMetrics(bot)
     reminderChecker(bot)
 }
 
 fun startBot(token: String): JDA {
-    File("store").mkdir()
     return JDABuilder.create(
         token,
         GatewayIntent.GUILD_MEMBERS,

@@ -25,17 +25,18 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation("com.google.code.gson:gson:2.9.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     implementation("net.dv8tion:JDA:4.4.0_350")
 
     implementation("com.github.mckernant1.lol:esports-api:0.0.9")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.12")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.30")
 
     implementation("org.slf4j:slf4j-simple:1.7.36")
 
-    implementation(platform("software.amazon.awssdk:bom:2.15.+"))
+    implementation(platform("software.amazon.awssdk:bom:2.17.+"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 

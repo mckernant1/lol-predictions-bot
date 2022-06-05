@@ -5,9 +5,11 @@ import com.github.mckernant1.lol.blitzcrank.metrics.MetricsPublisher
 import com.github.mckernant1.lol.blitzcrank.metrics.NoMetricsMetricsPublisher
 import com.github.mckernant1.lol.esports.api.ApiClient
 import com.github.mckernant1.lol.esports.api.client.DefaultApi
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import java.io.File
 import java.time.Duration
 import java.util.concurrent.ScheduledThreadPoolExecutor
 
@@ -35,9 +37,16 @@ internal val apiClient = DefaultApi(
             .readTimeout(Duration.ofSeconds(60))
             .connectTimeout(Duration.ofSeconds(60))
             .writeTimeout(Duration.ofSeconds(60))
+            .cache(
+                Cache(
+                    File("store"),
+                    50L * 1024L * 1024L // 50 MiB
+                )
+            )
             .build()
     ).apply {
-        setApiKey(System.getenv("ESPORTS_API_KEY")
-            ?: error("ESPORTS_API_KEY environment variable is missing"))
+        setApiKey(
+            System.getenv("ESPORTS_API_KEY")
+        )
     }
 )
