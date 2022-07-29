@@ -4,13 +4,8 @@ package com.github.mckernant1.lol.blitzcrank.utils
 import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.github.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.entities.Message
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
-
-private val fileCacheLogger: Logger = LoggerFactory.getLogger("FileCacheLogger")
-private val retrievalLogger = LoggerFactory.getLogger("RetrievalLogger")
 
 fun getSchedule(region: String, numberToGet: Int?): List<Match> {
     val mostRecentTourney = apiClient.getMostRecentTournament(region)

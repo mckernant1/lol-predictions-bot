@@ -47,7 +47,7 @@ fun reminderChecker(bot: JDA) {
                     logger.warn("This is an ErrorResponseException from discord API. Details: $knownErrorCodes, Error Code: ${it.errorCode}, Message: ${it.meaning}")
                 }
                 else -> {
-                    logger.warn("An error occurred while sending reminders. This is not an ErrorResponseException", it)
+                    logger.error("An error occurred while sending reminders. This is not an ErrorResponseException", it)
                 }
             }
         }
