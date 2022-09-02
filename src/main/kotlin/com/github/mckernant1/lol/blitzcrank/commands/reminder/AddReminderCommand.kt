@@ -6,7 +6,7 @@ import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class AddReminderCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         val newReminders = userSettings.reminders
         newReminders.add(
             Reminder(

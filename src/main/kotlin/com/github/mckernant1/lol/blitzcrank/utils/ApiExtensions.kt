@@ -6,11 +6,8 @@ import com.github.mckernant1.lol.esports.api.models.Match
 import com.github.mckernant1.lol.esports.api.models.Tournament
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.time.Instant
-import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.Date
 
 private val apiLogger = LoggerFactory.getLogger("ApiLogger")
 

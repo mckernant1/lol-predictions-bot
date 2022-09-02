@@ -5,7 +5,7 @@ import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class OngoingTournamentsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         val ongoingTourneys = apiClient.ongoingTournanments
             .map { apiClient.getLeagueByCode(it.leagueId) }
             .joinToString("\n") {

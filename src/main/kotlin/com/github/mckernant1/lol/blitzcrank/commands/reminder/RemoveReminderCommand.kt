@@ -5,7 +5,7 @@ import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class RemoveReminderCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         val removed = userSettings.reminders.removeAll {
             it.leagueSlug == region && it.hoursBeforeMatches == words[2].toLong()
         }

@@ -7,7 +7,7 @@ import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class StandingsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         val standings = getStandings(region)
         val replyString = formatStandingsReply(standings, region)
         event.channel.sendMessage(replyString).queue()

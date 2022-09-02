@@ -4,7 +4,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ListRemindersCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         event.channel.sendMessage("""
             Your Reminders
             ${userSettings.reminders.joinToString("-----------------") {

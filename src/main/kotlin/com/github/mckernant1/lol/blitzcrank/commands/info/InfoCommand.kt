@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class InfoCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
 
-    override suspend fun execute() {
+    override fun execute() {
         val message = when (words.getOrNull(1)) {
             "esports" -> esportsInfoMessage
             "predict" -> predictionsInfoMessage

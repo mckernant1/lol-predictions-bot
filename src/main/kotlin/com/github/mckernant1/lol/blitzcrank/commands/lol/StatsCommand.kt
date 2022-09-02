@@ -8,7 +8,7 @@ import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         var results = getResults(region, 100)
 
         results = if (numToGet != null) {

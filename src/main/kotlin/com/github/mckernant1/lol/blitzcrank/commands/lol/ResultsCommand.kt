@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 class ResultsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
-    override suspend fun execute() {
+    override fun execute() {
         val matches = getResults(region, numToGet)
         if (matches.isEmpty()) {
             val message = "There are no results"

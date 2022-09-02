@@ -16,7 +16,7 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         this.previous = previous
     }
 
-    override suspend fun execute() {
+    override fun execute() {
         val results = if (previous) getResults(region, numToGet) else getSchedule(region, numToGet)
 
         if (results.isEmpty()) {

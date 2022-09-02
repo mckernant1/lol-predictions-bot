@@ -7,18 +7,19 @@ import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.time.Duration
 
 
 class PredictCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
-    override suspend fun execute() = coroutineScope {
+    override fun execute() = runBlocking {
         val matches = getSchedule(region, numToGet)
         if (matches.isEmpty()) {
             val message = "There are no matches to predict"
             event.channel.sendMessage(message).complete()
-            return@coroutineScope
+            return@runBlocking
         }
 
         matches.map { match ->

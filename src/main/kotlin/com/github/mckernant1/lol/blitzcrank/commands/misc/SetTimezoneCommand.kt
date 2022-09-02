@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class SetTimezoneCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-    override suspend fun execute() {
+    override fun execute() {
         val userSpecifiedTimezone = words[1]
 
         val userZoneIdIsValid: Result<ZoneId> = userSpecifiedTimezone.runCatching {

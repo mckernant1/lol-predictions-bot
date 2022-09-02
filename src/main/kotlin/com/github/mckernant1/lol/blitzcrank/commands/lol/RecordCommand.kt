@@ -15,8 +15,7 @@ class RecordCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         private const val LINE_SEPARATOR = "\n---------------------------------------------------\n"
     }
 
-    override suspend fun execute() {
-        // Todo: Need to update this to match the new api spec. We should specify a league here
+    override fun execute() {
         val region = words[1].uppercase()
         val team1Words = words[2].uppercase()
         val team2Words = words.getOrNull(3)?.uppercase()

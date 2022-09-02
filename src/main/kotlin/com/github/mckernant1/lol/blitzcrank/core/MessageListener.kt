@@ -1,10 +1,12 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
+import com.github.mckernant1.extensions.strings.capitalize
 import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.reactInternalError
 import com.github.mckernant1.lol.blitzcrank.utils.reactUserError
+import com.github.mckernant1.standalone.measureDuration
 import kotlin.concurrent.thread
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -22,9 +24,13 @@ class MessageListener : ListenerAdapter() {
                 ?: return@thread
 
             event.channel.sendTyping().complete()
+            val commandString ="${words[0].removePrefix("!").capitalize()}Command"
 
             try {
-                command.validate()
+                val validationDuration = measureDuration {
+                    command.validate()
+                }
+                logger.info("Validation step for $commandString took ${validationDuration.toMillis()}ms")
             } catch (e: InvalidCommandException) {
                 reactUserError(event.message)
                 event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
@@ -38,9 +44,10 @@ class MessageListener : ListenerAdapter() {
 
             runCatching {
                 commandValidMetricsAndLogging(words, event)
-                runBlocking {
+                val executeDuration = measureDuration {
                     command.execute()
                 }
+                logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
             }.onFailure {
                 logger.error("Caught exception while running command '$words': ", it)
                 cwp.putErrorMetric()

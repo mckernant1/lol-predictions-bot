@@ -14,7 +14,7 @@ class RosterCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
     }
 
 
-    override suspend fun execute() {
+    override fun execute() {
         val teamToGet = words[1]
         val team = apiClient.getTeamByCode(teamToGet.uppercase())
 

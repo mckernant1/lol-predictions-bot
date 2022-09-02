@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
 
 
-    override suspend fun execute() {
+    override fun execute() {
         val matches = getSchedule(region, numToGet)
         if (matches.isEmpty()) {
             val message = "There are no matches listed"

@@ -6,6 +6,7 @@ import com.github.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import com.github.mckernant1.standalone.measureDuration
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
@@ -42,7 +43,7 @@ abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
             )
     }
 
-    abstract suspend fun execute(): Unit
+    abstract fun execute(): Unit
 
     @Throws(InvalidCommandException::class)
     abstract fun validate(): Unit
