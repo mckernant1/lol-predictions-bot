@@ -25,22 +25,22 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.google.code.gson:gson:2.9.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
 
-    implementation("net.dv8tion:JDA:4.4.0_350")
+    implementation("net.dv8tion:JDA:4.4.0_352")
 
-    implementation("com.github.mckernant1.lol:esports-api:0.0.9")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.30")
+    implementation("com.github.mckernant1.lol:esports-api:0.0.13")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.31")
 
-    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation("org.slf4j:slf4j-simple:2.0.0")
 
-    implementation(platform("software.amazon.awssdk:bom:2.17.+"))
+    implementation(platform("software.amazon.awssdk:bom:2.17.267"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
-    testImplementation("org.testng:testng:7.5")
+    testImplementation("org.testng:testng:7.6.1")
 }
 
 tasks {

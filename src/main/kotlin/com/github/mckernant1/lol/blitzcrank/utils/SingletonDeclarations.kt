@@ -45,8 +45,6 @@ internal val apiClient = DefaultApi(
             )
             .build()
     ).apply {
-        setApiKey(
-            System.getenv("ESPORTS_API_KEY")
-        )
+        basePath = "https://v2-api.lol-esports.mckernant1.com"
     }
 )
