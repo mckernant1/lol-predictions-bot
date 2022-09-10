@@ -47,7 +47,7 @@ fun getCommandFromWords(words: List<String>, event: CommandInfo) = when (words[0
 }
 
 fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
-    val commandString = "${words[0].removePrefix("!").capitalize()}Command"
+    val commandString = "${words[0].drop(1).capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
     logger.info(
         "Running command='${commandString}' with arguments='$words' from='${serverOrUser}' with id='${
