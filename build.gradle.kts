@@ -62,6 +62,7 @@ task<Test>("test-integration") {
 }
 
 tasks.withType<ShadowJar>() {
+    from("./src/main/resources")
     manifest {
         attributes["Main-Class"] = "RunnerKt"
     }
