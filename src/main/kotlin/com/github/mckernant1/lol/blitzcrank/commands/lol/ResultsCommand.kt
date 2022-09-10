@@ -13,7 +13,7 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun execute() {
         val matches = getResults(region, numToGet)
         if (matches.isEmpty()) {
-            val message = "There are no results.json"
+            val message = "There are no results"
             event.channel.sendMessage(message).complete()
             return
         }

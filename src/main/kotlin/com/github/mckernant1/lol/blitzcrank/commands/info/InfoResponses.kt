@@ -39,7 +39,7 @@ val esportsInfoMessage = EmbedBuilder()
         "Esports Commands", """
                 `!ongoing` -> Display all the leagues with ongoing tournaments
                 `!schedule <league>` [number of matches] -> Displays the upcoming games for the region
-                `!results.json <league>` [number of matches] -> Displays the most recent results.json for the region
+                `!results <league>` [number of matches] -> Displays the most recent results for the region
                 `!standings <league>` -> Displays the standings for the region
                 `!roster <team code>` -> Displays the roster for a team
                 `!record <league> <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
