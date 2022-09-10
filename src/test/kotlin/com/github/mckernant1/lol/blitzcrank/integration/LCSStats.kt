@@ -6,7 +6,7 @@ internal class LCSStats : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkLCSStats() {
-        runGenericTest("!stats lcs")
+        runGenericTest("/stats league_id: lcs")
     }
 
 }

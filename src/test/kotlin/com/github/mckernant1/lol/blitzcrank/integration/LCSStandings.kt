@@ -5,6 +5,6 @@ import org.testng.annotations.Test
 internal class LCSStandings : TestBase() {
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkLCSStandings() {
-        runGenericTest("!standings lcs")
+        runGenericTest("/standings league_id: lcs")
     }
 }

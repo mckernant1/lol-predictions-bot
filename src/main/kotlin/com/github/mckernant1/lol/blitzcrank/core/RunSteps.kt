@@ -9,11 +9,10 @@ import com.github.mckernant1.lol.blitzcrank.commands.pasta.SetPastaCommand
 import com.github.mckernant1.lol.blitzcrank.commands.reminder.AddReminderCommand
 import com.github.mckernant1.lol.blitzcrank.commands.reminder.ListRemindersCommand
 import com.github.mckernant1.lol.blitzcrank.commands.reminder.RemoveReminderCommand
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
-import com.github.mckernant1.lol.blitzcrank.utils.reactUserOk
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
@@ -22,29 +21,32 @@ import java.time.format.DateTimeFormatter
 
 private val logger: Logger = LoggerFactory.getLogger("RunCommandLogger")
 
-fun getCommandFromWords(words: List<String>, event: MessageReceivedEvent) = when (words[0]) {
-    "!schedule" -> ScheduleCommand(event)
-    "!info" -> InfoCommand(event)
-    "!results" -> ResultsCommand(event)
-    "!standings" -> StandingsCommand(event)
-    "!predict" -> PredictCommand(event)
-    "!report" -> ReportCommand(event, true)
-    "!predictions" -> ReportCommand(event, false)
-    "!stats" -> StatsCommand(event)
-    "!roster" -> RosterCommand(event)
-    "!setTimezone" -> SetTimezoneCommand(event)
-    "!record" -> RecordCommand(event)
-    "!setPasta" -> SetPastaCommand(event)
-    "!pasta" -> PastaCommand(event)
-    "!addReminder" -> AddReminderCommand(event)
-    "!listReminders" -> ListRemindersCommand(event)
-    "!deleteReminder" -> RemoveReminderCommand(event)
-    "!ongoing" -> OngoingTournamentsCommand(event)
+fun getCommandFromWords(words: List<String>, event: CommandInfo) = when (words[0].drop(1)) {
+    "schedule" -> ScheduleCommand(event)
+    "info" -> InfoCommand(event)
+    "results" -> ResultsCommand(event)
+    "standings" -> StandingsCommand(event)
+    "predict" -> PredictCommand(event)
+    "report" -> ReportCommand(event, true)
+    "predictions" -> ReportCommand(event, false)
+    "stats" -> StatsCommand(event)
+    "roster" -> RosterCommand(event)
+    "setTimezone" -> SetTimezoneCommand(event)
+    "set-timezone" -> SetTimezoneCommand(event)
+    "record" -> RecordCommand(event)
+    "pasta" -> PastaCommand(event)
+    "set-pasta" -> SetPastaCommand(event)
+    "addReminder" -> AddReminderCommand(event)
+    "add-reminder" -> AddReminderCommand(event)
+    "listReminders" -> ListRemindersCommand(event)
+    "list-reminders" -> ListRemindersCommand(event)
+    "deleteReminder" -> RemoveReminderCommand(event)
+    "delete-reminder" -> RemoveReminderCommand(event)
+    "ongoing" -> OngoingTournamentsCommand(event)
     else -> null
 }
 
-fun commandValidMetricsAndLogging(words: List<String>, event: MessageReceivedEvent) {
-    reactUserOk(event.message)
+fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
     val commandString = "${words[0].removePrefix("!").capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
     logger.info(

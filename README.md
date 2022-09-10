@@ -14,7 +14,7 @@ You can request this data at any time.
 
 ## Info
 This bot provides schedule, results, and standings for all regions listed in the esports api.
-To add this bot to your discord server [Click here](https://discord.com/api/oauth2/authorize?client_id=725169546633281628&permissions=2112&scope=bot)
+To add this bot to your discord server [Click here](https://discord.com/api/oauth2/authorize?client_id=725169546633281628&permissions=2112&scope=bot%20applications.commands)
 
 For support please file a Github issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
 

@@ -3,11 +3,16 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.extensions.collections.cartesianProduct
 import com.github.mckernant1.extensions.math.round
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
+class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
+    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
+    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
+
     override fun execute() {
         var results = getResults(region, 100)
 
@@ -17,9 +22,9 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
             results
         }
         val users = try {
-            event.guild.members.map { it.id }
+            event.guild!!.members.map { it.id }
         } catch (e: IllegalStateException) {
-            listOf(event.message.author.id)
+            listOf(event.author.id)
         }
 
 
@@ -47,9 +52,9 @@ class StatsCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         if (str.isBlank()) {
             event.channel.sendMessage("There are no past matches for this tournament").complete()
         } else if (str.length < 2000) {
-            event.channel.sendMessage("Prediction results for $region are:\n$str").complete()
+            event.channel.sendMessage("Prediction results.json for $region are:\n$str").complete()
         } else {
-            event.channel.sendMessage("Prediction results for $region are:").complete()
+            event.channel.sendMessage("Prediction results.json for $region are:").complete()
             resultString.forEach {
                 event.channel.sendMessage(it).complete()
             }

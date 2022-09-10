@@ -6,6 +6,6 @@ internal class TSMRoster : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkTSMRosterOk() {
-        runGenericTest("!roster tsm")
+        runGenericTest("/roster team_id: tsm")
     }
 }

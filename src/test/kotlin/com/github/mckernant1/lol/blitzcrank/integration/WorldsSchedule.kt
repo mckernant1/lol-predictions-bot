@@ -5,6 +5,6 @@ import org.testng.annotations.Test
 internal class WorldsSchedule : TestBase() {
     @Test(groups = ["integration"], timeOut = testTimeoutMillis)
     fun checkWorldsScheduleOk() {
-        runGenericTest("!schedule wcs")
+        runGenericTest("/schedule league_id: wcs")
     }
 }

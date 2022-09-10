@@ -5,6 +5,6 @@ import org.testng.annotations.Test
 internal class LCSPredict : TestBase() {
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkLCSPredictOk() {
-        runGenericTest("!predict lcs")
+        runGenericTest("/predict league_id: lcs")
     }
 }

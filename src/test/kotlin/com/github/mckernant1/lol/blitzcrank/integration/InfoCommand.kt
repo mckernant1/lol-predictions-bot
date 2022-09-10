@@ -6,7 +6,7 @@ internal class InfoCommand : TestBase() {
 
     @Test(groups = ["integration"], timeOut = testTimeoutMillis)
     fun checkInfoCommand() {
-        runGenericTest("!info")
+        runGenericTest("/info")
     }
 
 }

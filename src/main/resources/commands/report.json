@@ -1,0 +1,19 @@
+{
+  "name": "report",
+  "type": 1,
+  "description": "Get a report on predictions for a given league",
+  "options": [
+    {
+      "name": "league_id",
+      "description": "The league to query",
+      "type": 3,
+      "required": true
+    },
+    {
+      "name": "number_of_matches",
+      "description": "The number of matches to get",
+      "type": 3,
+      "required": false
+    }
+  ]
+}

@@ -6,7 +6,7 @@ internal class SetTimezone : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkTimezone() {
-        runGenericTest("!setTimezone GMT-8")
+        runGenericTest("/setTimezone timezone: GMT-8")
     }
 
 }

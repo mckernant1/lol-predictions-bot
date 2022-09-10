@@ -5,6 +5,6 @@ import org.testng.annotations.Test
 internal class Pasta : TestBase() {
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkPasta() {
-        runGenericTest("!pasta")
+        runGenericTest("/pasta")
     }
 }

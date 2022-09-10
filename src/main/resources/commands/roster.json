@@ -1,0 +1,13 @@
+{
+  "name": "roster",
+  "type": 1,
+  "description": "Get the roster for the given team",
+  "options": [
+    {
+      "name": "team_id",
+      "description": "The team to query",
+      "type": 3,
+      "required": true
+    }
+  ]
+}

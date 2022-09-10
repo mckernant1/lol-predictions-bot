@@ -6,6 +6,6 @@ internal class LCKSchedule : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkLCKScheduleOk() {
-        runGenericTest("!schedule lck")
+        runGenericTest("/schedule league_id: lck")
     }
 }

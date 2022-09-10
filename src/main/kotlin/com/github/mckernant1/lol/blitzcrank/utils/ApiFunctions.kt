@@ -80,4 +80,6 @@ fun getStandings(region: String): List<Standing> {
     return standings.values.toList()
 }
 
-fun getWordsFromMessage(message: Message) = message.contentRaw.replace("\\s+".toRegex(), " ").split(" ")
+fun getWordsFromMessage(message: Message): List<String> = getWordsFromString(message.contentRaw)
+
+fun getWordsFromString(string: String): List<String> = string.replace("\\s+".toRegex(), " ").split(" ")

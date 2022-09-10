@@ -5,6 +5,6 @@ import org.testng.annotations.Test
 internal class WorldsResults : TestBase() {
     @Test(groups = ["integration"], timeOut = testTimeoutMillis)
     fun checkResultsOk() {
-        runGenericTest("!results wcs")
+        runGenericTest("/results league_id: wcs")
     }
 }

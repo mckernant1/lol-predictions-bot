@@ -6,6 +6,6 @@ internal class TSMRecord : TestBase() {
 
     @Test(groups = ["integration"], timeOut = TestBase.testTimeoutMillis)
     fun checkTSMRecord() {
-        runGenericTest("!record lcs tsm")
+        runGenericTest("/record league_id: lcs team_id: tsm")
     }
 }

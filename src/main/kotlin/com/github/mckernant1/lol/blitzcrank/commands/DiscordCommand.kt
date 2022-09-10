@@ -3,11 +3,12 @@ package com.github.mckernant1.lol.blitzcrank.commands
 import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException
 import com.github.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
-import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
-import com.github.mckernant1.standalone.measureDuration
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,11 +16,14 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-abstract class DiscordCommand(protected val event: MessageReceivedEvent) {
+abstract class DiscordCommand(protected val event: CommandInfo) {
+
+    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
+    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
 
     protected lateinit var region: String
     protected var numToGet: Int? = null
-    protected val words = getWordsFromMessage(event.message)
+    protected val words = getWordsFromString(event.commandString)
 
     protected val logger: Logger = LoggerFactory.getLogger("${event.author.id}-${words}")
 

@@ -1,11 +1,15 @@
 package com.github.mckernant1.lol.blitzcrank.commands.reminder
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Reminder
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-class AddReminderCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
+class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
+    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
+    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
     override fun execute() {
         val newReminders = userSettings.reminders
         newReminders.add(

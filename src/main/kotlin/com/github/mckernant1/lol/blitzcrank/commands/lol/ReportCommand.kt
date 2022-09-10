@@ -3,14 +3,20 @@ package com.github.mckernant1.lol.blitzcrank.commands.lol
 import com.github.mckernant1.extensions.collections.cartesianProduct
 import com.github.mckernant1.extensions.math.round
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
-class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
+class ReportCommand(
+    event: CommandInfo,
     private var previous: Boolean = false
+) : DiscordCommand(event) {
+    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
+    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
 
     constructor(event: MessageReceivedEvent, previous: Boolean) : this(event) {
         this.previous = previous
@@ -26,10 +32,10 @@ class ReportCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
         }
 
         val users = try {
-            event.guild.members.map { it.id }
+            event.guild!!.members.map { it.id }
         } catch (e: IllegalStateException) {
             logger.info("IllegalStateException thrown ${e.message}")
-            listOf(event.message.author.id)
+            listOf(event.author.id)
         }.also { logger.info("User Ids in server: $it") }
 
         val predictions = users.cartesianProduct(results)

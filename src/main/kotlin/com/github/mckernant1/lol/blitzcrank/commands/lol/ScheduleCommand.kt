@@ -1,13 +1,14 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.github.mckernant1.lol.esports.api.models.Match
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 
-class ScheduleCommand(event: MessageReceivedEvent) : DiscordCommand(event) {
-
+class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
+    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
 
     override fun execute() {
         val matches = getSchedule(region, numToGet)
