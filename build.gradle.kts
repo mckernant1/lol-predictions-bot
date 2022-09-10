@@ -33,7 +33,7 @@ dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.3")
 
     // Cannot upgrade right now https://github.com/OpenAPITools/openapi-generator/issues/12549
-    implementation("com.github.mckernant1.lol:esports-api:0.0.10")
+    implementation("com.github.mckernant1.lol:esports-api:0.0.16")
     implementation("com.github.mckernant1:kotlin-utils:0.0.31")
 
     implementation("org.slf4j:slf4j-simple:2.0.0")
