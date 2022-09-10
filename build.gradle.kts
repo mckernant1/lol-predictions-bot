@@ -30,11 +30,10 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
 
     implementation("net.dv8tion:JDA:4.4.0_352")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.3")
 
     // Cannot upgrade right now https://github.com/OpenAPITools/openapi-generator/issues/12549
     implementation("com.github.mckernant1.lol:esports-api:0.0.16")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.31")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.32")
 
     implementation("org.slf4j:slf4j-simple:2.0.0")
 
