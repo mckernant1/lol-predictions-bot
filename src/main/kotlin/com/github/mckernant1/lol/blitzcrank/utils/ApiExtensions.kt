@@ -20,7 +20,10 @@ fun DefaultApi.getMostRecentTournament(league: String): Tournament {
                 ?: false
         }.sortedByDescending { it.startDateAsDate()!! }
 
-    val mostRecentTournament = tournamentsByMostRecent.find { it.isOngoing() }
+    val mostRecentTournament = tournamentsByMostRecent
+        // Worlds_2022 is an empty tournaments so we should remove it
+        .filterNot { it.tournamentId == "Worlds_2022" }
+        .find { it.isOngoing() }
         ?: tournamentsByMostRecent.first()
 
     apiLogger.info("Most recent tournament for ${league.uppercase()} is ${mostRecentTournament.tournamentId}")
