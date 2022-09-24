@@ -1,6 +1,7 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
 
+import com.github.mckernant1.extensions.boolean.falseIfNull
 import com.github.mckernant1.lol.esports.api.client.DefaultApi
 import com.github.mckernant1.lol.esports.api.models.Match
 import com.github.mckernant1.lol.esports.api.models.Tournament
@@ -12,13 +13,17 @@ import java.time.temporal.ChronoUnit
 private val apiLogger = LoggerFactory.getLogger("ApiLogger")
 
 fun DefaultApi.getMostRecentTournament(league: String): Tournament {
-    val tournamentsByMostRecent = this.getTournamentsForLeague(league.uppercase())
+    var tournamentsByMostRecent = this.getTournamentsForLeague(league.uppercase())
         .filter {
             it.startDateAsDate()
                 ?.minus(7, ChronoUnit.DAYS)
                 ?.isBefore(Instant.now())
                 ?: false
         }.sortedByDescending { it.startDateAsDate()!! }
+
+    if (league.equals("WCS", ignoreCase = true)) {
+        tournamentsByMostRecent = tournamentsByMostRecent.filter { it.isOfficial.falseIfNull() }
+    }
 
     val mostRecentTournament = tournamentsByMostRecent
         // Worlds_2022 is an empty tournaments so we should remove it
