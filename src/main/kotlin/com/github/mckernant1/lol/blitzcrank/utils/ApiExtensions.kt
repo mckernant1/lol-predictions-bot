@@ -21,13 +21,12 @@ fun DefaultApi.getMostRecentTournament(league: String): Tournament {
                 ?: false
         }.sortedByDescending { it.startDateAsDate()!! }
 
+    // Worlds has unoffical tournaments associated with it for some reason. So we should remove it
     if (league.equals("WCS", ignoreCase = true)) {
         tournamentsByMostRecent = tournamentsByMostRecent.filter { it.isOfficial.falseIfNull() }
     }
 
     val mostRecentTournament = tournamentsByMostRecent
-        // Worlds_2022 is an empty tournaments so we should remove it
-        .filterNot { it.tournamentId == "Worlds_2022" }
         .find { it.isOngoing() }
         ?: tournamentsByMostRecent.first()
 
