@@ -14,7 +14,7 @@ private val logger: Logger = LoggerFactory.getLogger("ApiFunctions")
 
 fun getSchedule(region: String, numberToGet: Int?): List<Match> {
     val (getMostRecentTournamentDuration, mostRecentTourney) = measureOperation {
-        apiClient.getMostRecentTournament(region)
+        apiClient.getMostRecentTournament(region.uppercase())
     }
     logger.info("GetMostRecentTournament took ${getMostRecentTournamentDuration.toMillis()}ms")
 
@@ -40,7 +40,7 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
 
 fun getResults(region: String, numberToGet: Int?): List<Match> {
     val (getMostRecentTournamentDuration, mostRecentTourney) = measureOperation {
-        apiClient.getMostRecentTournament(region)
+        apiClient.getMostRecentTournament(region.uppercase())
     }
     logger.info("GetMostRecentTournament took ${getMostRecentTournamentDuration.toMillis()}ms")
 
@@ -66,7 +66,7 @@ fun getResults(region: String, numberToGet: Int?): List<Match> {
 }
 
 fun getStandings(region: String): List<Standing> {
-    val tourney = apiClient.getMostRecentTournament(region)
+    val tourney = apiClient.getMostRecentTournament(region.uppercase())
     val matches = apiClient.getMatchesForTournament(tourney.tournamentId)
         .filterPastMatches()
         .filter { it.winner != null }

@@ -1,8 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.utils
 
 
-import com.github.mckernant1.extensions.boolean.falseIfNull
-import com.github.mckernant1.lol.esports.api.client.DefaultApi
 import com.github.mckernant1.lol.esports.api.models.Match
 import com.github.mckernant1.lol.esports.api.models.Tournament
 import org.slf4j.LoggerFactory
@@ -11,29 +9,6 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 private val apiLogger = LoggerFactory.getLogger("ApiLogger")
-
-fun DefaultApi.getMostRecentTournament(league: String): Tournament {
-    var tournamentsByMostRecent = this.getTournamentsForLeague(league.uppercase())
-        .filter {
-            it.startDateAsDate()
-                ?.minus(7, ChronoUnit.DAYS)
-                ?.isBefore(Instant.now())
-                ?: false
-        }.sortedByDescending { it.startDateAsDate()!! }
-
-    // Worlds has unoffical tournaments associated with it for some reason. So we should remove it
-    if (league.equals("WCS", ignoreCase = true)) {
-        tournamentsByMostRecent = tournamentsByMostRecent.filter { it.isOfficial.falseIfNull() }
-    }
-
-    val mostRecentTournament = tournamentsByMostRecent
-        .find { it.isOngoing() }
-        ?: tournamentsByMostRecent.first()
-
-    apiLogger.info("Most recent tournament for ${league.uppercase()} is ${mostRecentTournament.tournamentId}")
-
-    return mostRecentTournament
-}
 
 fun List<Match>.filterPastMatches() = filter {
     it.startTimeAsInstant().isBefore(Instant.now())
