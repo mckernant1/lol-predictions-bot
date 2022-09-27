@@ -70,7 +70,7 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
             event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
             return
         } catch (e: Exception) {
-            logger.error("Caught exception while running command '$words': ", e)
+            logger.error("Caught exception while validating command for user: ${event.author.id}, commands: '$words': ", e)
             cwp.putErrorMetric()
             event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
             return
@@ -83,7 +83,7 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
             }
             logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
         }.onFailure {
-            logger.error("Caught exception while running command '$words': ", it)
+            logger.error("Caught exception while executing command for user: ${event.author.id}, commands: '$words': ", it)
             cwp.putErrorMetric()
             event.channel.sendMessageEmbeds(createErrorMessage(it)).complete()
         }.onSuccess {
