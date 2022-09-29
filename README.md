@@ -8,7 +8,7 @@
 
 ## Bot Usage
 This bot stores user data about predictions and various settings the user specifies. By using the features to store your data you consent to have your data stored.
-Features such as !predict, !setPasta and !setTimezone will store your data
+Features such as /predict, /setPasta and /setTimezone will store your data
 
 You can request this data at any time.
 
@@ -19,7 +19,7 @@ To add this bot to your discord server [Click here](https://discord.com/api/oaut
 For support please file a Github issue: https://github.com/mckernant1/lol-predictions-bot/issues/new
 
 ### Commands
-!info lists this menu
+/info lists this menu
 
 \<league\> refers to one of the league codes (lcs, lpl, lck, ...) 
 
@@ -28,42 +28,42 @@ For support please file a Github issue: https://github.com/mckernant1/lol-predic
 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
 
 ### Esports Commands
-`!ongoing` -> Display all the leagues with ongoing tournaments
+`/ongoing` -> Display all the leagues with ongoing tournaments
 
-`!schedule <league> [number of matches]` -> Displays the upcoming games for the region
+`/schedule <league> [number of matches]` -> Displays the upcoming games for the region
 
-`!results <league> [number of matches]` -> Displays the most recent results for the region 
+`/results <league> [number of matches]` -> Displays the most recent results for the region 
 
-`!standings <league>` -> Displays the standings for the region 
+`/standings <league>` -> Displays the standings for the region 
 
-`!roster <team code>` -> Displays the teams roster
+`/roster <team code>` -> Displays the teams roster
 
-`!record <league> <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
+`/record <league> <team code> [another team code]` -> displays a team's record. If a second team is provided it provides only the record against that team
 
 ### Predictions Commands
-`!predict <league> [number of matches]` -> Prints a message where you can set your predictions. Disappears after 5 mins.
+`/predict <league> [number of matches]` -> Prints a message where you can set your predictions. Disappears after 5 mins.
 
-`!predictions <league> [number of matches]` -> Prints out he predictions for upcoming matches
+`/predictions <league> [number of matches]` -> Prints out he predictions for upcoming matches
 
-`!report <league> [number of matches]` -> Reports the most recent matches and who predicted what
+`/report <league> [number of matches]` -> Reports the most recent matches and who predicted what
 
-`!stats <league> [number of matches]` -> Displays the predictions standings. Default number of matches is the whole split
+`/stats <league> [number of matches]` -> Displays the predictions standings. Default number of matches is the whole split
 
 ### User Settings
 
-`!setTimezone <Timezone>` -> !setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles or a timezone code such as PST or CET. Example: !setTimezone PST
+`/setTimezone <Timezone>` -> /setTimezone <Timezone> -> This will set your timezone. Timezone should be formatted like America/Los_Angeles or a timezone code such as PST or CET. Example: /setTimezone PST
 
-`!setPasta <Pasta>` -> Sets your personal pasta. You can use your servers emotes, but private server emotes that this bot is not in will not work.
+`/setPasta <Pasta>` -> Sets your personal pasta. You can use your servers emotes, but private server emotes that this bot is not in will not work.
 
-`!pasta [number of times]` -> Prints out your pasta that you have saved the specified number of times
+`/pasta [number of times]` -> Prints out your pasta that you have saved the specified number of times
 
 ### Reminders
 
-`!addReminder <league> <number of hours>` -> Will ping you x amount of hours before the league starts
+`/addReminder <league> <number of hours>` -> Will ping you x amount of hours before the league starts
 
-`!listReminders` -> Will list all of your current reminders
+`/listReminders` -> Will list all of your current reminders
 
-`!deleteReminder <league> <number of hours>` -> Deletes a reminder with the specified league and number of hours beforehand 
+`/deleteReminder <league> <number of hours>` -> Deletes a reminder with the specified league and number of hours beforehand 
 
 
 ## Known Issues
@@ -76,3 +76,9 @@ ErrorResponseException: 50007: Cannot send messages to this user
 
 #### Message is too long
 If a server has too many users making predictions there will be too much text to output. Discord has a limit of 2000 characters per message, and some commands will not work.
+
+#### Can't Send messages
+If the bot does not post messages you most likely need to re-add it to your server. 
+Discord has changed permission models so permissions have updated
+
+The links to add should be updated everywhere.
