@@ -31,7 +31,6 @@ dependencies {
 
     implementation("net.dv8tion:JDA:4.4.0_352")
 
-    // Cannot upgrade right now https://github.com/OpenAPITools/openapi-generator/issues/12549
     implementation("com.github.mckernant1.lol:esports-api:0.0.17")
     implementation("com.github.mckernant1:kotlin-utils:0.0.32")
 
