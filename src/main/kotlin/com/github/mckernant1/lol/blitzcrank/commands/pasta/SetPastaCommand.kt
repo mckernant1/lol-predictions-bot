@@ -10,7 +10,7 @@ class SetPastaCommand(event: CommandInfo) : DiscordCommand(event) {
     constructor(event: SlashCommandEvent) : this(CommandInfo(event))
     constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
     override fun execute() {
-        userSettings.pasta = event.commandString.replace("!setPasta ", "")
+        userSettings.pasta = event.commandString.replace("/set-Pasta ", "")
         UserSettings.putSettings(userSettings)
         event.channel.sendMessage("Your Pasta has been set to ${userSettings.pasta}").complete()
     }
