@@ -34,9 +34,12 @@ dependencies {
     implementation("com.github.mckernant1.lol:esports-api:0.0.17")
     implementation("com.github.mckernant1:kotlin-utils:0.0.32")
 
-    implementation("org.slf4j:slf4j-simple:2.0.3")
+    implementation("org.slf4j:slf4j-api:2.0.5")
+    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0")
 
-    implementation(platform("software.amazon.awssdk:bom:2.18.11"))
+    implementation(platform("software.amazon.awssdk:bom:2.18.21"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
@@ -59,7 +62,7 @@ task<Test>("test-integration") {
     }
 }
 
-tasks.withType<ShadowJar>() {
+tasks.withType<ShadowJar> {
     from("./src/main/resources")
     manifest {
         attributes["Main-Class"] = "RunnerKt"
