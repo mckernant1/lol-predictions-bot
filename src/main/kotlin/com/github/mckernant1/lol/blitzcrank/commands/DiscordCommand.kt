@@ -85,7 +85,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
             apiClient.getTeamByCode(teamName.uppercase())
             logger.info("Team '$teamName' has been selected")
         } catch(e: Exception) {
-            throw TeamDoesNotExistException("Team '$teamName' does not exists")
+            throw TeamDoesNotExistException("Team '$teamName' does not exists. Use team code, not team name (C9 not Cloud9)")
         }
 
     }
