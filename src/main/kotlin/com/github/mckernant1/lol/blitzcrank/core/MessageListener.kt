@@ -4,12 +4,14 @@ import com.github.mckernant1.extensions.strings.capitalize
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
-import com.github.mckernant1.lol.blitzcrank.utils.*
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
+import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.github.mckernant1.standalone.measureDuration
 import kotlin.concurrent.thread
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -70,25 +72,34 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
             event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
             return
         } catch (e: Exception) {
-            logger.error("Caught exception while validating command for user: ${event.author.id}, commands: '$words': ", e)
+            logger.error(
+                "Caught exception while validating command for user: ${event.author.id}, commands: '$words': ",
+                e
+            )
             cwp.putErrorMetric()
             event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
             return
         }
 
-        runCatching {
+        try {
             commandValidMetricsAndLogging(words, event)
             val executeDuration = measureDuration {
                 command.execute()
             }
             logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
-        }.onFailure {
-            logger.error("Caught exception while executing command for user: ${event.author.id}, commands: '$words': ", it)
+        } catch (e: InsufficientPermissionException) {
+            logger.warn("Hit insufficient permissions for server: '${event.guild?.id}'", e)
+            return
+        } catch (e: Exception) {
+            logger.error(
+                "Caught exception while executing command for user: ${event.author.id}, commands: '$words': ",
+                e
+            )
             cwp.putErrorMetric()
-            event.channel.sendMessageEmbeds(createErrorMessage(it)).complete()
-        }.onSuccess {
-            cwp.putNoErrorMetric()
+            event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
+            return
         }
+        cwp.putNoErrorMetric()
     }
 
     companion object {
