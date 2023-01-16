@@ -13,13 +13,17 @@ class OngoingTournamentsCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun execute() {
         val ongoingTourneys = apiClient.ongoingTournanments
             .map { apiClient.getLeagueByCode(it.leagueId) }
-            .joinToString("\n") {
+        val ongoingTourneyString = if (ongoingTourneys.isEmpty()) {
+            "There are no ongoing tournaments"
+        } else {
+            ongoingTourneys.joinToString("\n") {
                 "- [**${it.leagueId}**] ${it.leagueName}"
             }
+        }
 
         val messageToSend = """
-            Leauges with ongoing tournaments
-$ongoingTourneys
+            **Leagues with ongoing tournaments**:
+$ongoingTourneyString
         """.trim()
 
         event.channel.sendMessage(messageToSend).complete()
