@@ -32,7 +32,7 @@ class ReportCommand(
         }
 
         val users = try {
-            event.guild!!.members.map { it.id }
+            event.guild?.members?.map { it.id } ?: listOf(event.author.id)
         } catch (e: IllegalStateException) {
             logger.info("IllegalStateException thrown ${e.message}")
             listOf(event.author.id)
