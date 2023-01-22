@@ -7,6 +7,7 @@ import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.github.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -31,16 +32,13 @@ class ReportCommand(
             return
         }
 
-        val users = try {
-            event.guild?.members?.map { it.id } ?: listOf(event.author.id)
-        } catch (e: IllegalStateException) {
-            logger.info("IllegalStateException thrown ${e.message}")
-            listOf(event.author.id)
-        }.also { logger.info("User Ids in server: $it") }
+        val users = getAllUsersForServer()
 
         val predictions = users.cartesianProduct(results)
-            .mapNotNull { (userId, result) ->
-                Prediction.getItem(userId, result.matchId)
+            .mapNotNull { (user, result) ->
+                val prediction = Prediction.getItem(user.getId(), result.matchId)
+                    ?: return@mapNotNull null
+                UserPrediction(user, prediction)
             }
 
 
@@ -51,8 +49,8 @@ class ReportCommand(
                         if (match.winner == match.blueTeamId)
                             "\uD83D\uDC51 " else ""
                     }${match.blueTeamId}: ${
-                        predictions.filter { it.matchId == match.matchId && it.prediction == match.blueTeamId }
-                            .joinToString(" ") { "<@${it.userId}>" }
+                        predictions.filter { it.prediction.matchId == match.matchId && it.prediction.prediction == match.blueTeamId }
+                            .joinToString(" ") { it.botUser.getMentionable() }
                     }${
                         getGlobalPredictionRate(globalPredictions, match.blueTeamId)
                     }" +
@@ -61,8 +59,8 @@ class ReportCommand(
                         if (match.winner == match.redTeamId)
                             "\uD83D\uDC51 " else ""
                     }${match.redTeamId}: ${
-                        predictions.filter { it.matchId == match.matchId && it.prediction == match.redTeamId }
-                            .joinToString(" ") { "<@${it.userId}>" }
+                        predictions.filter { it.prediction.matchId == match.matchId && it.prediction.prediction == match.redTeamId }
+                            .joinToString(" ") { it.botUser.getMentionable() }
                     }${
                         getGlobalPredictionRate(globalPredictions, match.redTeamId)
                     }"
@@ -76,6 +74,11 @@ class ReportCommand(
             }
         }
     }
+
+    private data class UserPrediction(
+        val botUser: BotUser,
+        val prediction: Prediction
+    )
 
     private fun getGlobalPredictionRate(predictions: List<Prediction>, teamName: String): String {
         return runCatching {

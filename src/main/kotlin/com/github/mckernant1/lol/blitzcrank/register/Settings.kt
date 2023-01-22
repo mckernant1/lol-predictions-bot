@@ -1,8 +1,10 @@
 package com.github.mckernant1.lol.blitzcrank.register
 
+import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-private val addReminderCommandData: CommandData = commandDataFromJson("""
+private val addReminderCommandData: CommandData = commandDataFromJson(
+    """
     {
       "name": "add-reminder",
       "type": 1,
@@ -22,9 +24,11 @@ private val addReminderCommandData: CommandData = commandDataFromJson("""
         }
       ]
     }
-""".trimIndent())
+""".trimIndent()
+)
 
-private val deleteReminderCommandData: CommandData = commandDataFromJson("""
+private val deleteReminderCommandData: CommandData = commandDataFromJson(
+    """
     {
       "name": "delete-reminder",
       "type": 1,
@@ -44,17 +48,21 @@ private val deleteReminderCommandData: CommandData = commandDataFromJson("""
         }
       ]
     }
-""".trimIndent())
+""".trimIndent()
+)
 
-private val listReminderCommandData: CommandData = commandDataFromJson("""
+private val listReminderCommandData: CommandData = commandDataFromJson(
+    """
     {
       "name": "list-reminders",
       "type": 1,
       "description": "List your reminders"
     }
-""".trimIndent())
+""".trimIndent()
+)
 
-private val setTimezoneCommandData: CommandData = commandDataFromJson("""
+private val setTimezoneCommandData: CommandData = commandDataFromJson(
+    """
     {
       "name": "set-timezone",
       "type": 1,
@@ -68,11 +76,15 @@ private val setTimezoneCommandData: CommandData = commandDataFromJson("""
         }
       ]
     }
-""".trimIndent())
+""".trimIndent()
+)
+
+private val notifyMeCommand: CommandData = CommandData(
+    "notify-me", "Whether or not to notify me when someone uses the commands that list people"
+).addOption(
+    OptionType.BOOLEAN, "notify", "true if you want to be notified", true
+)
 
 internal val settingsCommands: List<CommandData> = listOf(
-    addReminderCommandData,
-    deleteReminderCommandData,
-    listReminderCommandData,
-    setTimezoneCommandData
+    addReminderCommandData, deleteReminderCommandData, listReminderCommandData, setTimezoneCommandData, notifyMeCommand
 )

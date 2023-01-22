@@ -6,6 +6,7 @@ import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
+import com.github.mckernant1.lol.blitzcrank.utils.model.BotUser
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
@@ -21,32 +22,27 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
         } else {
             results
         }
-        val users = try {
-            event.guild!!.members.map { it.id }
-        } catch (e: IllegalStateException) {
-            listOf(event.author.id)
-        }
-
+        val users = getAllUsersForServer()
 
         val serverMatches = users.cartesianProduct(results)
-            .mapNotNull { (userId, match) ->
-                Prediction.getItem(userId, match.matchId)
+            .mapNotNull { (user, match) ->
+                Prediction.getItem(user.getId(), match.matchId)
             }
 
-        val resultString = users.map { userId ->
+        val resultString = users.map { user ->
             val numberPredicted = serverMatches.count { prediction ->
-                prediction.userId == userId && results.any { it.matchId == prediction.matchId }
+                prediction.userId == user.getId() && results.any { it.matchId == prediction.matchId }
             }
             val numberCorrect = serverMatches.count { prediction ->
                 val relevantResult = results.find { prediction.matchId == it.matchId }
                     ?: return@count false
-                return@count prediction.userId == userId && relevantResult.winner == prediction.prediction
+                return@count prediction.userId == user.getId() && relevantResult.winner == prediction.prediction
             }
-            return@map PredictionRatio(userId, numberPredicted, numberCorrect)
+            return@map PredictionRatio(user, numberPredicted, numberCorrect)
         }.filter { it.numberPredicted != 0 }
             .sortedByDescending { it.numberCorrect }
             .map {
-                "<@${it.userId}> predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
+                "${it.user.getMentionable()} predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
             }
         val str = resultString.joinToString("\n") { it }
         if (str.isBlank()) {
@@ -62,7 +58,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
     }
 
     private data class PredictionRatio(
-        val userId: String,
+        val user: BotUser,
         val numberPredicted: Int,
         val numberCorrect: Int,
     ) {

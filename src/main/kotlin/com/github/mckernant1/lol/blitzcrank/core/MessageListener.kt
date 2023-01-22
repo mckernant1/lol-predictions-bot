@@ -26,7 +26,7 @@ class MessageListener : ListenerAdapter() {
             logger.info("Got params ${slashEvent.options}")
             val command = getCommandFromWords(words, event)
                 ?: run {
-                    slashEvent.reply("Could find this command").complete()
+                    slashEvent.reply("Could not find this command").complete()
                     return@thread
                 }
             slashEvent.reply("Command Received!").complete()

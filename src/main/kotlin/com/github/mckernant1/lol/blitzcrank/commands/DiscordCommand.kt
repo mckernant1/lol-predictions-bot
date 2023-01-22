@@ -7,6 +7,7 @@ import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
+import com.github.mckernant1.lol.blitzcrank.utils.model.BotUser
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -93,6 +94,16 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     protected fun validateWordCount(range: IntRange) {
         if (words.size !in range) {
             throw InvalidCommandException("Invalid word count. There should be between $range words, but there are '${words.size}'")
+        }
+    }
+
+    protected fun getAllUsersForServer(): List<BotUser> {
+        return if (event.isFromGuild) {
+            event.guild!!.members.map { it.user }
+        } else {
+            listOf(event.author)
+        }.map {
+            BotUser(it, UserSettings.getSettingsForUser(it.id))
         }
     }
 

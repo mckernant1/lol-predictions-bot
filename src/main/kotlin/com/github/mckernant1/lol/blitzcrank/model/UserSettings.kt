@@ -25,6 +25,7 @@ class UserSettings(
     @get:DynamoDbAttribute("discordId") var discordId: String? = null,
     var timezone: String = "America/Los_Angeles",
     var pasta: String = "You have no pasta. Set one with `!setPasta My Pasta!`",
+    var notifyMe: Boolean = true,
     @get:DynamoDbConvertedBy(ReminderListConverter::class)
     var reminders: MutableList<Reminder> = mutableListOf()
 ) {
