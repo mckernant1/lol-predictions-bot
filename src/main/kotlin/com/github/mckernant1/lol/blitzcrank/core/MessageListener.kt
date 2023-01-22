@@ -35,13 +35,13 @@ class MessageListener : ListenerAdapter() {
                 }
             val hook = slashEvent.reply("Command Received!").complete()
 
+            handleCommonCommandLogic(event, command, words)
+
             try {
                 hook.deleteOriginal().complete()
             } catch (e: Exception) {
                 logger.warn("Failed to delete original message", e)
             }
-
-            handleCommonCommandLogic(event, command, words)
         }
     }
 
