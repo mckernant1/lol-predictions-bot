@@ -85,6 +85,10 @@ val userSettingsInfoMessage = EmbedBuilder()
                 `/listReminders` -> Will list all of your current reminders
                 `/deleteReminder <league> <number of hours>` -> Deletes a reminder with the specified league and number of hours beforehand 
             """.trimIndent(), false
+    ).addField(
+        "Notifications", """
+            `/notify-me` <true/false> -> You can turn the mentioning off for comands like state, predictions, and report
+        """.trimIndent(), false
     )
     .build()
 
