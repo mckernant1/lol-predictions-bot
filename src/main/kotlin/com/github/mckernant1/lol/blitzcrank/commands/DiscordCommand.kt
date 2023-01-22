@@ -99,11 +99,9 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected fun getAllUsersForServer(): List<BotUser> {
         return if (event.isFromGuild) {
-            event.guild!!.members.map { it.user }
+            event.guild!!.members.map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
         } else {
-            listOf(event.author)
-        }.map {
-            BotUser(it, UserSettings.getSettingsForUser(it.id))
+            listOf(event.author).map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
         }
     }
 
