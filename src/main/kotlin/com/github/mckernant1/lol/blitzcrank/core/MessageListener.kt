@@ -15,11 +15,15 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
 
 class MessageListener : ListenerAdapter() {
 
+    private val threadPool = Executors.newFixedThreadPool(10)
+
     override fun onSlashCommand(slashEvent: SlashCommandEvent) {
-        thread {
+        threadPool.submit {
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)
             logger.info("Got slash command ${event.commandString}")
@@ -27,9 +31,16 @@ class MessageListener : ListenerAdapter() {
             val command = getCommandFromWords(words, event)
                 ?: run {
                     slashEvent.reply("Could not find this command").complete()
-                    return@thread
+                    return@submit
                 }
-            slashEvent.reply("Command Received!").complete()
+            val hook = slashEvent.reply("Command Received!").complete()
+
+            try {
+                hook.deleteOriginal().complete()
+            } catch (e: Exception) {
+                logger.warn("Failed to delete original message", e)
+            }
+
             handleCommonCommandLogic(event, command, words)
         }
     }
