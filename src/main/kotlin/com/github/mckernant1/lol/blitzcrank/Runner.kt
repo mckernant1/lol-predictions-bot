@@ -2,10 +2,7 @@ package com.github.mckernant1.lol.blitzcrank
 
 import com.github.mckernant1.assertions.Assertions.assertEnvironmentVariablesExist
 import com.github.mckernant1.lol.blitzcrank.core.MessageListener
-import com.github.mckernant1.lol.blitzcrank.register.infoCommands
-import com.github.mckernant1.lol.blitzcrank.register.lolCommands
-import com.github.mckernant1.lol.blitzcrank.register.pastaCommands
-import com.github.mckernant1.lol.blitzcrank.register.settingsCommands
+import com.github.mckernant1.lol.blitzcrank.core.commandList
 import com.github.mckernant1.lol.blitzcrank.timers.publishBotMetrics
 import com.github.mckernant1.lol.blitzcrank.timers.reminderChecker
 import net.dv8tion.jda.api.JDA
@@ -61,15 +58,9 @@ fun startBot(token: String): JDA {
 private fun registerCommands(
     bot: JDA
 ) {
-    listOf(
-        infoCommands,
-        lolCommands,
-        pastaCommands,
-        settingsCommands
-    ).flatten()
-        .forEach {
-            logger.info("Upserting command ${it.name}")
-            bot.upsertCommand(it).complete()
-        }
+    commandList.forEach {
+        logger.info("Upserting command ${it.commandString}")
+        bot.upsertCommand(it.commandData).complete()
+    }
     logger.info("Done inserting commands!")
 }

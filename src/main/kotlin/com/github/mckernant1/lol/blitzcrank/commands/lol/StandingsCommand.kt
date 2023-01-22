@@ -1,16 +1,20 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 
+import com.github.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.github.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.github.mckernant1.lol.blitzcrank.utils.getStandings
 import com.github.mckernant1.lol.blitzcrank.utils.model.Standing
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class StandingsCommand(event: CommandInfo) : DiscordCommand(event) {
     constructor(event: SlashCommandEvent) : this(CommandInfo(event))
     constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
+
     override fun execute() {
         val standings = getStandings(region)
         val replyString = formatStandingsReply(standings, region)
@@ -36,6 +40,30 @@ class StandingsCommand(event: CommandInfo) : DiscordCommand(event) {
                 }
                 return@fold stringBuilder
             }.toString()
+    }
+
+    companion object : CommandMetadata {
+        override val commandString: String = "standings"
+        override val commandDescription: String = "The standings in the given league"
+        override val commandData: CommandData = commandDataFromJson(
+            """
+            {
+              "name": "$commandString",
+              "type": 1,
+              "description": "$commandDescription",
+              "options": [
+                {
+                  "name": "league_id",
+                  "description": "The league to query",
+                  "type": 3,
+                  "required": true
+                }
+              ]
+            }
+        """.trimIndent()
+        )
+
+        override fun create(event: CommandInfo): DiscordCommand = StandingsCommand(event)
     }
 
 }

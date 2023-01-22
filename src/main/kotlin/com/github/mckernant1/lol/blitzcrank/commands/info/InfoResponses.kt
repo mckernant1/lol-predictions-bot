@@ -1,22 +1,26 @@
 package com.github.mckernant1.lol.blitzcrank.commands.info
 
+import com.github.mckernant1.extensions.strings.capitalize
+import com.github.mckernant1.lol.blitzcrank.core.commandsByType
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
 
-val baseInfoMessage: MessageEmbed = EmbedBuilder()
-    .setTitle("General Info")
-    .addField(
-        "Basic Info", """
+
+private val basicInfo = MessageEmbed.Field(
+    "Basic Info", """
                 `/info` lists this menu
                 <league> refers to one of the league codes (lcs, lpl, lck, ...)
                 <team code> refers to the 2 or three letter acronym for a team. example: C9 (cloud9), FPX (FunPlus Phoenix)
                 [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
             """.trimIndent(), false
-    ).addField(
+)
+
+val baseInfoMessage: MessageEmbed = EmbedBuilder()
+    .setTitle("General Info")
+    .addField(basicInfo)
+    .addField(
         "SubCommands", """
-           `/info esports` -> info for esports commands
-           `/info predict` -> info for predictions commands
-           `/info settings` -> info for user settings commands
+           ${commandsByType.keys.joinToString("\n") { "`/info $it`" }}
             """.trimIndent(), false
     ).addField(
         "Useful Links",
@@ -25,16 +29,25 @@ val baseInfoMessage: MessageEmbed = EmbedBuilder()
     )
     .build()
 
+val infoSubCommands = commandsByType.entries
+    .associate { (category, commands) ->
+        val embed = EmbedBuilder()
+            .setTitle("${category.capitalize()} Info")
+            .addField(basicInfo)
+            .addField(
+                "${category.capitalize()} Commands", """
+                ${commands.joinToString("\n") { "`/${it.commandString}` -> ${it.commandDescription}" }}
+            """.trimIndent(), false
+            )
+            .build()
+        category to embed
+    }
+
+// Old Descriptions
+
 val esportsInfoMessage = EmbedBuilder()
     .setTitle("Esports Info")
-    .addField(
-        "Basic Info", """
-                `/info` lists this menu
-                <league> refers to one of the league codes (lcs, lpl, lck, ...)
-                <team code> refers to the 2 or three letter acronym for a team. example: C9 (cloud9), FPX (FunPlus Phoenix)
-                [number of matches] is optional, picks the number of matches to display. Default is the next or previous days matches
-            """.trimIndent(), false
-    )
+    .addField(basicInfo)
     .addField(
         "Esports Commands", """
                 `/ongoing` -> Display all the leagues with ongoing tournaments

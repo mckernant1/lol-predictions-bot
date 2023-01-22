@@ -1,9 +1,12 @@
 package com.github.mckernant1.lol.blitzcrank.commands.reminder
 
+import com.github.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.github.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
     constructor(event: SlashCommandEvent) : this(CommandInfo(event))
@@ -22,5 +25,21 @@ class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun validate() {
        validateWordCount(1..1)
+    }
+
+    companion object : CommandMetadata {
+        override val commandString: String = "list-reminders"
+        override val commandDescription: String = "List your reminders"
+        override val commandData: CommandData = commandDataFromJson(
+            """
+                {
+                  "name": "$commandString",
+                  "type": 1,
+                  "description": "$commandDescription"
+                }
+            """.trimIndent()
+        )
+
+        override fun create(event: CommandInfo): DiscordCommand = ListRemindersCommand(event)
     }
 }

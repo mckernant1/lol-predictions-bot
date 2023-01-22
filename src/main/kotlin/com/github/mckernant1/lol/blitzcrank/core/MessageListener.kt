@@ -7,23 +7,20 @@ import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
+import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import com.github.mckernant1.standalone.measureDuration
-import kotlin.concurrent.thread
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor
+import kotlin.concurrent.thread
 
 class MessageListener : ListenerAdapter() {
 
-    private val threadPool = Executors.newFixedThreadPool(10)
-
     override fun onSlashCommand(slashEvent: SlashCommandEvent) {
-        threadPool.submit {
+        globalThreadPool.submit {
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)
             logger.info("Got slash command ${event.commandString}")

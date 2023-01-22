@@ -1,22 +1,22 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
 import com.github.mckernant1.extensions.math.round
+import com.github.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.utils.apiClient
+import com.github.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.github.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Instant
 
 class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
     constructor(event: SlashCommandEvent) : this(CommandInfo(event))
     constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
-    companion object {
-        private const val LINE_SEPARATOR = "\n---------------------------------------------------\n"
-    }
 
     override fun execute() {
         val region = words[1].uppercase()
@@ -26,7 +26,12 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
         val matches = getResults(region, Int.MAX_VALUE)
 
         var matchesGroupedByTeam = matches
-            .filter { it.blueTeamId.equals(team1.teamId, ignoreCase = true) || it.redTeamId.equals(team1.teamId, ignoreCase = true) }
+            .filter {
+                it.blueTeamId.equals(team1.teamId, ignoreCase = true) || it.redTeamId.equals(
+                    team1.teamId,
+                    ignoreCase = true
+                )
+            }
             .groupBy {
                 if (it.blueTeamId.equals(team1.teamId, ignoreCase = true)) it.redTeamId else it.blueTeamId
             }
@@ -82,5 +87,43 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
         validateRegion(1)
         validateTeam(2)
         if (words.size == 4) validateTeam(2)
+    }
+
+    companion object : CommandMetadata {
+        private const val LINE_SEPARATOR = "\n---------------------------------------------------\n"
+        override val commandString: String = "record"
+        override val commandDescription: String = "Get the record of a team in a given tournament"
+        override val commandData: CommandData = commandDataFromJson(
+            """
+                {
+                  "name": "$commandString",
+                  "type": 1,
+                  "description": "$commandDescription",
+                  "options": [
+                    {
+                      "name": "league_id",
+                      "description": "The league to query",
+                      "type": 3,
+                      "required": true
+                    },
+                    {
+                      "name": "team1",
+                      "description": "The team who's record to get",
+                      "type": 3,
+                      "required": true
+                    },
+                    {
+                      "name": "team2",
+                      "description": "The team to compare against",
+                      "type": 3,
+                      "required": false
+                    }
+                  ]
+                }
+            """.trimIndent()
+        )
+
+        override fun create(event: CommandInfo): DiscordCommand = RecordCommand(event)
+
     }
 }
