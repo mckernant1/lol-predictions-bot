@@ -19,9 +19,11 @@ class OngoingTournamentsCommand(event: CommandInfo) : DiscordCommand(event) {
         val ongoingTourneyString = if (ongoingTourneys.isEmpty()) {
             "There are no ongoing tournaments"
         } else {
-            ongoingTourneys.joinToString("\n") {
-                "- [**${it.leagueId}**] ${it.leagueName}"
-            }
+            ongoingTourneys
+                .distinctBy { it.leagueId }
+                .joinToString("\n") {
+                    "- [**${it.leagueId}**] ${it.leagueName}"
+                }
         }
 
         val messageToSend = """
@@ -48,6 +50,7 @@ $ongoingTourneyString
                 }
             """.trimIndent()
         )
+
         override fun create(event: CommandInfo): DiscordCommand = OngoingTournamentsCommand(event)
     }
 }
