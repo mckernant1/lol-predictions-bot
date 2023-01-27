@@ -19,6 +19,14 @@ class NotifyMeCommand(event: CommandInfo) : DiscordCommand(event) {
         val settings = userSettings
         settings.notifyMe = notify
         UserSettings.putSettings(settings)
+
+        val response = if (notify) {
+            "You will now be notified by other commands"
+        } else {
+            "You will no longer be notified by other commands"
+        }
+
+        reply(response)
     }
 
     companion object : CommandMetadata {
