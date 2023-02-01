@@ -32,7 +32,7 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
 
     private fun formatScheduleReply(matches: List<Match>, region: String): String {
         val sb = StringBuilder()
-        sb.appendLine("The next ${matches.size} matches in $region are: ")
+        sb.appendLine("The next ${matches.size} matches in **${region.uppercase()}** are: ")
         matches.forEach {
             sb.appendLine("${longDateFormat.format(it.startTimeAsInstant())}: **${it.blueTeamId}** vs **${it.redTeamId}**")
         }
