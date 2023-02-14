@@ -4,27 +4,54 @@ import com.github.mckernant1.extensions.collections.cartesianProduct
 import com.github.mckernant1.extensions.math.round
 import com.github.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.github.mckernant1.lol.blitzcrank.model.Prediction
-import com.github.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import com.github.mckernant1.lol.blitzcrank.utils.apiClient
+import com.github.mckernant1.lol.blitzcrank.utils.endDateAsDate
 import com.github.mckernant1.lol.blitzcrank.utils.getResults
 import com.github.mckernant1.lol.blitzcrank.utils.model.BotUser
+import com.github.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
     constructor(event: SlashCommandEvent) : this(CommandInfo(event))
     constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
 
     override fun execute() {
-        var results = getResults(region, 100)
+        val results: List<Match> = when (Timeframe.valueOf(words[2])) {
+            Timeframe.Tournament -> getResults(region, 100)
+            Timeframe.Year -> apiClient.getTournamentsForLeague(region).filter {
+                it.endDateAsDate()?.atZone(ZoneId.of("UTC"))?.year == ZonedDateTime.now().year
+            }.flatMap {
+                apiClient.getMatchesForTournament(it.tournamentId)
+            }
+            Timeframe.Split -> {
+                val splitIdentifier = apiClient.getMostRecentTournament(region).let {
+                    val groups = tournamentIdRegex.matchEntire(it.tournamentId)?.groups
+                        ?: throw InvalidCommandException("Tournament name ${it.tournamentId} could not be parsed")
+                    val region = groups["region"]?.value!!
+                    val year = groups["year"]?.value!!
+                    val split = groups["split"]?.value!!
+                    return@let "${region}_${year}_${split}"
+                }
 
-        results = if (numToGet != null) {
-            results.take(numToGet!!)
-        } else {
-            results
+                apiClient.getTournamentsForLeague(region)
+                    .filter { it.tournamentId.contains(splitIdentifier) }
+                    .flatMap {
+                        apiClient.getMatchesForTournament(it.tournamentId)
+                    }
+            }
+
         }
+
+
         val users = getAllUsersForServer()
 
         val serverMatches = users.cartesianProduct(results)
@@ -71,29 +98,30 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun validate() {
         validateWordCount(2..3)
         validateRegion(1)
-        validateNumberPositive(2)
+    }
+
+    private enum class Timeframe {
+        Tournament,
+        Year,
+        Split
     }
 
     companion object : CommandMetadata {
+        // Should look like one of these
+        // LEC_2022_Summer
+        // LEC_2022_Summer_Playoffs
+        private val tournamentIdRegex =
+            Regex("(?<region>[a-zA-Z]+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z]+))?")
         override val commandString: String = "stats"
         override val commandDescription: String = "The stats for a given league"
-        override val commandData: CommandData = commandDataFromJson(
-            """
-                {
-                  "name": "$commandString",
-                  "type": 1,
-                  "description": "$commandDescription",
-                  "options": [
-                    {
-                      "name": "league_id",
-                      "description": "The league to query",
-                      "type": 3,
-                      "required": true
-                    }
-                  ]
-                }
-            """.trimIndent()
-        )
+        override val commandData: CommandData = CommandData(commandString, commandDescription)
+            .addOption(OptionType.STRING, "league_id", "The league to query", true)
+            .addOptions(
+                OptionData(OptionType.STRING, "timeframe", "What timeframe for stats", true)
+                    .addChoice("Tournament", "Tournament")
+                    .addChoice("Split", "Split")
+                    .addChoice("Year", "Year")
+            )
 
         override fun create(event: CommandInfo): DiscordCommand = StatsCommand(event)
     }

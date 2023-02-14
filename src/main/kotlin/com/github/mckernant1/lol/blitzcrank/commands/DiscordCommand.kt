@@ -68,7 +68,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     }
 
     protected fun validateRegion(position: Int) {
-        region = words[position]
+        region = words[position].uppercase()
         try {
             apiClient.getLeagueByCode(region.uppercase())
             logger.info("validateRegion with region: '${region.uppercase()}'")
