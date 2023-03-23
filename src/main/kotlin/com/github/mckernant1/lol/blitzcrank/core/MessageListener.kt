@@ -8,13 +8,14 @@ import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
+import com.github.mckernant1.slf4j.logger
 import com.github.mckernant1.standalone.measureDuration
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import kotlin.concurrent.thread
 
 class MessageListener : ListenerAdapter() {
@@ -95,22 +96,32 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
                 command.execute()
             }
             logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
+            cwp.putNoErrorMetric()
         } catch (e: InsufficientPermissionException) {
             logger.warn("Hit insufficient permissions for server: '${event.guild?.id}'", e)
-            return
+        } catch (e: ErrorResponseException) {
+            when (e.errorCode) {
+                50001 -> {
+                    logger.warn("Hit Permission issue. Known to be an issue with reaction permissions", e)
+                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions").complete()
+                }
+                else -> defaultErrBehavior(event, words, e)
+            }
         } catch (e: Exception) {
-            logger.error(
-                "Caught exception while executing command for user: ${event.author.id}, commands: '$words': ",
-                e
-            )
-            cwp.putErrorMetric()
-            event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
-            return
+            defaultErrBehavior(event, words, e)
         }
-        cwp.putNoErrorMetric()
+    }
+
+    private fun defaultErrBehavior(event: CommandInfo, words: List<String>, e: Exception) {
+        logger.error(
+            "Caught exception while executing command for user: ${event.author.id}, commands: '$words': ",
+            e
+        )
+        cwp.putErrorMetric()
+        event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
     }
 
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(MessageListener::class.java)
+        private val logger: Logger = logger()
     }
 }
