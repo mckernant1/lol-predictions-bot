@@ -26,24 +26,24 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("com.google.code.gson:gson:2.10")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
     implementation("net.dv8tion:JDA:4.4.0_352")
 
-    implementation("com.github.mckernant1.lol:esports-api:0.0.19")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.33")
+    implementation("com.github.mckernant1.lol:esports-api:0.0.22")
+    implementation("com.github.mckernant1:kotlin-utils:0.0.39")
 
     implementation("org.slf4j:slf4j-api:2.0.5")
-    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.19.0")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
 
     implementation(platform("software.amazon.awssdk:bom:2.18.21"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
-    testImplementation("org.testng:testng:7.6.1")
+    testImplementation("org.testng:testng:7.7.0")
 }
 
 tasks {

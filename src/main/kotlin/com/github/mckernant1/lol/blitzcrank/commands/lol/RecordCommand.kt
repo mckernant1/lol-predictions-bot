@@ -1,6 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.commands.lol
 
-import com.github.mckernant1.extensions.math.round
+import com.github.mckernant1.extensions.math.DoubleAlgebra.round
 import com.github.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo

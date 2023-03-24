@@ -1,6 +1,7 @@
 package com.github.mckernant1.lol.blitzcrank.core
 
 import com.github.mckernant1.extensions.strings.capitalize
+import com.github.mckernant1.logging.Slf4j.logger
 import com.github.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.github.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.github.mckernant1.lol.blitzcrank.model.CommandInfo
@@ -8,7 +9,6 @@ import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.github.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
-import com.github.mckernant1.slf4j.logger
 import com.github.mckernant1.standalone.measureDuration
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent

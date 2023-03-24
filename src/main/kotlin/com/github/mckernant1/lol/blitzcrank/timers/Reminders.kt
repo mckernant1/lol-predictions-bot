@@ -1,8 +1,8 @@
 package com.github.mckernant1.lol.blitzcrank.timers
 
+import com.github.mckernant1.extensions.executor.Executors.scheduleAtFixedRate
+import com.github.mckernant1.extensions.time.Instants.timeUntilNextWhole
 import com.github.mckernant1.lol.blitzcrank.model.UserSettings
-import com.github.mckernant1.extensions.executor.scheduleAtFixedRate
-import com.github.mckernant1.extensions.time.timeUntilNextWhole
 import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.exceptions.ErrorResponseException

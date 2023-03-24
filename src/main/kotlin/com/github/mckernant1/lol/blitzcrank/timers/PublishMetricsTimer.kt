@@ -1,6 +1,6 @@
 package com.github.mckernant1.lol.blitzcrank.timers
 
-import com.github.mckernant1.extensions.executor.scheduleAtFixedRate
+import com.github.mckernant1.extensions.executor.Executors.scheduleAtFixedRate
 import com.github.mckernant1.lol.blitzcrank.utils.cwp
 import com.github.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import net.dv8tion.jda.api.JDA
