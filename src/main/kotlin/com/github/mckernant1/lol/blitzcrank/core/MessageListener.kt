@@ -105,6 +105,10 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
                     logger.warn("Hit Permission issue. Known to be an issue with reaction permissions", e)
                     event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions").complete()
                 }
+                50013 -> {
+                    logger.warn("Hit Permission issue. Known to be an issue with embedded message permissions ", e)
+                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with embedded message permissions").complete()
+                }
                 else -> defaultErrBehavior(event, words, e)
             }
         } catch (e: Exception) {
