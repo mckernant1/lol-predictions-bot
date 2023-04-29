@@ -1,15 +1,15 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     application
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.8.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-group = "com.github.mckernant1"
+group = "com.mckernant1.lol"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.github.mckernant1.lol.blitzcrank.RunnerKt")
+    mainClass.set("com.mckernant1.lol.blitzcrank.RunnerKt")
 }
 
 repositories {
@@ -31,8 +31,8 @@ dependencies {
 
     implementation("net.dv8tion:JDA:4.4.0_352")
 
-    implementation("com.github.mckernant1.lol:esports-api:0.0.22")
-    implementation("com.github.mckernant1:kotlin-utils:0.0.39")
+    implementation("com.mckernant1.lol:esports-api:0.1.0")
+    implementation("com.mckernant1.commons:kotlin-utils:0.2.1")
 
     implementation("org.slf4j:slf4j-api:2.0.5")
     implementation("org.apache.logging.log4j:log4j-core:2.20.0")
@@ -48,10 +48,10 @@ dependencies {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 }
 
