@@ -9,8 +9,6 @@ import com.mckernant1.lol.blitzcrank.utils.apiClient
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
