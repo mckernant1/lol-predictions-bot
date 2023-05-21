@@ -7,17 +7,14 @@ import com.mckernant1.lol.blitzcrank.model.Prediction
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
-import java.time.Duration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import java.time.Duration
 
 class PredictCommand(event: CommandInfo) : DiscordCommand(event) {
-    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
-    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
 
     override fun execute() {
         runBlocking {
@@ -67,8 +64,8 @@ class PredictCommand(event: CommandInfo) : DiscordCommand(event) {
     }
 
     companion object : CommandMetadata {
-        const val BLUE_TEAM_EMOJI = "\uD83D\uDD35"
-        const val RED_TEAM_EMOJI = "\uD83D\uDD34"
+        val BLUE_TEAM_EMOJI = Emoji.fromUnicode("\uD83D\uDD35")
+        val RED_TEAM_EMOJI = Emoji.fromUnicode("\uD83D\uDD34")
         override val commandString: String = "predict"
         override val commandDescription: String = "Do predictions for a given league"
         override val commandData: CommandData = commandDataFromJson(

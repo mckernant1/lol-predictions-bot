@@ -11,20 +11,12 @@ import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class ReportCommand(
     event: CommandInfo,
     private var previous: Boolean = false
 ) : DiscordCommand(event) {
-    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
-    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
-
-    constructor(event: MessageReceivedEvent, previous: Boolean) : this(event) {
-        this.previous = previous
-    }
 
     override fun execute() {
         val results = if (previous) getResults(region, numToGet) else getSchedule(region, numToGet)

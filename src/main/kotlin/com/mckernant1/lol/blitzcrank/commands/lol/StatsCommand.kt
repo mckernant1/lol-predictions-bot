@@ -12,17 +12,14 @@ import com.mckernant1.lol.blitzcrank.utils.endDateAsDate
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.esports.api.models.Match
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import net.dv8tion.jda.internal.interactions.CommandDataImpl
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
-    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
-    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
 
     override fun execute() {
         val results: List<Match> = when (Timeframe.valueOf(words[2])) {
@@ -114,7 +111,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             Regex("(?<region>[a-zA-Z]+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z]+))?")
         override val commandString: String = "stats"
         override val commandDescription: String = "The stats for a given league"
-        override val commandData: CommandData = CommandData(commandString, commandDescription)
+        override val commandData: CommandData = CommandDataImpl(commandString, commandDescription)
             .addOption(OptionType.STRING, "league_id", "The league to query", true)
             .addOptions(
                 OptionData(OptionType.STRING, "timeframe", "What timeframe for stats", true)

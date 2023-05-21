@@ -29,7 +29,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
-    implementation("net.dv8tion:JDA:4.4.0_352")
+    implementation("net.dv8tion:JDA:5.0.0-beta.9")
 
     implementation("com.mckernant1.lol:esports-api:0.1.0")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.1")

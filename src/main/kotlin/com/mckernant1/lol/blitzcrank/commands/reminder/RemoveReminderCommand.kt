@@ -5,13 +5,9 @@ import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class RemoveReminderCommand(event: CommandInfo) : DiscordCommand(event) {
-    constructor(event: SlashCommandEvent) : this(CommandInfo(event))
-    constructor(event: MessageReceivedEvent) : this(CommandInfo(event))
 
     override fun execute() {
         val removed = userSettings.reminders.removeAll {

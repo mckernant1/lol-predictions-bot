@@ -1,10 +1,11 @@
 package com.mckernant1.lol.blitzcrank.model
 
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 
 data class CommandInfo(
     val channel: MessageChannel,
@@ -26,7 +27,7 @@ data class CommandInfo(
         event.isFromGuild
     )
 
-    constructor(event: SlashCommandEvent) : this(
+    constructor(event: SlashCommandInteractionEvent) : this(
         event.channel,
         event.user,
         event.guild,

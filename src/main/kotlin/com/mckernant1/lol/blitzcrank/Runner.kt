@@ -25,8 +25,8 @@ fun main() {
         "BOT_APPLICATION_ID"
     )
     val botToken = System.getenv("BOT_TOKEN")
-    val bot = com.mckernant1.lol.blitzcrank.startBot(botToken)
-    com.mckernant1.lol.blitzcrank.registerCommands(bot)
+    val bot = startBot(botToken)
+    registerCommands(bot)
     publishBotMetrics(bot)
     reminderChecker(bot)
 }
@@ -45,9 +45,11 @@ fun startBot(token: String): JDA {
         .disableCache(
             CacheFlag.ACTIVITY,
             CacheFlag.VOICE_STATE,
-            CacheFlag.EMOTE,
+            CacheFlag.EMOJI,
             CacheFlag.CLIENT_STATUS,
-            CacheFlag.ONLINE_STATUS
+            CacheFlag.ONLINE_STATUS,
+            CacheFlag.STICKER,
+            CacheFlag.SCHEDULED_EVENTS
         ).setChunkingFilter(ChunkingFilter.exclude(264445053596991498))
         .setMemberCachePolicy(MemberCachePolicy.ALL)
         .addEventListeners(MessageListener())
@@ -59,8 +61,8 @@ private fun registerCommands(
     bot: JDA
 ) {
     commandList.forEach {
-        com.mckernant1.lol.blitzcrank.logger.info("Upserting command ${it.commandString}")
+        logger.info("Upserting command ${it.commandString}")
         bot.upsertCommand(it.commandData).complete()
     }
-    com.mckernant1.lol.blitzcrank.logger.info("Done inserting commands!")
+    logger.info("Done inserting commands!")
 }

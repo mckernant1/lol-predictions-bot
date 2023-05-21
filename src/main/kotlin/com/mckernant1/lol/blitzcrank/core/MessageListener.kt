@@ -2,6 +2,7 @@ package com.mckernant1.lol.blitzcrank.core
 
 import com.mckernant1.commons.extensions.strings.capitalize
 import com.mckernant1.commons.logging.Slf4j.logger
+import com.mckernant1.commons.standalone.measureDuration
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
@@ -9,8 +10,7 @@ import com.mckernant1.lol.blitzcrank.utils.cwp
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.mckernant1.lol.blitzcrank.utils.globalThreadPool
-import com.mckernant1.commons.standalone.measureDuration
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
@@ -20,7 +20,7 @@ import kotlin.concurrent.thread
 
 class MessageListener : ListenerAdapter() {
 
-    override fun onSlashCommand(slashEvent: SlashCommandEvent) {
+    override fun onSlashCommandInteraction(slashEvent: SlashCommandInteractionEvent) {
         globalThreadPool.submit {
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)

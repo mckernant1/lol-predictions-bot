@@ -4,7 +4,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import org.testng.Assert
 import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
@@ -44,9 +45,9 @@ internal open class TestBase {
             println("Waiting for responce")
             mostRecentMessage = testerBotChannel.history.retrievePast(1).complete().first().contentRaw
         }
-        Assert.assertEquals(message.retrieveReactionUsers("\uD83D\uDC4C").complete().size, 1)
-        Assert.assertEquals(message.retrieveReactionUsers("❌").complete().size, 0)
-        Assert.assertEquals(message.retrieveReactionUsers("⛔").complete().size, 0)
+        Assert.assertEquals(message.retrieveReactionUsers(Emoji.fromUnicode("\uD83D\uDC4C")).complete().size, 1)
+        Assert.assertEquals(message.retrieveReactionUsers(Emoji.fromFormatted("❌")).complete().size, 0)
+        Assert.assertEquals(message.retrieveReactionUsers(Emoji.fromFormatted("⛔")).complete().size, 0)
     }
 
 }
