@@ -101,6 +101,9 @@ Feel free to join the support discord with any questions https://discord.gg/cHRU
             logger.warn("Hit insufficient permissions for server: '${event.guild?.id}'", e)
         } catch (e: ErrorResponseException) {
             when (e.errorCode) {
+                10003 -> {
+                    logger.warn("The channel we tried to post to a channel that doesnt exist")
+                }
                 50001 -> {
                     logger.warn("Hit Permission issue. Known to be an issue with reaction permissions", e)
                     event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions").complete()
