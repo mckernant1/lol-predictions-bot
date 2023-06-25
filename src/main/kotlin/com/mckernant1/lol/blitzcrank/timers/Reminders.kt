@@ -23,18 +23,33 @@ fun reminderChecker(bot: JDA) {
         Instant.now().timeUntilNextWhole(ChronoUnit.HOURS).toMillis(),
         TimeUnit.MILLISECONDS
     ) {
-        runCatching {
-            UserSettings.scan().asSequence().flatMap { it.reminders }
-                .filter { it.shouldSendMessage() }
-                .onEach {
+        UserSettings.scan().asSequence()
+            .flatMap { it.reminders }
+            .filter { it.shouldSendMessage() }
+            .onEach {
+                try {
                     val user = bot.getUserById(it.userId) ?: return@onEach
                     val privateChannel = user.openPrivateChannel().complete() ?: return@onEach
                     privateChannel.sendMessage(
                         "Reminder: ${it.leagueSlug} is coming up in ${it.hoursBeforeMatches} hours"
                     ).complete()
-
-                }.groupBy { it.userId }
-                .forEach { (userId, reminders) ->
+                } catch (e: ErrorResponseException) {
+                    val knownErrorResponse = when (e.errorCode) {
+                        50001 -> "Bot does not have permission to channel it was called from"
+                        50007 -> "User '${it.userId}' does not have PMs enabled"
+                        else -> null
+                    }
+                    if (knownErrorResponse != null) {
+                        logger.warn("This is an ErrorResponseException from discord API. Details: $knownErrorResponse, Error Code: ${e.errorCode}, Message: ${e.meaning}")
+                    } else {
+                        logger.error("This is an ErrorResponseException from discord API. We have not seen this code before", e)
+                    }
+                } catch (e: Exception) {
+                    logger.error("An unknown error occurred while sending reminders", e)
+                }
+            }.groupBy { it.userId }
+            .forEach { (userId, reminders) ->
+                try {
                     val user = UserSettings.getSettingsForUser(userId)
                     val newReminders = reminders.map {
                         it.lastReminderSentEpochMillis = Instant.now().toEpochMilli()
@@ -42,21 +57,9 @@ fun reminderChecker(bot: JDA) {
                     }.toMutableList()
                     user.reminders = newReminders
                     UserSettings.putSettings(user)
-                }
-        }.onFailure {
-            when (it) {
-                is ErrorResponseException -> {
-                    val knownErrorCodes = when (it.errorCode) {
-                        50001 -> "Bot does not have permission to channel it was called from"
-                        50007 -> "User does not have PMs enabled"
-                        else -> "Unknown Code"
-                    }
-                    logger.warn("This is an ErrorResponseException from discord API. Details: $knownErrorCodes, Error Code: ${it.errorCode}, Message: ${it.meaning}")
-                }
-                else -> {
-                    logger.error("An error occurred while sending reminders. This is not an ErrorResponseException", it)
+                } catch (e: Exception) {
+                    logger.error("Failed to update user reminder for userId: '{}'", userId, e)
                 }
             }
-        }
     }
 }

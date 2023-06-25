@@ -108,7 +108,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
         // LEC_2022_Summer
         // LEC_2022_Summer_Playoffs
         private val tournamentIdRegex =
-            Regex("(?<region>[a-zA-Z]+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z]+))?")
+            Regex("(?<region>[a-zA-Z]+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z\\d]+))?")
         override val commandString: String = "stats"
         override val commandDescription: String = "The stats for a given league"
         override val commandData: CommandData = CommandDataImpl(commandString, commandDescription)
