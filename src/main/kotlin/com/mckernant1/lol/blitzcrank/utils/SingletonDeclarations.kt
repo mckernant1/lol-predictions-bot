@@ -11,6 +11,7 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.io.File
 import java.time.Duration
+import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledThreadPoolExecutor
 
 internal val dc by lazy { DynamoDbClient.builder().build() }
@@ -27,7 +28,7 @@ internal val cwp: MetricsPublisher by lazy {
         NoMetricsMetricsPublisher()
 }
 
-internal val globalThreadPool by lazy {
+internal val globalThreadPool: ScheduledExecutorService by lazy {
     ScheduledThreadPoolExecutor(10)
 }
 

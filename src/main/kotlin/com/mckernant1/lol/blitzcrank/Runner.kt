@@ -48,6 +48,7 @@ fun startBot(token: String): JDA {
             GatewayIntent.GUILD_INVITES,
             GatewayIntent.GUILD_WEBHOOKS,
             GatewayIntent.SCHEDULED_EVENTS,
+            GatewayIntent.MESSAGE_CONTENT
         )
         .disableCache(
             CacheFlag.ACTIVITY,
@@ -57,8 +58,8 @@ fun startBot(token: String): JDA {
             CacheFlag.ONLINE_STATUS,
             CacheFlag.STICKER,
             CacheFlag.SCHEDULED_EVENTS
-        ).setChunkingFilter(ChunkingFilter.exclude(264445053596991498))
-        .setMemberCachePolicy(MemberCachePolicy.ALL)
+        ).setChunkingFilter(ChunkingFilter.NONE)
+        .setMemberCachePolicy(MemberCachePolicy.NONE)
         .addEventListeners(MessageListener())
         .build()
         .awaitReady()

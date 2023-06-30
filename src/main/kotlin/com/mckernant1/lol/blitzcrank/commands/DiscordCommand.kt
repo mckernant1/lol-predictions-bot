@@ -1,5 +1,7 @@
 package com.mckernant1.lol.blitzcrank.commands
 
+import com.mckernant1.commons.extensions.time.DurationFormat.format
+import com.mckernant1.commons.standalone.measureOperation
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException
 import com.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
@@ -94,7 +96,13 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected fun getAllUsersForServer(): List<BotUser> {
         return if (event.isFromGuild) {
-            event.guild!!.members.map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
+            val (duration, users) = measureOperation {
+                event.guild!!.loadMembers()
+                    .get()
+                    .map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
+            }
+            logger.info("loading ${users.size} members took ${duration.toMillis()}ms")
+            users
         } else {
             listOf(event.author).map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
         }

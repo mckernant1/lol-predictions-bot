@@ -11,12 +11,10 @@ import com.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.Logger
-import kotlin.concurrent.thread
 
 class MessageListener : ListenerAdapter() {
 
@@ -40,28 +38,6 @@ class MessageListener : ListenerAdapter() {
             } catch (e: Exception) {
                 logger.warn("Failed to delete original message", e)
             }
-        }
-    }
-
-    override fun onMessageReceived(messageEvent: MessageReceivedEvent) {
-        thread {
-            val words = getWordsFromMessage(messageEvent.message)
-            if (words.isEmpty() || messageEvent.author.id == messageEvent.jda.selfUser.id) return@thread
-            val event = CommandInfo(messageEvent)
-
-            val command = getCommandFromWords(words, event)
-                ?: return@thread
-
-            messageEvent.channel.sendMessage(
-                """
-This bot is migrating to discord slash commands. Please type / to activate them. 
-Running commands with `!` will become unavailable on Oct 1st 2022.
-                
-You may have to re-add the bot your server to allow this.
-Feel free to join the support discord with any questions https://discord.gg/cHRU5jcFc6
-            """.trimMargin()
-            ).complete()
-            handleCommonCommandLogic(event, command, words)
         }
     }
 

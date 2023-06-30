@@ -2,6 +2,8 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 
 import com.mckernant1.commons.extensions.collections.SetTheory.cartesianProduct
 import com.mckernant1.commons.extensions.math.DoubleAlgebra.round
+import com.mckernant1.commons.standalone.measureDuration
+import com.mckernant1.commons.standalone.measureOperation
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
@@ -12,6 +14,12 @@ import com.mckernant1.lol.blitzcrank.utils.endDateAsDate
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.esports.api.models.Match
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -21,7 +29,7 @@ import java.time.ZonedDateTime
 
 class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
 
-    override fun execute() {
+    override fun execute(): Unit = runBlocking {
         val results: List<Match> = when (Timeframe.valueOf(words[2])) {
             Timeframe.Tournament -> getResults(region, 100)
             Timeframe.Year -> apiClient.getTournamentsForLeague(region).filter {
@@ -29,6 +37,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             }.flatMap {
                 apiClient.getMatchesForTournament(it.tournamentId)
             }
+
             Timeframe.Split -> {
                 val splitIdentifier = apiClient.getMostRecentTournament(region).let {
                     val groups = tournamentIdRegex.matchEntire(it.tournamentId)?.groups
@@ -51,26 +60,36 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
 
         val users = getAllUsersForServer()
 
-        val serverMatches = users.cartesianProduct(results)
-            .mapNotNull { (user, match) ->
-                Prediction.getItem(user.getId(), match.matchId)
-            }
+        val (duration, serverMatches) = measureOperation {
+            users
+                .cartesianProduct(results)
+                .map { (user, match) ->
+                    async { Prediction.getItem(user.getId(), match.matchId) }
+                }
+                .awaitAll()
+                .filterNotNull()
+        }
 
-        val resultString = users.map { user ->
-            val numberPredicted = serverMatches.count { prediction ->
-                prediction.userId == user.getId() && results.any { it.matchId == prediction.matchId }
+        logger.info("Getting ${serverMatches.size} matches took ${duration.toMillis()}ms")
+
+        val resultString = users.asSequence()
+            .map { user ->
+                val numberPredicted = serverMatches.count { prediction ->
+                    prediction.userId == user.getId() && results.any { it.matchId == prediction.matchId }
+                }
+                val numberCorrect = serverMatches.count { prediction ->
+                    val relevantResult = results.find { prediction.matchId == it.matchId }
+                        ?: return@count false
+                    return@count prediction.userId == user.getId() && relevantResult.winner == prediction.prediction
+                }
+                return@map PredictionRatio(user, numberPredicted, numberCorrect)
             }
-            val numberCorrect = serverMatches.count { prediction ->
-                val relevantResult = results.find { prediction.matchId == it.matchId }
-                    ?: return@count false
-                return@count prediction.userId == user.getId() && relevantResult.winner == prediction.prediction
-            }
-            return@map PredictionRatio(user, numberPredicted, numberCorrect)
-        }.filter { it.numberPredicted != 0 }
+            .filter { it.numberPredicted != 0 }
             .sortedByDescending { it.numberCorrect }
             .map {
                 "${it.user.getMentionable()} predicted ${it.numberCorrect} out of ${it.numberPredicted} for a correct prediction rate of **${it.getPredictionPercentage()}%**"
             }
+            .toList()
         val str = resultString.joinToString("\n") { it }
         if (str.isBlank()) {
             event.channel.sendMessage("There are no past matches for this tournament").complete()
