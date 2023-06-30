@@ -6,10 +6,9 @@ import com.mckernant1.commons.standalone.measureDuration
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.utils.commandThreadPool
 import com.mckernant1.lol.blitzcrank.utils.cwp
-import com.mckernant1.lol.blitzcrank.utils.getWordsFromMessage
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
-import com.mckernant1.lol.blitzcrank.utils.globalThreadPool
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
@@ -19,7 +18,7 @@ import org.slf4j.Logger
 class MessageListener : ListenerAdapter() {
 
     override fun onSlashCommandInteraction(slashEvent: SlashCommandInteractionEvent) {
-        globalThreadPool.submit {
+        commandThreadPool.submit {
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)
             logger.info("Got slash command ${event.commandString}")

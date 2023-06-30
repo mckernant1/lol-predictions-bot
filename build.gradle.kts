@@ -27,6 +27,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.guava:guava:32.1.0-jre")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
     implementation("net.dv8tion:JDA:5.0.0-beta.9")

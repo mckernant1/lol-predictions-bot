@@ -3,7 +3,7 @@ package com.mckernant1.lol.blitzcrank.timers
 import com.mckernant1.commons.extensions.executor.Executors.scheduleAtFixedRate
 import com.mckernant1.commons.extensions.time.Instants.timeUntilNextWhole
 import com.mckernant1.lol.blitzcrank.model.UserSettings
-import com.mckernant1.lol.blitzcrank.utils.globalThreadPool
+import com.mckernant1.lol.blitzcrank.utils.periodicActionsThreadPool
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import org.slf4j.LoggerFactory
@@ -18,11 +18,12 @@ private val logger by lazy {
 }
 
 fun reminderChecker(bot: JDA) {
-    globalThreadPool.scheduleAtFixedRate(
+    periodicActionsThreadPool.scheduleAtFixedRate(
         Duration.ofMinutes(30).toMillis(),
         Instant.now().timeUntilNextWhole(ChronoUnit.HOURS).toMillis(),
         TimeUnit.MILLISECONDS
     ) {
+        logger.info("Starting Reminder Checker")
         UserSettings.scan().asSequence()
             .flatMap { it.reminders }
             .filter { it.shouldSendMessage() }
