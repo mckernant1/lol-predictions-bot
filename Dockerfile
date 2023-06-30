@@ -10,4 +10,4 @@ RUN mkdir /app
 
 COPY --from=build /app/build/libs/*-all.jar /app/app.jar
 
-ENTRYPOINT ["java", "-Xms128m", "-Xmx128m", "-jar", "app/app.jar"]
+ENTRYPOINT ["java", "-Xms512m", "-Xmx512m", "-jar", "app/app.jar"]
