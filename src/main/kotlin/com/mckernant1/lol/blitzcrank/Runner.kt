@@ -42,6 +42,13 @@ fun startBot(token: String): JDA {
         GatewayIntent.DIRECT_MESSAGE_REACTIONS,
         GatewayIntent.DIRECT_MESSAGE_TYPING
     )
+        .disableIntents(
+            GatewayIntent.GUILD_VOICE_STATES,
+            GatewayIntent.GUILD_PRESENCES,
+            GatewayIntent.GUILD_INVITES,
+            GatewayIntent.GUILD_WEBHOOKS,
+            GatewayIntent.SCHEDULED_EVENTS,
+        )
         .disableCache(
             CacheFlag.ACTIVITY,
             CacheFlag.VOICE_STATE,

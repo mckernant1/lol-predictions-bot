@@ -40,9 +40,9 @@ fun reminderChecker(bot: JDA) {
                         else -> null
                     }
                     if (knownErrorResponse != null) {
-                        logger.warn("This is an ErrorResponseException from discord API. Details: $knownErrorResponse, Error Code: ${e.errorCode}, Message: ${e.meaning}")
+                        logger.warn("This is an exception from discord API. Details: $knownErrorResponse, Code: ${e.errorCode}, Message: ${e.meaning}")
                     } else {
-                        logger.error("This is an ErrorResponseException from discord API. We have not seen this code before", e)
+                        logger.error("This is an exception from discord API. We have not seen this code before", e)
                     }
                 } catch (e: Exception) {
                     logger.error("An unknown error occurred while sending reminders", e)
