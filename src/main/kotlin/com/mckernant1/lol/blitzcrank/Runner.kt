@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
+import software.amazon.codeguruprofilerjavaagent.Profiler
 
 private val logger = LoggerFactory.getLogger("MainLogger")
 
 fun main() {
-//    convertPredictions()
     assertEnvironmentVariablesExist(
         "BOT_TOKEN",
         "ESPORTS_API_KEY",
@@ -25,6 +25,15 @@ fun main() {
         "BOT_APPLICATION_ID"
     )
     val botToken = System.getenv("BOT_TOKEN")
+
+    if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true)) {
+        Profiler.Builder()
+            .profilingGroupName("lol-predictions-bot")
+            .withHeapSummary(true)
+            .build()
+            .start()
+    }
+
     val bot = startBot(botToken)
     registerCommands(bot)
     publishBotMetrics(bot)

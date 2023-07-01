@@ -1,6 +1,5 @@
 package com.mckernant1.lol.blitzcrank.commands
 
-import com.mckernant1.commons.extensions.time.DurationFormat.format
 import com.mckernant1.commons.standalone.measureOperation
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException

@@ -14,6 +14,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven(uri("https://d1osg35nybn3tt.cloudfront.net"))
     maven {
         url = uri("https://mvn.mckernant1.com/release")
     }
@@ -43,6 +44,8 @@ dependencies {
     implementation(platform("software.amazon.awssdk:bom:2.18.21"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
+
+    implementation("com.amazonaws:codeguru-profiler-java-agent:1.2.2")
 
     testImplementation("org.testng:testng:7.7.0")
 }
