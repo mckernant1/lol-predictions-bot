@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
+import org.slf4j.bridge.SLF4JBridgeHandler
 import software.amazon.codeguruprofilerjavaagent.Profiler
 
 private val logger = LoggerFactory.getLogger("MainLogger")
@@ -26,6 +27,8 @@ fun main() {
     )
     val botToken = System.getenv("BOT_TOKEN")
 
+    SLF4JBridgeHandler.removeHandlersForRootLogger()
+    SLF4JBridgeHandler.install()
     if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true)) {
         Profiler.Builder()
             .profilingGroupName("lol-predictions-bot")

@@ -40,6 +40,9 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.20.0")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.slf4j:jul-to-slf4j:2.0.7")
+
+
 
     implementation(platform("software.amazon.awssdk:bom:2.18.21"))
     implementation("software.amazon.awssdk:cloudwatch")
