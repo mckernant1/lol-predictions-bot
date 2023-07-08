@@ -6,6 +6,7 @@ import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -41,7 +42,7 @@ class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
             "Your timezone has now been set to ${zoneId.id}. Your current time should be ${
                 longDateFormat.withZone(
                     zoneId
-                ).format(ZonedDateTime.now())
+                ).format(Instant.now())
             }"
         ).complete()
     }
