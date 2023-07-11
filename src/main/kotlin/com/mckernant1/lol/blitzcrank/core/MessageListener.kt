@@ -43,7 +43,7 @@ class MessageListener : ListenerAdapter() {
     private fun handleCommonCommandLogic(
         event: CommandInfo,
         command: DiscordCommand,
-        words: List<String>
+        words: List<String>,
     ) {
         val commandString = "${words[0].removePrefix("!").capitalize()}Command"
 
@@ -76,17 +76,26 @@ class MessageListener : ListenerAdapter() {
             logger.warn("Hit insufficient permissions for server: '${event.guild?.id}'", e)
         } catch (e: ErrorResponseException) {
             when (e.errorCode) {
-                10003 -> {
-                    logger.warn("The channel we tried to post to a channel that doesnt exist")
+                10008 -> {
+                    logger.warn("We tried to react to a message that didn't exist", e)
                 }
+
+                10003 -> {
+                    logger.warn("The channel we tried to post to a channel that doesnt exist", e)
+                }
+
                 50001 -> {
                     logger.warn("Hit Permission issue. Known to be an issue with reaction permissions", e)
-                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions").complete()
+                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions")
+                        .complete()
                 }
+
                 50013 -> {
                     logger.warn("Hit Permission issue. Known to be an issue with embedded message permissions ", e)
-                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with embedded message permissions").complete()
+                    event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with embedded message permissions")
+                        .complete()
                 }
+
                 else -> defaultErrBehavior(event, words, e)
             }
         } catch (e: Exception) {
@@ -96,7 +105,7 @@ class MessageListener : ListenerAdapter() {
 
     private fun defaultErrBehavior(event: CommandInfo, words: List<String>, e: Exception) {
         logger.error(
-            "Caught exception while executing command for user: ${event.author.id}, commands: '$words': ",
+            "Caught exception while executing command for user: ${event.author.id}, guild: ${event.guild?.id}, commands: '$words': ",
             e
         )
         cwp.putErrorMetric()
