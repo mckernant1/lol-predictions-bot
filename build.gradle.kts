@@ -31,7 +31,9 @@ dependencies {
     implementation("com.google.guava:guava:32.1.0-jre")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
-    implementation("net.dv8tion:JDA:5.0.0-beta.9")
+    implementation("net.dv8tion:JDA:5.0.0-beta.12") {
+        exclude(module = "opus-java")
+    }
 
     implementation("com.mckernant1.lol:esports-api:0.1.0")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.1")
