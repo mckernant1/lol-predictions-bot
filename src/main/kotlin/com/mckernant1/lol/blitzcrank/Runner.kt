@@ -19,9 +19,6 @@ private val logger = LoggerFactory.getLogger("MainLogger")
 
 fun main() {
     assertEnvironmentVariablesExist(
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "AWS_REGION",
         "BOT_TOKEN",
         "ESPORTS_API_KEY",
         "PREDICTIONS_TABLE_NAME",
