@@ -26,7 +26,10 @@ fun getSchedule(region: String, numberToGet: Int?): List<Match> {
     }
     logger.info("GetMatches took ${getMatchesDuration.toMillis()}ms")
 
-    if (matches.isEmpty()) return emptyList()
+    if (matches.isEmpty()) {
+        logger.info("There are no matches returned for tourney: ${mostRecentTourney.tournamentId}")
+        return emptyList()
+    }
 
     return if (numberToGet == null) {
         val first = matches.first()
