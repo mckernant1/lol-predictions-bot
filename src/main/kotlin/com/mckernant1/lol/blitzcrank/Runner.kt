@@ -29,7 +29,7 @@ fun main() {
 
     SLF4JBridgeHandler.removeHandlersForRootLogger()
     SLF4JBridgeHandler.install()
-    if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true)) {
+    if (false /* && System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true)*/) {
         Profiler.Builder()
             .profilingGroupName("lol-predictions-bot")
             .withHeapSummary(true)
