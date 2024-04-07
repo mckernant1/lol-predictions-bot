@@ -37,9 +37,8 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             }.flatMap {
                 apiClient.getMatchesForTournament(it.tournamentId)
             }
-
             Timeframe.Split -> {
-                val splitIdentifier = apiClient.getMostRecentTournament(region).let {
+                val splitIdentifier: String = apiClient.getMostRecentTournament(region).let {
                     val groups = tournamentIdRegex.matchEntire(it.tournamentId)?.groups
                         ?: throw InvalidCommandException("Tournament name ${it.tournamentId} could not be parsed")
                     val region = groups["region"]?.value!!
@@ -127,7 +126,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
         // LEC_2022_Summer
         // LEC_2022_Summer_Playoffs
         private val tournamentIdRegex =
-            Regex("(?<region>[a-zA-Z]+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z\\d]+))?")
+            Regex("(?<region>\\w+)_(?<year>\\d+)_(?<split>[a-zA-Z]+)(_(?<tournament>[a-zA-Z\\d]+))?")
         override val commandString: String = "stats"
         override val commandDescription: String = "The stats for a given league"
         override val commandData: CommandData = CommandDataImpl(commandString, commandDescription)
