@@ -91,7 +91,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             .toList()
         val str = resultString.joinToString("\n") { it }
         if (str.isBlank()) {
-            event.channel.sendMessage("There are no past matches for this tournament").complete()
+            event.channel.sendMessage("There are no completed predictions for $region to display").complete()
         } else if (str.length < 2000) {
             event.channel.sendMessage("Prediction results for $region are:\n$str").complete()
         } else {
