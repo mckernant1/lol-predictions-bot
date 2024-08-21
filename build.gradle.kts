@@ -28,7 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
     // Discord
-    implementation("net.dv8tion:JDA:5.0.0-beta.12") {
+    implementation("net.dv8tion:JDA:5.0.2") {
         exclude(module = "opus-java")
     }
 
