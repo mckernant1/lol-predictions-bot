@@ -63,7 +63,7 @@ class MessageListener : ListenerAdapter() {
                 "Caught exception while validating command for user: ${event.author.id}, commands: '$words': ",
                 e
             )
-            metrics.withDimensions { m ->
+            metrics.withNewMetrics { m ->
                 m.addCount("Error", 1)
             }
             event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
@@ -76,7 +76,7 @@ class MessageListener : ListenerAdapter() {
                 command.execute()
             }
             logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
-            metrics.withDimensions { m ->
+            metrics.withNewMetrics { m ->
                 m.addCount("Error", 0)
             }
         } catch (e: InsufficientPermissionException) {
@@ -115,7 +115,7 @@ class MessageListener : ListenerAdapter() {
             "Caught exception while executing command for user: ${event.author.id}, guild: ${event.guild?.id}, commands: '$words': ",
             e
         )
-        metrics.withDimensions { m ->
+        metrics.withNewMetrics { m ->
             m.addCount("Error", 1)
         }
         event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()

@@ -31,8 +31,9 @@ fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
             )
         }'"
     )
-    metrics.addCount(commandString, 1)
-    metrics.submitAndClear()
+    metrics.withNewMetrics {
+        it.addCount(commandString, 1)
+    }
 }
 
 fun createErrorMessage(e: Throwable) = EmbedBuilder()

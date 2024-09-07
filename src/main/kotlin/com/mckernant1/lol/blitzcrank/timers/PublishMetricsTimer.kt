@@ -21,8 +21,9 @@ fun publishBotMetrics(bot: JDA) {
     periodicActionsThreadPool.scheduleAtFixedRate(Duration.ofMinutes(5)) {
         logger.info("Publishing metrics")
         runCatching {
-            metrics.addCount("count", bot.guilds.size)
-            metrics.submitAndClear()
+            metrics.submitAndClear {
+                it.addCount("count", bot.guilds.size)
+            }
         }.onFailure {
             logger.error("An error occurred while posting metrics", it)
         }

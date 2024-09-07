@@ -35,7 +35,7 @@ dependencies {
     // My Libs
     implementation("com.mckernant1.lol:esports-api:0.1.0")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.3")
-    implementation("com.mckernant1.commons:metrics:0.0.7")
+    implementation("com.mckernant1.commons:metrics:0.0.9")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.5")
