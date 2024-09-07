@@ -17,8 +17,11 @@ import org.slf4j.Logger
 
 class MessageListener : ListenerAdapter() {
 
+    private val metrics = cwp.newMetrics("ErrorCount" to "Error")
+
     override fun onSlashCommandInteraction(slashEvent: SlashCommandInteractionEvent) {
         commandThreadPool.submit {
+
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)
             logger.info("Got slash command ${event.commandString}")
@@ -60,7 +63,9 @@ class MessageListener : ListenerAdapter() {
                 "Caught exception while validating command for user: ${event.author.id}, commands: '$words': ",
                 e
             )
-            cwp.putErrorMetric()
+            metrics.withDimensions { m ->
+                m.addCount("Error", 1)
+            }
             event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
             return
         }
@@ -71,7 +76,9 @@ class MessageListener : ListenerAdapter() {
                 command.execute()
             }
             logger.info("Execution step for $commandString took ${executeDuration.toMillis()}ms")
-            cwp.putNoErrorMetric()
+            metrics.withDimensions { m ->
+                m.addCount("Error", 0)
+            }
         } catch (e: InsufficientPermissionException) {
             logger.warn("Hit insufficient permissions for server: '${event.guild?.id}'", e)
         } catch (e: ErrorResponseException) {
@@ -108,7 +115,9 @@ class MessageListener : ListenerAdapter() {
             "Caught exception while executing command for user: ${event.author.id}, guild: ${event.guild?.id}, commands: '$words': ",
             e
         )
-        cwp.putErrorMetric()
+        metrics.withDimensions { m ->
+            m.addCount("Error", 1)
+        }
         event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
     }
 

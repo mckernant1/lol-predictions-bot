@@ -1,14 +1,15 @@
 package com.mckernant1.lol.blitzcrank.utils
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
-import com.mckernant1.lol.blitzcrank.metrics.AWSCloudwatchMetricsPublisher
-import com.mckernant1.lol.blitzcrank.metrics.MetricsPublisher
-import com.mckernant1.lol.blitzcrank.metrics.NoMetricsMetricsPublisher
+import com.mckernant1.commons.metrics.Metrics
+import com.mckernant1.commons.metrics.impls.CloudWatchMetrics
+import com.mckernant1.commons.metrics.impls.NoopMetrics
 import com.mckernant1.lol.esports.api.ApiClient
 import com.mckernant1.lol.esports.api.client.DefaultApi
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.io.File
 import java.time.Duration
@@ -22,11 +23,17 @@ internal val ddbClient: DynamoDbEnhancedClient by lazy {
         .build()
 }
 
-internal val cwp: MetricsPublisher by lazy {
+internal val cloudWatchClient: CloudWatchClient by lazy {
+    CloudWatchClient.create()
+}
+
+private const val NAMESPACE = "Discord-bots/Predictions-Bot"
+
+internal val cwp: Metrics by lazy {
     if (System.getenv("METRICS_ENABLED").equals("true", ignoreCase = true)) {
-        AWSCloudwatchMetricsPublisher()
+        CloudWatchMetrics(NAMESPACE, cloudWatchClient)
     } else {
-        NoMetricsMetricsPublisher()
+        NoopMetrics()
     }
 }
 

@@ -1,6 +1,5 @@
 package com.mckernant1.lol.blitzcrank.metrics
 
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
 import software.amazon.awssdk.services.cloudwatch.model.Dimension
 import software.amazon.awssdk.services.cloudwatch.model.MetricDatum
 import software.amazon.awssdk.services.cloudwatch.model.PutMetricDataRequest
@@ -10,10 +9,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-
+@Deprecated("Use metrics library instead")
 class AWSCloudwatchMetricsPublisher : MetricsPublisher {
-
-    private val cw = CloudWatchClient.builder().build()
 
     companion object {
         private const val NAMESPACE = "Discord-bots/Predictions-Bot"
@@ -34,10 +31,10 @@ class AWSCloudwatchMetricsPublisher : MetricsPublisher {
             .timestamp(instant)
             .dimensions(dimension).build()
 
-        val request = PutMetricDataRequest.builder()
+        PutMetricDataRequest.builder()
             .namespace(NAMESPACE)
             .metricData(datum).build()
-        cw.putMetricData(request)
+        // cw.putMetricData(request)
     }
 
     override fun putCommandUsedMetric(commandName: String) {
@@ -55,10 +52,10 @@ class AWSCloudwatchMetricsPublisher : MetricsPublisher {
             .timestamp(instant)
             .dimensions(dimension).build()
 
-        val request = PutMetricDataRequest.builder()
+        PutMetricDataRequest.builder()
             .namespace(NAMESPACE)
             .metricData(datum).build()
-        cw.putMetricData(request)
+        // cw.putMetricData(request)
     }
 
     override fun putErrorMetric() {
@@ -76,10 +73,10 @@ class AWSCloudwatchMetricsPublisher : MetricsPublisher {
             .timestamp(instant)
             .dimensions(dimension).build()
 
-        val request = PutMetricDataRequest.builder()
+        PutMetricDataRequest.builder()
             .namespace(NAMESPACE)
             .metricData(datum).build()
-        cw.putMetricData(request)
+        // cw.putMetricData(request)
     }
 
     override fun putNoErrorMetric() {
@@ -97,10 +94,10 @@ class AWSCloudwatchMetricsPublisher : MetricsPublisher {
             .timestamp(instant)
             .dimensions(dimension).build()
 
-        val request = PutMetricDataRequest.builder()
+        PutMetricDataRequest.builder()
             .namespace(NAMESPACE)
             .metricData(datum).build()
-        cw.putMetricData(request)
+        // cw.putMetricData(request)
     }
 
     private fun getInstant() = Instant.parse(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))

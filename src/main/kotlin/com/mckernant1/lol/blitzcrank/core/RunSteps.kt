@@ -15,6 +15,12 @@ import java.time.format.DateTimeFormatter
 private val logger: Logger = LoggerFactory.getLogger("RunCommandLogger")
 fun getCommandFromWords(words: List<String>, event: CommandInfo): DiscordCommand? = commandsByName[words[0].drop(1)]?.create(event)
 
+private val metrics by lazy {
+    cwp.newMetrics(
+        "Commands" to "Count"
+    )
+}
+
 fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
     val commandString = "${words[0].drop(1).capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
@@ -25,7 +31,8 @@ fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
             )
         }'"
     )
-    cwp.putCommandUsedMetric(commandString)
+    metrics.addCount(commandString, 1)
+    metrics.submitAndClear()
 }
 
 fun createErrorMessage(e: Throwable) = EmbedBuilder()

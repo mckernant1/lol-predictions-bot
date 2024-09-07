@@ -11,11 +11,18 @@ private val logger by lazy {
     LoggerFactory.getLogger("BotMetrics")
 }
 
+private val metrics by lazy {
+    cwp.newMetrics(
+        "Servers" to "Count"
+    )
+}
+
 fun publishBotMetrics(bot: JDA) {
     periodicActionsThreadPool.scheduleAtFixedRate(Duration.ofMinutes(5)) {
         logger.info("Publishing metrics")
         runCatching {
-            cwp.putNumServers(bot.guilds.size)
+            metrics.addCount("count", bot.guilds.size)
+            metrics.submitAndClear()
         }.onFailure {
             logger.error("An error occurred while posting metrics", it)
         }
