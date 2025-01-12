@@ -33,16 +33,17 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
         sb.appendLine("The last ${matches.size} matches in ${region.uppercase()} were: ")
         matches.forEach {
             if (it.winner == it.blueTeamId) {
-                sb.append("\uD83D\uDC51 ")
+                sb.append("$CROWN ")
             }
             sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**)")
             if (it.winner == it.redTeamId) {
-                sb.append(" \uD83D\uDC52")
+                sb.append(" $CROWN")
             }
 
             if (it.vod != null) {
                 sb.append(" [Vod](${it.vod})")
             }
+
             if (it.highlight != null) {
                 sb.append(" [Highlight](${it.highlight})")
             }
@@ -52,6 +53,7 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
     }
 
     companion object : CommandMetadata {
+        private const val CROWN = "\uD83D\uDC51"
         override val commandString: String = "results"
         override val commandDescription: String = "The results for the given league"
         override val commandData: CommandData = commandDataFromJson(
