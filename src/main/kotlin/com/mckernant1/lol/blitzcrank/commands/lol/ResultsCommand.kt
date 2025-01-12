@@ -35,7 +35,7 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
             if (it.winner == it.blueTeamId) {
                 sb.append("$CROWN ")
             }
-            sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**)")
+            sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**")
             if (it.winner == it.redTeamId) {
                 sb.append(" $CROWN")
             }
