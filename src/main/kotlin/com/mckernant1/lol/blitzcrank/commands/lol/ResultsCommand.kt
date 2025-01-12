@@ -32,15 +32,21 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
         val sb = StringBuilder()
         sb.appendLine("The last ${matches.size} matches in ${region.uppercase()} were: ")
         matches.forEach {
-            sb.appendLine(
-                "${
-                    if (it.winner == it.blueTeamId)
-                        "\uD83D\uDC51 " else ""
-                }**${it.blueTeamId}** vs **${it.redTeamId}**${
-                    if (it.winner == it.redTeamId)
-                        " \uD83D\uDC51" else ""
-                }"
-            )
+            if (it.winner == it.blueTeamId) {
+                sb.append("\uD83D\uDC51 ")
+            }
+            sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**)")
+            if (it.winner == it.redTeamId) {
+                sb.append(" \uD83D\uDC52")
+            }
+
+            if (it.vod != null) {
+                sb.append(" [Vod](${it.vod})")
+            }
+            if (it.highlight != null) {
+                sb.append(" [Highlight](${it.highlight})")
+            }
+            sb.appendLine()
         }
         return sb.toString()
     }

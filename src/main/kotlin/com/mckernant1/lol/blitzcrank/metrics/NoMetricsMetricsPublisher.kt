@@ -1,5 +1,6 @@
 package com.mckernant1.lol.blitzcrank.metrics
 
+@Deprecated("Use metrics library instead")
 class NoMetricsMetricsPublisher : MetricsPublisher {
     override fun putNumServers(number: Int) = Unit
 

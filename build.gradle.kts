@@ -33,7 +33,7 @@ dependencies {
     }
 
     // My Libs
-    implementation("com.mckernant1.lol:esports-api:0.1.0")
+    implementation("com.mckernant1.lol:esports-api:0.2.0")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.3")
     implementation("com.mckernant1.commons:metrics:0.0.9")
 
