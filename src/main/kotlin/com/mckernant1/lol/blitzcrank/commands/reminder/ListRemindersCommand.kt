@@ -20,9 +20,7 @@ class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
         """.trimIndent()).complete()
     }
 
-    override fun validate() {
-       validateWordCount(1..1)
-    }
+    override fun validate(options: Map<String, String>) {}
 
     companion object : CommandMetadata {
         override val commandString: String = "list-reminders"

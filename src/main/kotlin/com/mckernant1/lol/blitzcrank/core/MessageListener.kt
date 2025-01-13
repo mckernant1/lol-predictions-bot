@@ -52,7 +52,7 @@ class MessageListener : ListenerAdapter() {
 
         try {
             val validationDuration = measureDuration {
-                command.validate()
+                command.validate(event.options)
             }
             logger.info("Validation step for $commandString took ${validationDuration.toMillis()}ms")
         } catch (e: InvalidCommandException) {

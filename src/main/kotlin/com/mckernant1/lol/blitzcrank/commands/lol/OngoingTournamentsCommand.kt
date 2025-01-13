@@ -29,9 +29,7 @@ $ongoingTourneyString
         event.channel.sendMessage(messageToSend).complete()
     }
 
-    override fun validate() {
-        validateWordCount(1..1)
-    }
+    override fun validate(options: Map<String, String>) = Unit
 
     companion object : CommandMetadata {
         override val commandString: String = "ongoing"

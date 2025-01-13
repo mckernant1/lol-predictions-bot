@@ -26,6 +26,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.guava:guava:32.1.0-jre")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
 
     // Discord
     implementation("net.dv8tion:JDA:5.0.2") {
@@ -35,7 +36,7 @@ dependencies {
     // My Libs
     implementation("com.mckernant1.lol:esports-api:0.2.0")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.3")
-    implementation("com.mckernant1.commons:metrics:0.0.9")
+    implementation("com.mckernant1.commons:metrics:0.0.10")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.5")

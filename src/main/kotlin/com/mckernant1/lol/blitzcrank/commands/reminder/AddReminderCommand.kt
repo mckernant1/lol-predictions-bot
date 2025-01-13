@@ -15,7 +15,7 @@ class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
             Reminder(
                 event.author.id,
                 region,
-                words[2].toLong()
+                event.options["hours_before"]!!.toLong()
             )
         )
         userSettings.reminders = newReminders
@@ -24,10 +24,9 @@ class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
         event.channel.sendMessage("Your Reminder has been added").complete()
     }
 
-    override fun validate() {
-        validateWordCount(3..3)
-        validateRegion(1)
-        validateNumberPositive(2)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
+        validateNumberPositive(options["hours_before"])
     }
 
     companion object : CommandMetadata {

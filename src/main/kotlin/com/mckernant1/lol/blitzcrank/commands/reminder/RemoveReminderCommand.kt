@@ -10,22 +10,22 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 class RemoveReminderCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun execute() {
+        val hoursBefore = event.options["hours_before"]
         val removed = userSettings.reminders.removeAll {
-            it.leagueSlug == region && it.hoursBeforeMatches == words[2].toLong()
+            it.leagueSlug == region && it.hoursBeforeMatches == hoursBefore?.toLong()
         }
         UserSettings.putSettings(userSettings)
         val replyText = if (removed) {
             "Your reminder has been removed"
         } else {
-            "None of your reminders matched $region, ${words[2]}"
+            "None of your reminders matched $region, $hoursBefore"
         }
         reply(replyText)
     }
 
-    override fun validate() {
-        validateWordCount(3..3)
-        validateRegion(1)
-        validateNumberPositive(2)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
+        validateNumberPositive(options["hours_before"])
     }
 
     companion object : CommandMetadata {

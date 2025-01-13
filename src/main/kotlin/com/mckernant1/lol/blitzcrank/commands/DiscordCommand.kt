@@ -20,9 +20,8 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected lateinit var region: String
     protected var numToGet: Int? = null
-    protected val words = getWordsFromString(event.commandString)
 
-    protected val logger: Logger = LoggerFactory.getLogger("${event.author.id}-${words}")
+    protected val logger: Logger = LoggerFactory.getLogger("${event.author.id}-${event.commandString}")
 
     protected val userSettings by lazy {
         UserSettings.getSettingsForUser(event.author.id)
@@ -47,11 +46,11 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     abstract fun execute(): Unit
 
     @Throws(InvalidCommandException::class)
-    abstract fun validate(): Unit
+    abstract fun validate(options: Map<String, String>): Unit
 
-    protected fun validateNumberPositive(position: Int) {
+    protected fun validateNumberPositive(input: String?) {
         numToGet = try {
-            words.getOrNull(position)?.toInt()
+            input?.toInt()
         } catch (e: NumberFormatException) {
             throw InvalidCommandException("Input must be a number")
         }
@@ -63,8 +62,9 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         }
     }
 
-    protected fun validateRegion(position: Int) {
-        region = words[position].uppercase()
+    protected fun validateRegion(leagueId: String?) {
+        region = leagueId
+            ?: throw InvalidCommandException("league_id cannot be null")
         try {
             apiClient.getLeagueByCode(region.uppercase())
             logger.info("validateRegion with region: '${region.uppercase()}'")
@@ -76,8 +76,8 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     }
 
-    protected fun validateTeam(position: Int) {
-        val teamName = words[position]
+    protected fun validateTeam(teamName: String?) {
+        teamName ?: throw InvalidCommandException("Team name cannot be null")
         try  {
             apiClient.getTeamByCode(teamName.uppercase())
             logger.info("Team '$teamName' has been selected")
@@ -85,12 +85,6 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
             throw TeamDoesNotExistException("Team '$teamName' does not exists. Use team code, not team name (C9 not Cloud9)")
         }
 
-    }
-
-    protected fun validateWordCount(range: IntRange) {
-        if (words.size !in range) {
-            throw InvalidCommandException("Invalid word count. There should be between $range words, but there are '${words.size}'")
-        }
     }
 
     protected fun getAllUsersForServer(): List<BotUser> {

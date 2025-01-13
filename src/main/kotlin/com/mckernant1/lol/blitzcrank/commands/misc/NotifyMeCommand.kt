@@ -1,5 +1,6 @@
 package com.mckernant1.lol.blitzcrank.commands.misc
 
+import com.mckernant1.commons.extensions.boolean.trueIfNull
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
@@ -11,12 +12,11 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl
 class NotifyMeCommand(event: CommandInfo) : DiscordCommand(event) {
 
 
-    override fun validate() {
-        validateWordCount(2..2)
+    override fun validate(options: Map<String, String>) {
     }
 
     override fun execute() {
-        val notify = words[1].toBooleanStrictOrNull() ?: true
+        val notify = event.options["notify"]?.toBoolean().trueIfNull()
         val settings = userSettings
         settings.notifyMe = notify
         UserSettings.putSettings(settings)

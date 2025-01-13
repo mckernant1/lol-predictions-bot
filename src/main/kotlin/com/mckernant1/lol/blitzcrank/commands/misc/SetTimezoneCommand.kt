@@ -2,6 +2,7 @@ package com.mckernant1.lol.blitzcrank.commands.misc
 
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
@@ -13,7 +14,7 @@ import java.time.ZonedDateTime
 class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun execute() {
-        val userSpecifiedTimezone = words[1].uppercase()
+        val userSpecifiedTimezone = event.options["timezone"]!!.uppercase()
 
         val userZoneIdIsValid: Result<ZoneId> = userSpecifiedTimezone.runCatching {
             ZoneId.of(this)
@@ -47,8 +48,7 @@ class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
         ).complete()
     }
 
-    override fun validate() {
-        validateWordCount(2..2)
+    override fun validate(options: Map<String, String>) {
     }
 
     companion object : CommandMetadata {

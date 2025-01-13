@@ -13,26 +13,16 @@ data class CommandInfo(
     val guild: Guild?,
     val commandString: String,
     val isFromGuild: Boolean,
+    val options: Map<String, String>
 ) {
-
-    constructor(event: MessageReceivedEvent) : this(
-        event.channel,
-        event.author,
-        try {
-            event.guild
-        } catch (e: IllegalStateException) {
-            null
-        },
-        event.message.contentRaw,
-        event.isFromGuild
-    )
 
     constructor(event: SlashCommandInteractionEvent) : this(
         event.channel,
         event.user,
         event.guild,
         event.commandString.replace("\\w+: ".toRegex(), ""),
-        event.isFromGuild
+        event.isFromGuild,
+        event.options.associate { it.name to it.asString }
     )
 
 }

@@ -16,9 +16,9 @@ import java.time.Instant
 
 class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun execute() {
-        val region = words[1].uppercase()
-        val team1Words = words[2].uppercase()
-        val team2Words = words.getOrNull(3)?.uppercase()
+        val region = region.uppercase()
+        val team1Words = event.options["team1"]!!.uppercase()
+        val team2Words = event.options["team2"]?.uppercase()
         val team1 = apiClient.getTeamByCode(team1Words)
         val matches = getResults(region, Int.MAX_VALUE)
 
@@ -79,11 +79,13 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
         fun getLosses() = totalGames - numWins
     }
 
-    override fun validate() {
-        validateWordCount(3..4)
-        validateRegion(1)
-        validateTeam(2)
-        if (words.size == 4) validateTeam(2)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
+        validateNumberPositive(options["number_of_matches"])
+        validateTeam(options["team1"])
+        if (options["team2"] != null) {
+            validateTeam(options["team2"])
+        }
     }
 
     companion object : CommandMetadata {

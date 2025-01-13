@@ -2,7 +2,6 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 
 import com.mckernant1.commons.extensions.collections.SetTheory.cartesianProduct
 import com.mckernant1.commons.extensions.math.DoubleAlgebra.round
-import com.mckernant1.commons.standalone.measureDuration
 import com.mckernant1.commons.standalone.measureOperation
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
@@ -16,9 +15,6 @@ import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.esports.api.models.Match
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -30,7 +26,7 @@ import java.time.ZonedDateTime
 class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun execute(): Unit = runBlocking {
-        val results: List<Match> = when (Timeframe.valueOf(words[2])) {
+        val results: List<Match> = when (Timeframe.valueOf(event.options["timeframe"]!!)) {
             Timeframe.Tournament -> getResults(region, 100)
             Timeframe.Year -> apiClient.getTournamentsForLeague(region).filter {
                 it.endDateAsDate()?.atZone(ZoneId.of("UTC"))?.year == ZonedDateTime.now().year
@@ -110,9 +106,8 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
         fun getPredictionPercentage() = (100 * numberCorrect / numberPredicted.toDouble()).round(1)
     }
 
-    override fun validate() {
-        validateWordCount(2..3)
-        validateRegion(1)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
     }
 
     private enum class Timeframe {

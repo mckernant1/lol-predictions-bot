@@ -2,6 +2,7 @@ package com.mckernant1.lol.blitzcrank.commands.pasta
 
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
@@ -15,8 +16,10 @@ class SetPastaCommand(event: CommandInfo) : DiscordCommand(event) {
         event.channel.sendMessage("Your Pasta has been set to ${userSettings.pasta}").complete()
     }
 
-    override fun validate() {
-        validateWordCount(2..100)
+    override fun validate(options: Map<String, String>) {
+        if (options["pasta"]!!.length > 100) {
+            throw InvalidCommandException("Sorry! Pasta must be less than 100 characters")
+        }
     }
 
     companion object : CommandMetadata {

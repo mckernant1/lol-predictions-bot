@@ -10,14 +10,13 @@ import com.mckernant1.lol.esports.api.models.Team
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class RosterCommand(event: CommandInfo) : DiscordCommand(event) {
-    override fun validate() {
-        validateWordCount(2..2)
-        validateTeam(1)
+    override fun validate(options: Map<String, String>) {
+        validateTeam(options["team_id"])
     }
 
 
     override fun execute() {
-        val teamToGet = words[1]
+        val teamToGet = event.options["team_id"]!!
         val team = apiClient.getTeamByCode(teamToGet.uppercase())
 
         val message = formatMessage(team)
@@ -51,7 +50,8 @@ class RosterCommand(event: CommandInfo) : DiscordCommand(event) {
     companion object : CommandMetadata {
         override val commandString: String = "roster"
         override val commandDescription: String = "Get the roster for the given team"
-        override val commandData: CommandData = commandDataFromJson("""
+        override val commandData: CommandData = commandDataFromJson(
+            """
             {
               "name": "$commandString",
               "type": 1,

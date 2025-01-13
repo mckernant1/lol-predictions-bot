@@ -17,9 +17,8 @@ class StandingsCommand(event: CommandInfo) : DiscordCommand(event) {
         event.channel.sendMessage(replyString).queue()
     }
 
-    override fun validate() {
-        validateWordCount(2..2)
-        validateRegion(1)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
     }
 
 

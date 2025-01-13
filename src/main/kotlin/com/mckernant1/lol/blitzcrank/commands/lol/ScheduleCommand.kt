@@ -22,10 +22,9 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
         event.channel.sendMessage(replyString).queue()
     }
 
-    override fun validate() {
-        validateWordCount(2..3)
-        validateRegion(1)
-        validateNumberPositive(2)
+    override fun validate(options: Map<String, String>) {
+        validateRegion(options["league_id"])
+        validateNumberPositive(options["number_of_matches"])
     }
 
     private fun formatScheduleReply(matches: List<Match>, region: String): String {

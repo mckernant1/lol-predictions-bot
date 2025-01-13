@@ -10,11 +10,11 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 class InfoCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun execute() {
-        val message = infoSubCommands[words.getOrNull(1)] ?: baseInfoMessage
+        val message = infoSubCommands[event.options["help"]] ?: baseInfoMessage
         event.channel.sendMessageEmbeds(message).complete()
     }
 
-    override fun validate() = Unit
+    override fun validate(options: Map<String, String>) = Unit
 
     companion object : CommandMetadata {
         override val commandString: String = "info"

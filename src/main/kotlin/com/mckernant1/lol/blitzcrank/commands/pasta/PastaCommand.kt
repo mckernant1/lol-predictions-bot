@@ -8,10 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class PastaCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun execute() {
-        val numberOfTimes = words.getOrNull(1)?.toIntOrNull() ?: 1
-        val messageToSend = (1..numberOfTimes).joinToString("") {
-            userSettings.pasta + " "
-        }
+        val messageToSend = userSettings.pasta
         if (messageToSend.length >= 2000) {
             event.channel.sendMessage("Your pasta must be less than 2000 characters").complete()
         } else {
@@ -19,9 +16,8 @@ class PastaCommand(event: CommandInfo) : DiscordCommand(event) {
         }
     }
 
-    override fun validate() {
-        validateWordCount(1..2)
-        validateNumberPositive(1)
+    override fun validate(options: Map<String, String>) {
+
     }
 
     companion object : CommandMetadata {
