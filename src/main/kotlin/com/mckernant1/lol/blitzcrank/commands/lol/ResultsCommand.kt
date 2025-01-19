@@ -5,6 +5,7 @@ import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.utils.getResults
+import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -22,7 +23,9 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
         }
         val replyString =
             formatResultsReply(matches, region, showSpoilers)
-        event.channel.sendMessage(replyString).queue()
+        event.channel.sendMessage(replyString)
+            .setSuppressEmbeds(true)
+            .complete()
     }
 
     override fun validate(options: Map<String, String>) {
@@ -38,6 +41,8 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
         val sb = StringBuilder()
         sb.appendLine("The last ${matches.size} matches in ${region.uppercase()} were: ")
         matches.forEach {
+            sb.append(mediumDateFormat.format(it.startTimeAsInstant()))
+            sb.append(" ")
             if (showSpoilers && it.winner == it.blueTeamId) {
                 sb.append("$CROWN ")
             }
