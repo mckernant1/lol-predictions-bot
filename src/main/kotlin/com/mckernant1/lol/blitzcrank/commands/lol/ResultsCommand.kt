@@ -52,11 +52,11 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
             }
 
             if (it.vod != null) {
-                sb.append(" [Vod](${it.vod})")
+                sb.append(" ([Vod](${it.vod}))")
             }
 
             if (it.highlight != null) {
-                sb.append(" [Highlight](${it.highlight})")
+                sb.append(" ([Highlight](${it.highlight}))")
             }
             sb.appendLine()
         }
