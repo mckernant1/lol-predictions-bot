@@ -7,14 +7,16 @@ import com.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
-import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.time.temporal.ChronoField
 
 abstract class DiscordCommand(protected val event: CommandInfo) {
 
@@ -37,7 +39,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected val longDateFormat: DateTimeFormatter by lazy {
         DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.LONG)
+            .ofPattern("E, MMM d hh:mm a z")
             .withZone(
                 ZoneId.of(userSettings.timezone)
             )
@@ -45,7 +47,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected val mediumDateFormat: DateTimeFormatter by lazy {
         DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)
+            .ofPattern("MMM d hh:mm a z")
             .withZone(
                 ZoneId.of(userSettings.timezone)
             )
