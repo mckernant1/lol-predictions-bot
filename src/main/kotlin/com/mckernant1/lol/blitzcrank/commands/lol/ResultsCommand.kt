@@ -43,10 +43,13 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
         matches.forEach {
             sb.append(mediumDateFormat.format(it.startTimeAsInstant()))
             sb.append(" ")
+
             if (showSpoilers && it.winner == it.blueTeamId) {
                 sb.append("$CROWN ")
             }
+
             sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**")
+
             if (showSpoilers && it.winner == it.redTeamId) {
                 sb.append(" $CROWN")
             }

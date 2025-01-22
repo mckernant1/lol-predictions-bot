@@ -18,6 +18,14 @@ import java.time.format.FormatStyle
 
 abstract class DiscordCommand(protected val event: CommandInfo) {
 
+    companion object {
+        private val LEAGUE_MAP = mapOf<String, String>(
+            "lcs" to "lta_n",
+            "cblol" to "lta_s",
+            "worlds" to "wcs"
+        )
+    }
+
     protected lateinit var region: String
     protected var numToGet: Int? = null
 
@@ -65,6 +73,11 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     protected fun validateRegion(leagueId: String?) {
         region = leagueId
             ?: throw InvalidCommandException("league_id cannot be null")
+
+        if (leagueId in LEAGUE_MAP) {
+            region = LEAGUE_MAP[leagueId]!!
+        }
+
         try {
             apiClient.getLeagueByCode(region.uppercase())
             logger.info("validateRegion with region: '${region.uppercase()}'")
