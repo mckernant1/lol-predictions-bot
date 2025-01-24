@@ -12,19 +12,31 @@ import java.time.Instant
 
 private val logger: Logger = LoggerFactory.getLogger("ApiFunctions")
 
-fun getSchedule(region: String, numberToGet: Int?): List<Match> {
+fun getSchedule(
+    region: String,
+    numberToGet: Int?,
+    filter: ((Match) -> Boolean)? = null,
+): List<Match> {
     val (getMostRecentTournamentDuration, mostRecentTourney) = measureOperation {
         apiClient.getMostRecentTournament(region.uppercase())
     }
     logger.info("GetMostRecentTournament took ${getMostRecentTournamentDuration.toMillis()}ms")
 
-    val (getMatchesDuration, matches) = measureOperation {
+    var (getMatchesDuration, matchesSeq) = measureOperation {
         apiClient.getMatchesForTournament(mostRecentTourney.tournamentId)
+            .asSequence()
             .sortedBy { it.startTimeAsInstant() }.dropWhile {
                 it.startTimeAsInstant() < Instant.now()
             }
     }
+
+    if (filter != null) {
+        matchesSeq = matchesSeq.filter(filter)
+    }
+
     logger.info("GetMatches took ${getMatchesDuration.toMillis()}ms")
+
+    val matches = matchesSeq.toList()
 
     if (matches.isEmpty()) {
         logger.info("There are no matches returned for tourney: ${mostRecentTourney.tournamentId}")

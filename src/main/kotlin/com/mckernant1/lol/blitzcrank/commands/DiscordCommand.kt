@@ -13,10 +13,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
-import java.time.format.TextStyle
-import java.time.temporal.ChronoField
 
 abstract class DiscordCommand(protected val event: CommandInfo) {
 
@@ -58,7 +54,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     @Throws(InvalidCommandException::class)
     abstract fun validate(options: Map<String, String>): Unit
 
-    protected fun validateNumberPositive(input: String?) {
+    protected fun validateAndSetNumberPositive(input: String?) {
         numToGet = try {
             input?.toInt()
         } catch (e: NumberFormatException) {
@@ -72,7 +68,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         }
     }
 
-    protected fun validateRegion(leagueId: String?) {
+    protected fun validateAndSetRegion(leagueId: String?) {
         region = leagueId
             ?: throw InvalidCommandException("league_id cannot be null")
 
@@ -95,7 +91,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         teamName ?: throw InvalidCommandException("Team name cannot be null")
         try  {
             apiClient.getTeamByCode(teamName.uppercase())
-            logger.info("Team '$teamName' has been selected")
+            logger.info("validateTeam with team '$teamName'")
         } catch(e: Exception) {
             throw TeamDoesNotExistException("Team '$teamName' does not exists. Use team code, not team name (C9 not Cloud9)")
         }

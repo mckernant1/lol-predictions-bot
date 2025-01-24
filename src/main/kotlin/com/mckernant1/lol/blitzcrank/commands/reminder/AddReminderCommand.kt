@@ -25,8 +25,8 @@ class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
     }
 
     override fun validate(options: Map<String, String>) {
-        validateRegion(options["league_id"])
-        validateNumberPositive(options["hours_before"])
+        validateAndSetRegion(options["league_id"])
+        validateAndSetNumberPositive(options["hours_before"])
     }
 
     companion object : CommandMetadata {

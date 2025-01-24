@@ -107,7 +107,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
     }
 
     override fun validate(options: Map<String, String>) {
-        validateRegion(options["league_id"])
+        validateAndSetRegion(options["league_id"])
     }
 
     private enum class Timeframe {

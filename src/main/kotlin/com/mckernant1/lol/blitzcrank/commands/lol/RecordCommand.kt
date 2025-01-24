@@ -9,8 +9,6 @@ import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Instant
 
@@ -51,11 +49,11 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
                 )
             }
         val totalTeamWins: Int = records.sumOf { it.numWins }
-        val totalTeamLosses: Int = records.sumOf { it.getLosses() }
+        val totalTeamLosses: Int = records.sumOf { it.numLosses }
         val teamStrings = records
             .sortedByDescending { it.mostRecentMatchDate }
             .joinToString(LINE_SEPARATOR) { record ->
-                "${record.team} (${record.numWins}W - ${record.getLosses()}L): \n" +
+                "${record.team} (${record.numWins}W - ${record.numLosses}L): \n" +
                         record.matches.joinToString("\n") {
                             "\t${if (it.winner == record.team) "L" else "W"} - ${longDateFormat.format(it.startTimeAsInstant())}"
                         }
@@ -74,14 +72,13 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
         val numWins: Int,
         val totalGames: Int,
     ) {
-        fun getWinRatio() = (100 * numWins / totalGames.toDouble()).round(1)
-
-        fun getLosses() = totalGames - numWins
+        val numLosses = totalGames - numWins
+        val winRatio = (100 * numWins / totalGames.toDouble()).round(1)
     }
 
     override fun validate(options: Map<String, String>) {
-        validateRegion(options["league_id"])
-        validateNumberPositive(options["number_of_matches"])
+        validateAndSetRegion(options["league_id"])
+        validateAndSetNumberPositive(options["number_of_matches"])
         validateTeam(options["team1"])
         if (options["team2"] != null) {
             validateTeam(options["team2"])

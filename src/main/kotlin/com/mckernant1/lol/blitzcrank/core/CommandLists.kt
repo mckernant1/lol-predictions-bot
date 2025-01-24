@@ -18,7 +18,8 @@ internal val commandsByType: Map<String, List<CommandMetadata>> by lazy {
             ResultsCommand,
             RosterCommand,
             ScheduleCommand,
-            StandingsCommand
+            StandingsCommand,
+            RecordCommand
         ),
         "predict" to listOf(
             ReportCommand.Predictions,

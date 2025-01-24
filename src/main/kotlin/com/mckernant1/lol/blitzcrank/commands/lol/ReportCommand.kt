@@ -86,8 +86,8 @@ class ReportCommand(
     }
 
     override fun validate(options: Map<String, String>) {
-        validateRegion(options["league_id"])
-        validateNumberPositive(options["number_of_matches"])
+        validateAndSetRegion(options["league_id"])
+        validateAndSetNumberPositive(options["number_of_matches"])
     }
 
     object Predictions : CommandMetadata {
