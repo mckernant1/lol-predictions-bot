@@ -58,7 +58,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         numToGet = try {
             input?.toInt()
         } catch (e: NumberFormatException) {
-            throw InvalidCommandException("Input must be a number")
+            throw InvalidCommandException("Input must be a number", e)
         }
 
         if (numToGet == null || numToGet!! >= 1) {

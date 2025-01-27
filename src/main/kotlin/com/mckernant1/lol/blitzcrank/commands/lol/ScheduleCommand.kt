@@ -60,7 +60,7 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
         override val commandDescription: String = "Get Schedules for the given league"
         override val commandData: CommandData = CommandDataImpl(commandString, commandDescription)
             .addOption(OptionType.STRING, "league_id", "The league to query", true)
-            .addOption(OptionType.NUMBER, "number_of_matches", "The number of matches", false)
+            .addOption(OptionType.INTEGER, "number_of_matches", "The number of matches", false)
             .addOption(OptionType.STRING, "team_id", "Get the schedule of a particular team", false)
 
         override fun create(event: CommandInfo): DiscordCommand = ScheduleCommand(event)

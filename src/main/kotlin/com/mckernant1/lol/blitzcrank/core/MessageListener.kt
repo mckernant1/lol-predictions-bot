@@ -56,6 +56,7 @@ class MessageListener : ListenerAdapter() {
             }
             logger.info("Validation step for $commandString took ${validationDuration.toMillis()}ms")
         } catch (e: InvalidCommandException) {
+            logger.debug("InvalidCommandException occurred while validating command", e)
             event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
             return
         } catch (e: Exception) {
