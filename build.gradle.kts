@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     application
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -26,12 +26,12 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.guava:guava:32.1.0-jre")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
+    implementation("com.google.guava:guava:33.4.8-jre")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.2")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
 
     // Discord
-    implementation("net.dv8tion:JDA:5.0.2") {
+    implementation("net.dv8tion:JDA:5.6.1") {
         exclude(module = "opus-java")
     }
 
@@ -41,14 +41,14 @@ dependencies {
     implementation("com.mckernant1.commons:metrics:0.0.10")
 
     // Logging
-    implementation("org.slf4j:slf4j-api:2.0.5")
-    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
-    implementation("org.slf4j:jul-to-slf4j:2.0.7")
+    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("org.apache.logging.log4j:log4j-core:2.25.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.25.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.25.1")
+    implementation("org.slf4j:jul-to-slf4j:2.0.17")
 
     // AWS
-    implementation(platform("software.amazon.awssdk:bom:2.18.21"))
+    implementation(platform("software.amazon.awssdk:bom:2.32.4"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
