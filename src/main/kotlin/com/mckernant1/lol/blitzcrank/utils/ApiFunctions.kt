@@ -17,13 +17,8 @@ fun getSchedule(
     numberToGet: Int?,
     filter: ((Match) -> Boolean)? = null,
 ): List<Match> {
-    val (getMostRecentTournamentDuration, mostRecentTourney) = measureOperation {
-        apiClient.getMostRecentTournament(region.uppercase())
-    }
-    logger.info("GetMostRecentTournament took ${getMostRecentTournamentDuration.toMillis()}ms")
-
     var (getMatchesDuration, matchesSeq) = measureOperation {
-        apiClient.getMatchesForTournament(mostRecentTourney.tournamentId)
+        apiClient.getMatches(region.uppercase(), null)
             .asSequence()
             .sortedBy { it.startTimeAsInstant() }.dropWhile {
                 it.startTimeAsInstant() < Instant.now()
@@ -39,7 +34,7 @@ fun getSchedule(
     val matches = matchesSeq.toList()
 
     if (matches.isEmpty()) {
-        logger.info("There are no matches returned for tourney: ${mostRecentTourney.tournamentId}")
+        logger.info("There are no matches returned for region: ${region.uppercase()}")
         return emptyList()
     }
 
@@ -54,13 +49,8 @@ fun getSchedule(
 }
 
 fun getResults(region: String, numberToGet: Int?): List<Match> {
-    val (getMostRecentTournamentDuration, mostRecentTourney) = measureOperation {
-        apiClient.getMostRecentTournament(region.uppercase())
-    }
-    logger.info("GetMostRecentTournament took ${getMostRecentTournamentDuration.toMillis()}ms")
-
     val (getMatchesDuration, matches) = measureOperation {
-        apiClient.getMatchesForTournament(mostRecentTourney.tournamentId)
+        apiClient.getMatches(region.uppercase(), null)
             .filter { it.winner == it.blueTeamId || it.winner == it.redTeamId }
             .sortedByDescending { it.startTimeAsInstant() }.dropWhile {
                 it.startTimeAsInstant() > Instant.now()
