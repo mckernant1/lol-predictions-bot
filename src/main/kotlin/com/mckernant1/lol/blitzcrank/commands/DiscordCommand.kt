@@ -73,7 +73,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
             ?: throw InvalidCommandException("league_id cannot be null")
 
         if (leagueId in LEAGUE_MAP) {
-            region = LEAGUE_MAP[leagueId]!!
+            region = LEAGUE_MAP[leagueId]!!.uppercase()
         }
 
         try {

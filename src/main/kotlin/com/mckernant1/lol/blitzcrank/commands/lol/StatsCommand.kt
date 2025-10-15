@@ -28,13 +28,13 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
     override fun execute(): Unit = runBlocking {
         val results: List<Match> = when (Timeframe.valueOf(event.options["timeframe"]!!)) {
             Timeframe.Tournament -> getResults(region, 100)
-            Timeframe.Year -> apiClient.getTournamentsForLeague(region).filter {
+            Timeframe.Year -> apiClient.getTournamentsForLeague(region.uppercase()).filter {
                 it.endDateAsDate()?.atZone(ZoneId.of("UTC"))?.year == ZonedDateTime.now().year
             }.flatMap {
                 apiClient.getMatchesForTournament(it.tournamentId)
             }
             Timeframe.Split -> {
-                val splitIdentifier: String = apiClient.getMostRecentTournament(region).let {
+                val splitIdentifier: String = apiClient.getMostRecentTournament(region.uppercase()).let {
                     val groups = tournamentIdRegex.matchEntire(it.tournamentId)?.groups
                         ?: throw InvalidCommandException("Tournament name ${it.tournamentId} could not be parsed")
                     val region = groups["region"]?.value!!
@@ -43,7 +43,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
                     return@let "${region}_${year}_${split}"
                 }
 
-                apiClient.getTournamentsForLeague(region)
+                apiClient.getTournamentsForLeague(region.uppercase())
                     .filter { it.tournamentId.contains(splitIdentifier) }
                     .flatMap {
                         apiClient.getMatchesForTournament(it.tournamentId)
