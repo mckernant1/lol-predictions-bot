@@ -2,7 +2,7 @@ name: PR Gradle Build
 on:
   pull_request:
     branches:
-      - master
+      - '**'
 
 jobs:
   build:
