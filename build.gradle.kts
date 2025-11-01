@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     application
     kotlin("jvm") version "2.1.10"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 group = "com.mckernant1.lol"
@@ -66,7 +66,11 @@ tasks {
     }
 }
 
-task<Test>("test-integration") {
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
+}
+
+tasks.register<Test>("test-integration") {
     useTestNG {
         suites("src/test/resources/testng.xml")
         includeGroups("integration")
