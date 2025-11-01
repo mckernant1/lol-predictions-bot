@@ -54,7 +54,7 @@ dependencies {
 
     implementation("com.amazonaws:codeguru-profiler-java-agent:1.2.2")
 
-    testImplementation("org.testng:testng:7.7.0")
+    testImplementation("org.testng:testng:7.11.0")
 }
 
 tasks {
