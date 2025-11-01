@@ -11,7 +11,7 @@ group = "com.mckernant1.lol"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.mckernant1.lol.blitzcrank.RunnerKt")
+    mainClass = "com.mckernant1.lol.blitzcrank.RunnerKt"
 }
 
 repositories {
@@ -74,12 +74,5 @@ tasks.register<Test>("test-integration") {
     useTestNG {
         suites("src/test/resources/testng.xml")
         includeGroups("integration")
-    }
-}
-
-tasks.withType<ShadowJar> {
-    from("./src/main/resources")
-    manifest {
-        attributes["Main-Class"] = "RunnerKt"
     }
 }
