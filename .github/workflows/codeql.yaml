@@ -15,6 +15,7 @@ jobs:
       security-events: write
 
     strategy:
+      fail-fast: false
       matrix:
         language:
           - java
@@ -35,7 +36,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           dependency-caching: true
-          packs: codeql/${{ matrix.language }}-queries,githubsecuritylab/codeql-${{ matrix.language }}-queries
+          packs: codeql/java-queries,githubsecuritylab/codeql-java-queries
 
       - name: Build
         uses: github/codeql-action/autobuild@v4
