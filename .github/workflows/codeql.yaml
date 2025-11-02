@@ -31,12 +31,22 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Initialize CodeQL
+      - name: Initialize CodeQL (Non-Actions)
         uses: github/codeql-action/init@v4
+        if: matrix.language != 'actions'
         with:
           languages: ${{ matrix.language }}
           dependency-caching: true
-          packs: codeql/java-queries,githubsecuritylab/codeql-java-queries
+          packs: >
+            codeql/${{ matrix.language }}-queries,
+            githubsecuritylab/codeql-${{ matrix.language }}-queries
+
+      - name: Initialize CodeQL (Actions)
+        uses: github/codeql-action/init@v4
+        if: matrix.language == 'actions'
+        with:
+          languages: ${{ matrix.language }}
+          dependency-caching: true
 
       - name: Build
         uses: github/codeql-action/autobuild@v4
