@@ -35,6 +35,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           dependency-caching: true
+          packs: codeql/${{ matrix.language }}-queries,githubsecuritylab/codeql-${{ matrix.language }}-queries
 
       - name: Build
         uses: github/codeql-action/autobuild@v4
