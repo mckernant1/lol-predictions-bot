@@ -40,6 +40,7 @@ jobs:
           packs: >
             codeql/${{ matrix.language }}-queries,
             githubsecuritylab/codeql-${{ matrix.language }}-queries
+          queries: security-and-quality
 
       - name: Initialize CodeQL (Actions)
         uses: github/codeql-action/init@v4
