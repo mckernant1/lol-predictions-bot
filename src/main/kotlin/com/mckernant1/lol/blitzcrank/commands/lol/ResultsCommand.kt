@@ -1,6 +1,5 @@
 package com.mckernant1.lol.blitzcrank.commands.lol
 
-import com.mckernant1.commons.extensions.boolean.falseIfNull
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
