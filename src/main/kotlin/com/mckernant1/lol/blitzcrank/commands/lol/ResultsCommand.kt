@@ -54,11 +54,11 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
                 sb.append(" $CROWN")
             }
 
-            if (it.vod != null) {
+            if (!it.vod.isNullOrBlank()) {
                 sb.append(" ([Vod](${it.vod}))")
             }
 
-            if (it.highlight != null) {
+            if (!it.highlight.isNullOrBlank()) {
                 sb.append(" ([Highlight](${it.highlight}))")
             }
             sb.appendLine()
