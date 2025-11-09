@@ -15,14 +15,13 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
 
     override fun execute() {
         val matches = getResults(region, numToGet)
-        val showSpoilers = event.options["spoilers"]?.toBoolean().falseIfNull()
         if (matches.isEmpty()) {
             val message = "There are no results"
             event.channel.sendMessage(message).complete()
             return
         }
         val replyString =
-            formatResultsReply(matches, region, showSpoilers)
+            formatResultsReply(matches, region)
         event.channel.sendMessage(replyString)
             .setSuppressEmbeds(true)
             .complete()
@@ -36,7 +35,6 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
     private fun formatResultsReply(
         matches: List<Match>,
         region: String,
-        showSpoilers: Boolean,
     ): String {
         val sb = StringBuilder()
         sb.appendLine("The last ${matches.size} matches in ${region.uppercase()} were: ")
@@ -44,14 +42,18 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
             sb.append(mediumDateFormat.format(it.startTimeAsInstant()))
             sb.append(" ")
 
-            if (showSpoilers && it.winner == it.blueTeamId) {
-                sb.append("$CROWN ")
+            if (it.winner == it.blueTeamId) {
+                sb.append("||$CROWN|| ")
+            } else {
+                sb.append("||$THUMBS_DOWN|| ")
             }
 
             sb.append("**${it.blueTeamId}** vs **${it.redTeamId}**")
 
-            if (showSpoilers && it.winner == it.redTeamId) {
-                sb.append(" $CROWN")
+            if (it.winner == it.redTeamId) {
+                sb.append(" ||$CROWN||")
+            } else {
+                sb.append(" ||$THUMBS_DOWN||")
             }
 
             if (!it.vod.isNullOrBlank()) {
@@ -68,12 +70,12 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
 
     companion object : CommandMetadata {
         private const val CROWN = "\uD83D\uDC51"
+        private const val THUMBS_DOWN = "\uD83D\uDC4E"
         override val commandString: String = "results"
         override val commandDescription: String = "The results for the given league"
         override val commandData: CommandData = CommandDataImpl(commandString, commandDescription)
             .addOption(OptionType.STRING, "league_id", "The league to query", true)
             .addOption(OptionType.INTEGER, "number_of_matches", "The number of matches to get")
-            .addOption(OptionType.BOOLEAN, "spoilers", "Show the results of the matches", false)
 
         override fun create(event: CommandInfo): DiscordCommand = ResultsCommand(event)
     }
