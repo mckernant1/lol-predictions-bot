@@ -31,7 +31,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
 
     // Discord
-    implementation("net.dv8tion:JDA:6.2.0") {
+    implementation("net.dv8tion:JDA:6.2.1") {
         exclude(module = "opus-java")
     }
 
