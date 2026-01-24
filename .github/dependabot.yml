@@ -4,8 +4,14 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
+registries:
+  mckernant1-mvn:
+    type: maven-repository
+    url: https://mvn.mckernant1.com/release
 updates:
   - package-ecosystem: "gradle" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    registries:
+      - mckernant1-mvn
