@@ -3,17 +3,21 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 import com.mckernant1.commons.extensions.math.DoubleAlgebra.round
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.mckernant1.lol.blitzcrank.commands.reminder.RemoveReminderCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Instant
 
-class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
-    override fun execute() {
+class RecordCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
+    override suspend fun execute() {
         val region = region.uppercase()
         val team1Words = event.options["team1"]!!.uppercase()
         val team2Words = event.options["team2"]?.uppercase()
@@ -32,7 +36,9 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
             }
 
         if (team2Words != null) {
-            val team2 = apiClient.getTeamByCode(team2Words)
+            val team2 = withContext(Dispatchers.IO) {
+                apiClient.getTeamByCode(team2Words)
+            }
             matchesGroupedByTeam = matchesGroupedByTeam.filter { (teamName, _) ->
                 teamName.equals(team2.teamId, ignoreCase = true)
             }
@@ -76,7 +82,7 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
         val winRatio = (100 * numWins / totalGames.toDouble()).round(1)
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["number_of_matches"])
         validateTeam(options["team1"])
@@ -119,7 +125,6 @@ class RecordCommand(event: CommandInfo) : DiscordCommand(event) {
             """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = RecordCommand(event)
-
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = RecordCommand(event, userSettings)
     }
 }

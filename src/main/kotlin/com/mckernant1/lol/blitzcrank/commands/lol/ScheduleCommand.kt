@@ -3,16 +3,18 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
 
-class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
+class ScheduleCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val matches = if ("team_id" in event.options) {
             val teamId = event.options["team_id"]?.uppercase()
             getSchedule(region, numToGet ?: 5) {
@@ -23,14 +25,14 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
         }
         if (matches.isEmpty()) {
             val message = "There are no matches listed"
-            event.channel.sendMessage(message).complete()
+            event.channel.sendMessage(message).submit().await()
             return
         }
         val replyString = formatScheduleReply(matches, region, event.options["team_id"])
         event.channel.sendMessage(replyString).queue()
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["number_of_matches"])
         if (options.containsKey("team_id")) {
@@ -41,7 +43,7 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
     private fun formatScheduleReply(
         matches: List<Match>,
         region: String,
-        teamId: String? = null
+        teamId: String? = null,
     ): String {
         val sb = StringBuilder()
         sb.append("The next ${matches.size} matches in **${region.uppercase()}**")
@@ -63,7 +65,7 @@ class ScheduleCommand(event: CommandInfo) : DiscordCommand(event) {
             .addOption(OptionType.INTEGER, "number_of_matches", "The number of matches", false)
             .addOption(OptionType.STRING, "team_id", "Get the schedule of a particular team", false)
 
-        override fun create(event: CommandInfo): DiscordCommand = ScheduleCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = ScheduleCommand(event, userSettings)
     }
 }
 

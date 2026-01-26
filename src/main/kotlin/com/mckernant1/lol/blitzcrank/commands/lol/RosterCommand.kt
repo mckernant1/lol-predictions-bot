@@ -4,24 +4,30 @@ import com.mckernant1.commons.extensions.strings.capitalize
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.mckernant1.lol.esports.api.models.Team
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-class RosterCommand(event: CommandInfo) : DiscordCommand(event) {
-    override fun validate(options: Map<String, String>) {
+class RosterCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
+    override suspend fun validate(options: Map<String, String>) {
         validateTeam(options["team_id"])
     }
 
 
-    override fun execute() {
+    override suspend fun execute() {
         val teamToGet = event.options["team_id"]!!
-        val team = apiClient.getTeamByCode(teamToGet.uppercase())
+        val team = withContext(Dispatchers.IO) {
+            apiClient.getTeamByCode(teamToGet.uppercase())
+        }
 
         val message = formatMessage(team)
 
-        event.channel.sendMessage(message).complete()
+        event.channel.sendMessage(message).submit().await()
     }
 
     private fun formatMessage(team: Team): String {
@@ -68,7 +74,7 @@ class RosterCommand(event: CommandInfo) : DiscordCommand(event) {
         """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = RosterCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = RosterCommand(event, userSettings)
     }
 
 }

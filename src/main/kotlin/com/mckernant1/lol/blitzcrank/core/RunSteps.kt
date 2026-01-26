@@ -3,6 +3,7 @@ package com.mckernant1.lol.blitzcrank.core
 import com.mckernant1.commons.extensions.strings.capitalize
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.cwp
 import com.mckernant1.lol.blitzcrank.utils.getServerIdOrUserId
 import net.dv8tion.jda.api.EmbedBuilder
@@ -13,7 +14,11 @@ import java.time.format.DateTimeFormatter
 
 
 private val logger: Logger = LoggerFactory.getLogger("RunCommandLogger")
-fun getCommandFromWords(words: List<String>, event: CommandInfo): DiscordCommand? = commandsByName[words[0].drop(1)]?.create(event)
+suspend fun getCommandFromWords(words: List<String>, event: CommandInfo): DiscordCommand? =
+    commandsByName[words[0].drop(1)]?.create(
+        event,
+        UserSettings.getSettingsForUser(event.author.id)
+    )
 
 private val metrics by lazy {
     cwp.newMetrics(
@@ -21,7 +26,7 @@ private val metrics by lazy {
     )
 }
 
-fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
+suspend fun commandValidMetricsAndLogging(words: List<String>, event: CommandInfo) {
     val commandString = "${words[0].drop(1).capitalize()}Command"
     val serverOrUser = if (event.isFromGuild) "server" else "user"
     logger.info(

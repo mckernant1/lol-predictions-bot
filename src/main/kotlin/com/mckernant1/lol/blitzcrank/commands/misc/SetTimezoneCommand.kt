@@ -2,18 +2,20 @@ package com.mckernant1.lol.blitzcrank.commands.misc
 
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.mckernant1.lol.blitzcrank.commands.reminder.RemoveReminderCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
+class SetTimezoneCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val userSpecifiedTimezone = event.options["timezone"]!!.uppercase()
 
         val userZoneIdIsValid: Result<ZoneId> = userSpecifiedTimezone.runCatching {
@@ -31,7 +33,8 @@ class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
         }
 
         if (zoneId == null) {
-            event.channel.sendMessage("Sorry, we could not interpret the time code '$userSpecifiedTimezone'").complete()
+            event.channel.sendMessage("Sorry, we could not interpret the time code '$userSpecifiedTimezone'").submit()
+                .await()
             return
         }
 
@@ -45,10 +48,10 @@ class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
                     zoneId
                 ).format(Instant.now())
             }"
-        ).complete()
+        ).submit().await()
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
     }
 
     companion object : CommandMetadata {
@@ -72,6 +75,7 @@ class SetTimezoneCommand(event: CommandInfo) : DiscordCommand(event) {
             """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = SetTimezoneCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand =
+            SetTimezoneCommand(event, userSettings)
     }
 }

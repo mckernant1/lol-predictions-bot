@@ -1,6 +1,7 @@
 package com.mckernant1.lol.blitzcrank.commands
 
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 interface CommandMetadata {
@@ -9,6 +10,6 @@ interface CommandMetadata {
     val commandDescription: String
     val commandData: CommandData
 
-    fun create(event: CommandInfo): DiscordCommand
+    fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand
 
 }

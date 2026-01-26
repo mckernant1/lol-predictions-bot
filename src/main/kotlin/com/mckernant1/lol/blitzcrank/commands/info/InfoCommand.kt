@@ -4,17 +4,19 @@ import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.core.commandsByType
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-class InfoCommand(event: CommandInfo) : DiscordCommand(event) {
+class InfoCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val message = infoSubCommands[event.options["help"]] ?: baseInfoMessage
-        event.channel.sendMessageEmbeds(message).complete()
+        event.channel.sendMessageEmbeds(message).submit().await()
     }
 
-    override fun validate(options: Map<String, String>) = Unit
+    override suspend fun validate(options: Map<String, String>) = Unit
 
     companion object : CommandMetadata {
         override val commandString: String = "info"
@@ -48,6 +50,6 @@ class InfoCommand(event: CommandInfo) : DiscordCommand(event) {
         """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = InfoCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = InfoCommand(event, userSettings)
     }
 }

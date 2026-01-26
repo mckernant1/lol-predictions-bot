@@ -4,6 +4,8 @@ package com.mckernant1.lol.blitzcrank.utils
 import com.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.mckernant1.lol.esports.api.models.Match
 import com.mckernant1.commons.standalone.measureOperation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,15 +14,17 @@ import java.time.Instant
 
 private val logger: Logger = LoggerFactory.getLogger("ApiFunctions")
 
-fun getSchedule(
+suspend fun getSchedule(
     region: String,
     numberToGet: Int?,
     filter: ((Match) -> Boolean)? = null,
 ): List<Match> {
     var (getMatchesDuration, matchesSeq) = measureOperation {
-        apiClient.getMatches(region.uppercase(), null)
-            .asSequence()
-            .sortedBy { it.startTimeAsInstant() }.dropWhile {
+        withContext(Dispatchers.IO) {
+            apiClient.getMatches(region.uppercase(), null)
+        }.asSequence()
+            .sortedBy { it.startTimeAsInstant() }
+            .dropWhile {
                 it.startTimeAsInstant() < Instant.now()
             }
     }
@@ -48,10 +52,11 @@ fun getSchedule(
     }
 }
 
-fun getResults(region: String, numberToGet: Int?): List<Match> {
+suspend fun getResults(region: String, numberToGet: Int?): List<Match> {
     val (getMatchesDuration, matches) = measureOperation {
-        apiClient.getMatches(region.uppercase(), null)
-            .filter { it.winner == it.blueTeamId || it.winner == it.redTeamId }
+        withContext(Dispatchers.IO) {
+            apiClient.getMatches(region.uppercase(), null)
+        }.filter { it.winner == it.blueTeamId || it.winner == it.redTeamId }
             .sortedByDescending { it.startTimeAsInstant() }.dropWhile {
                 it.startTimeAsInstant() > Instant.now()
             }
@@ -70,9 +75,13 @@ fun getResults(region: String, numberToGet: Int?): List<Match> {
     }
 }
 
-fun getStandings(region: String): List<Standing> {
-    val tourney = apiClient.getMostRecentTournament(region.uppercase())
-    val matches = apiClient.getMatchesForTournament(tourney.tournamentId)
+suspend fun getStandings(region: String): List<Standing> {
+    val tourney = withContext(Dispatchers.IO) {
+        apiClient.getMostRecentTournament(region.uppercase())
+    }
+    val matches = withContext(Dispatchers.IO) {
+        apiClient.getMatchesForTournament(tourney.tournamentId)
+    }
         .filterPastMatches()
         .filter { it.winner != null }
 

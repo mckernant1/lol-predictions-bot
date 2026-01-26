@@ -1,6 +1,14 @@
 package com.mckernant1.lol.blitzcrank.model
 
 import com.mckernant1.lol.blitzcrank.utils.ddbClient
+import com.mckernant1.lol.blitzcrank.utils.scanAsFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.reactive.asFlow
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema
@@ -33,25 +41,28 @@ class Prediction(
             System.getenv("PREDICTIONS_TABLE_NAME")
                 ?: error("Environment variable 'PREDICTIONS_TABLE_NAME' is not defined")
         }
-        private val table: DynamoDbTable<Prediction> by lazy {
+        private val table: DynamoDbAsyncTable<Prediction> by lazy {
             ddbClient.table(TABLE_NAME, TableSchema.fromImmutableClass(Prediction::class.java))
         }
 
-        fun getItem(userId: String, matchId: String): Prediction? =
+        suspend fun getItem(userId: String, matchId: String): Prediction? =
             table.getItem(Key.builder().partitionValue(userId).sortValue(matchId).build())
+                .await()
 
-        fun putItem(prediction: Prediction) = table.putItem(prediction)
+        suspend fun putItem(prediction: Prediction) {
+            table.putItem(prediction).await()
+        }
 
-        fun scan(): Iterable<Prediction> = table.scan().items()
+        fun scan(): Flow<Prediction> = table.scanAsFlow()
 
-        fun getAllPredictionsForMatch(matchId: String): List<Prediction> =
+        suspend fun getAllPredictionsForMatch(matchId: String): List<Prediction> =
             table.index(MATCH_ID_INDEX_NAME).query { it ->
                 it.queryConditional(
                     QueryConditional.keyEqualTo(
                         Key.builder().partitionValue(matchId).build()
                     )
                 )
-            }.stream().flatMap { it.items().stream() }.toList()
+            }.asFlow().toList().flatMap { it.items() }
 
         @JvmStatic
         fun builder() = Builder()

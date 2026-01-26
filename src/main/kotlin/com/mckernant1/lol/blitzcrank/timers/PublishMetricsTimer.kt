@@ -1,8 +1,10 @@
 package com.mckernant1.lol.blitzcrank.timers
 
 import com.mckernant1.commons.extensions.executor.Executors.scheduleAtFixedRate
+import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.cwp
 import com.mckernant1.lol.blitzcrank.utils.periodicActionsThreadPool
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import org.slf4j.LoggerFactory
 import java.time.Duration
@@ -19,13 +21,15 @@ private val metrics by lazy {
 
 fun publishBotMetrics(bot: JDA) {
     periodicActionsThreadPool.scheduleAtFixedRate(Duration.ofMinutes(5)) {
-        logger.info("Publishing metrics")
-        runCatching {
-            metrics.submitAndClear {
-                it.addCount("count", bot.guilds.size)
+        coroutineScope.launch {
+            logger.info("Publishing metrics")
+            try {
+                metrics.submitAndClear {
+                    it.addCount("count", bot.guilds.size)
+                }
+            } catch (e: Exception) {
+                logger.error("An error occurred while posting metrics", e)
             }
-        }.onFailure {
-            logger.error("An error occurred while posting metrics", it)
         }
     }
 }

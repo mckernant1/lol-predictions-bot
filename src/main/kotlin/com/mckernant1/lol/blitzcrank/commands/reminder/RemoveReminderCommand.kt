@@ -7,9 +7,9 @@ import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-class RemoveReminderCommand(event: CommandInfo) : DiscordCommand(event) {
+class RemoveReminderCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val hoursBefore = event.options["hours_before"]
         val removed = userSettings.reminders.removeAll {
             it.leagueSlug == region && it.hoursBeforeMatches == hoursBefore?.toLong()
@@ -23,7 +23,7 @@ class RemoveReminderCommand(event: CommandInfo) : DiscordCommand(event) {
         reply(replyText)
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["hours_before"])
     }
@@ -55,7 +55,7 @@ class RemoveReminderCommand(event: CommandInfo) : DiscordCommand(event) {
         """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = RemoveReminderCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = RemoveReminderCommand(event, userSettings)
     }
 
 }

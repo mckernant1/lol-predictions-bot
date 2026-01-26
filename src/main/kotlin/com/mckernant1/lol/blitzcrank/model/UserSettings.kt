@@ -4,13 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mckernant1.lol.blitzcrank.utils.ddbClient
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
+import com.mckernant1.lol.blitzcrank.utils.scanAsFlow
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
-import software.amazon.awssdk.enhanced.dynamodb.AttributeConverter
-import software.amazon.awssdk.enhanced.dynamodb.AttributeValueType
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
-import software.amazon.awssdk.enhanced.dynamodb.EnhancedType
-import software.amazon.awssdk.enhanced.dynamodb.Key
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.future.await
+import software.amazon.awssdk.enhanced.dynamodb.*
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbConvertedBy
@@ -27,7 +25,7 @@ class UserSettings(
     var pasta: String = "You have no pasta. Set one with `!setPasta My Pasta!`",
     var notifyMe: Boolean = true,
     @get:DynamoDbConvertedBy(ReminderListConverter::class)
-    var reminders: MutableList<Reminder> = mutableListOf()
+    var reminders: MutableList<Reminder> = mutableListOf(),
 ) {
 
     companion object {
@@ -35,17 +33,21 @@ class UserSettings(
             System.getenv("USER_SETTINGS_TABLE_NAME")
                 ?: error("Environment variable 'USER_SETTINGS_TABLE_NAME' is not defined")
         }
-        private val table: DynamoDbTable<UserSettings> by lazy {
+        private val table: DynamoDbAsyncTable<UserSettings> by lazy {
             ddbClient.table(TABLE_NAME, TableSchema.fromClass(UserSettings::class.java))
         }
 
-        fun getSettingsForUser(discordId: String): UserSettings =
+        suspend fun getSettingsForUser(discordId: String): UserSettings =
             table.getItem(Key.builder().partitionValue(discordId).build())
-                ?: UserSettings(discordId = discordId)
+                ?.await() ?: UserSettings(discordId = discordId)
 
-        fun putSettings(settings: UserSettings) = table.putItem(settings)
+        suspend fun putSettings(settings: UserSettings) {
+            table.putItem(settings).await()
+        }
 
-        fun scan() = table.scan().items().stream()
+        fun scan(): Flow<UserSettings> {
+            return table.scanAsFlow()
+        }
     }
 
     override fun toString(): String = "[discordId=$discordId, timezone=$timezone, pasta=$pasta, reminders=$reminders]"
@@ -56,10 +58,13 @@ class Reminder(
     val userId: String = "12345678",
     val leagueSlug: String = "lcs",
     val hoursBeforeMatches: Long = 0,
-    var lastReminderSentEpochMillis: Long = 0
+    var lastReminderSentEpochMillis: Long = 0,
 ) {
-    fun shouldSendMessage(): Boolean {
-        if (Instant.ofEpochMilli(lastReminderSentEpochMillis) + Duration.ofHours(hoursBeforeMatches) + Duration.ofHours(12) > Instant.now()) {
+    suspend fun shouldSendMessage(): Boolean {
+        if (Instant.ofEpochMilli(lastReminderSentEpochMillis) + Duration.ofHours(hoursBeforeMatches) + Duration.ofHours(
+                12
+            ) > Instant.now()
+        ) {
             return false
         }
         val firstMatch = getSchedule(leagueSlug, 1)
@@ -67,6 +72,20 @@ class Reminder(
 
         return Instant.now() + Duration.ofHours(hoursBeforeMatches) >
                 firstMatch.startTimeAsInstant()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Reminder) return false
+
+        return userId == other.userId &&
+                leagueSlug == other.leagueSlug
+    }
+
+    override fun hashCode(): Int {
+        var result = userId.hashCode()
+        result = 31 * result + leagueSlug.hashCode()
+        return result
     }
 
     override fun toString(): String =

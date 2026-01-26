@@ -2,37 +2,44 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
+import com.mckernant1.lol.blitzcrank.commands.reminder.RemoveReminderCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.Prediction
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Duration
 
-class PredictCommand(event: CommandInfo) : DiscordCommand(event) {
+class PredictCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute(): Unit = runBlocking {
+    override suspend fun execute() {
         val matches = getSchedule(region, numToGet)
         if (matches.isEmpty()) {
             val message = "There are no matches to predict"
-            event.channel.sendMessage(message).complete()
-            return@runBlocking
+            event.channel.sendMessage(message).submit().await()
+            return
         }
 
         matches.map { match ->
             val date = match.startTimeAsInstant()
             val msg =
                 "${longDateFormat.format(date)}: \uD83D\uDD35 **${match.blueTeamId}** vs **${match.redTeamId}** \uD83D\uDD34\n(This message will delete itself in 5 mins. DO NOT delete yourself)"
-            val message = event.channel.sendMessage(msg).complete()
-            message.addReaction(BLUE_TEAM_EMOJI).complete()
-            message.addReaction(RED_TEAM_EMOJI).complete()
+            val message = event.channel.sendMessage(msg).submit().await()
+            message.addReaction(BLUE_TEAM_EMOJI).submit().await()
+            message.addReaction(RED_TEAM_EMOJI).submit().await()
 
-            return@map launch {
+            coroutineScope.launch {
                 logger.info("Starting Thread to wait for 5 mins then check the result")
 //                delay(Duration.ofSeconds(30).toMillis()) // For Testing
                 delay(Duration.ofMinutes(5).toMillis())
@@ -45,18 +52,19 @@ class PredictCommand(event: CommandInfo) : DiscordCommand(event) {
                 val predictions = mapOf(match.blueTeamId to blueTeamUsers, match.redTeamId to redTeamUsers)
                     .map { (team, users) ->
                         users.map { Prediction(matchId = match.matchId, userId = it, prediction = team) }
-                    }.flatten().also { logger.info("Saving prediction: $it") }
+                    }.flatten()
+                    .also { logger.info("Saving prediction: $it") }
                 predictions.forEach { Prediction.putItem(it) }
-                message.delete().complete()
+                message.delete().submit().await()
             }
-        }.forEach { it.join() }
+        }.joinAll()
+
         event.channel.sendMessage(
             "Predictions have been recorded for ${matches.size} ${if (matches.size == 1) "match" else "matches"} in the $region"
-        ).complete()
-
+        ).submit().await()
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["number_of_matches"])
     }
@@ -90,6 +98,7 @@ class PredictCommand(event: CommandInfo) : DiscordCommand(event) {
         """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = PredictCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand =
+            PredictCommand(event, userSettings)
     }
 }

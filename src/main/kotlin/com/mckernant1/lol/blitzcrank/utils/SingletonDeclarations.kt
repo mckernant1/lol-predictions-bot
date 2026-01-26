@@ -6,25 +6,30 @@ import com.mckernant1.commons.metrics.impls.CloudWatchMetrics
 import com.mckernant1.commons.metrics.impls.NoopMetrics
 import com.mckernant1.lol.esports.api.ApiClient
 import com.mckernant1.lol.esports.api.client.DefaultApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.io.File
 import java.time.Duration
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
-internal val dc by lazy { DynamoDbClient.builder().build() }
-internal val ddbClient: DynamoDbEnhancedClient by lazy {
-    DynamoDbEnhancedClient.builder()
+internal val dc by lazy { DynamoDbAsyncClient.builder().build() }
+internal val ddbClient: DynamoDbEnhancedAsyncClient by lazy {
+    DynamoDbEnhancedAsyncClient.builder()
         .dynamoDbClient(dc)
         .build()
 }
 
-internal val cloudWatchClient: CloudWatchClient by lazy {
-    CloudWatchClient.create()
+internal val cloudWatchClient: CloudWatchAsyncClient by lazy {
+    CloudWatchAsyncClient.create()
 }
 
 private const val NAMESPACE = "Discord-bots/Predictions-Bot"
@@ -37,12 +42,7 @@ internal val cwp: Metrics by lazy {
     }
 }
 
-internal val commandThreadPool: ScheduledExecutorService by lazy {
-    val tf = ThreadFactoryBuilder()
-        .setNameFormat("command-pool-%d")
-        .build()
-    Executors.newScheduledThreadPool(5, tf)
-}
+internal val coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 internal val periodicActionsThreadPool: ScheduledExecutorService by lazy {
     val tf = ThreadFactoryBuilder()

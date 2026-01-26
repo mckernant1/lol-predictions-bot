@@ -3,30 +3,32 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.internal.interactions.CommandDataImpl
 
-class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
+class ResultsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val matches = getResults(region, numToGet)
         if (matches.isEmpty()) {
             val message = "There are no results"
-            event.channel.sendMessage(message).complete()
+            event.channel.sendMessage(message).submit().await()
             return
         }
         val replyString =
             formatResultsReply(matches, region)
         event.channel.sendMessage(replyString)
             .setSuppressEmbeds(true)
-            .complete()
+            .submit().await()
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["number_of_matches"])
     }
@@ -76,7 +78,7 @@ class ResultsCommand(event: CommandInfo) : DiscordCommand(event) {
             .addOption(OptionType.STRING, "league_id", "The league to query", true)
             .addOption(OptionType.INTEGER, "number_of_matches", "The number of matches to get")
 
-        override fun create(event: CommandInfo): DiscordCommand = ResultsCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = ResultsCommand(event, userSettings)
     }
 }
 

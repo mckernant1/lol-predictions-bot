@@ -3,12 +3,14 @@ package com.mckernant1.lol.blitzcrank.commands.reminder
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
+class ListRemindersCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         event.channel.sendMessage("""
             Your Reminders
             ${userSettings.reminders.joinToString("-----------------") {
@@ -17,10 +19,10 @@ class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
             Hours before: ${it.hoursBeforeMatches}
             """ }
             }
-        """.trimIndent()).complete()
+        """.trimIndent()).submit().await()
     }
 
-    override fun validate(options: Map<String, String>) {}
+    override suspend fun validate(options: Map<String, String>) {}
 
     companion object : CommandMetadata {
         override val commandString: String = "list-reminders"
@@ -35,6 +37,5 @@ class ListRemindersCommand(event: CommandInfo) : DiscordCommand(event) {
             """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = ListRemindersCommand(event)
-    }
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = ListRemindersCommand(event, userSettings)    }
 }

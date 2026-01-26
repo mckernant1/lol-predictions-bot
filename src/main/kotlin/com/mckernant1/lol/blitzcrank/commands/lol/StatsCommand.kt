@@ -8,13 +8,16 @@ import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.Prediction
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
+import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.endDateAsDate
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.esports.api.models.Match
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -23,9 +26,9 @@ import net.dv8tion.jda.internal.interactions.CommandDataImpl
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
+class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
-    override fun execute(): Unit = runBlocking {
+    override suspend fun execute(): Unit {
         val results: List<Match> = when (Timeframe.valueOf(event.options["timeframe"]!!)) {
             Timeframe.Tournament -> getResults(region, 100)
             Timeframe.Year -> apiClient.getTournamentsForLeague(region.uppercase()).filter {
@@ -59,7 +62,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             users
                 .cartesianProduct(results)
                 .map { (user, match) ->
-                    async { Prediction.getItem(user.getId(), match.matchId) }
+                    coroutineScope.async { Prediction.getItem(user.getId(), match.matchId) }
                 }
                 .awaitAll()
                 .filterNotNull()
@@ -87,9 +90,9 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
             .toList()
         val str = resultString.joinToString("\n") { it }
         if (str.isBlank()) {
-            event.channel.sendMessage("There are no completed predictions for $region to display").complete()
+            event.channel.sendMessage("There are no completed predictions for $region to display").submit().await()
         } else if (str.length < 2000) {
-            event.channel.sendMessage("Prediction results for $region are:\n$str").complete()
+            event.channel.sendMessage("Prediction results for $region are:\n$str").submit().await()
         } else {
             event.channel.sendMessage("Prediction results for $region are:").complete()
             resultString.forEach {
@@ -106,7 +109,7 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
         fun getPredictionPercentage() = (100 * numberCorrect / numberPredicted.toDouble()).round(1)
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
     }
 
@@ -133,6 +136,6 @@ class StatsCommand(event: CommandInfo) : DiscordCommand(event) {
                     .addChoice("Year", "Year")
             )
 
-        override fun create(event: CommandInfo): DiscordCommand = StatsCommand(event)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = StatsCommand(event, userSettings)
     }
 }

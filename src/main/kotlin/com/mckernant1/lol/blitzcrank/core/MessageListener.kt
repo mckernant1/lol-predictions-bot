@@ -6,9 +6,11 @@ import com.mckernant1.commons.standalone.measureDuration
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
-import com.mckernant1.lol.blitzcrank.utils.commandThreadPool
+import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.cwp
 import com.mckernant1.lol.blitzcrank.utils.getWordsFromString
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
@@ -20,18 +22,17 @@ class MessageListener : ListenerAdapter() {
     private val metrics = cwp.newMetrics("ErrorCount" to "Error")
 
     override fun onSlashCommandInteraction(slashEvent: SlashCommandInteractionEvent) {
-        commandThreadPool.submit {
-
+        coroutineScope.launch {
             val event = CommandInfo(slashEvent)
             val words = getWordsFromString(event.commandString)
             logger.info("Got slash command ${event.commandString}")
             logger.info("Got params ${slashEvent.options}")
             val command = getCommandFromWords(words, event)
                 ?: run {
-                    slashEvent.reply("Could not find this command").complete()
-                    return@submit
+                    slashEvent.reply("Could not find this command").submit().await()
+                    return@launch
                 }
-            val hook = slashEvent.reply("Command Received!").complete()
+            val hook = slashEvent.reply("Command Received!").submit().await()
 
             handleCommonCommandLogic(event, command, words)
 
@@ -43,7 +44,7 @@ class MessageListener : ListenerAdapter() {
         }
     }
 
-    private fun handleCommonCommandLogic(
+    private suspend fun handleCommonCommandLogic(
         event: CommandInfo,
         command: DiscordCommand,
         words: List<String>,
@@ -57,7 +58,7 @@ class MessageListener : ListenerAdapter() {
             logger.info("Validation step for $commandString took ${validationDuration.toMillis()}ms")
         } catch (e: InvalidCommandException) {
             logger.debug("InvalidCommandException occurred while validating command", e)
-            event.channel.sendMessage("There was an error validating your command:\n${e.message}").complete()
+            event.channel.sendMessage("There was an error validating your command:\n${e.message}").submit().await()
             return
         } catch (e: Exception) {
             logger.error(
@@ -67,7 +68,9 @@ class MessageListener : ListenerAdapter() {
             metrics.withNewMetrics { m ->
                 m.addCount("Error", 1)
             }
-            event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
+            event.channel.sendMessageEmbeds(createErrorMessage(e))
+                .submit()
+                .await()
             return
         }
 
@@ -95,13 +98,13 @@ class MessageListener : ListenerAdapter() {
                 50001 -> {
                     logger.warn("Hit Permission issue. Known to be an issue with reaction permissions", e)
                     event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with reaction permissions")
-                        .complete()
+                        .submit().await()
                 }
 
                 50013 -> {
                     logger.warn("Hit Permission issue. Known to be an issue with embedded message permissions ", e)
                     event.channel.sendMessage("The Bot has encountered a permission issue. From what I know this is an issue with embedded message permissions")
-                        .complete()
+                        .submit().await()
                 }
 
                 else -> defaultErrBehavior(event, words, e)
@@ -111,7 +114,7 @@ class MessageListener : ListenerAdapter() {
         }
     }
 
-    private fun defaultErrBehavior(event: CommandInfo, words: List<String>, e: Exception) {
+    private suspend fun defaultErrBehavior(event: CommandInfo, words: List<String>, e: Exception) {
         logger.error(
             "Caught exception while executing command for user: ${event.author.id}, guild: ${event.guild?.id}, commands: '$words': ",
             e
@@ -119,7 +122,7 @@ class MessageListener : ListenerAdapter() {
         metrics.withNewMetrics { m ->
             m.addCount("Error", 1)
         }
-        event.channel.sendMessageEmbeds(createErrorMessage(e)).complete()
+        event.channel.sendMessageEmbeds(createErrorMessage(e)).submit().await()
     }
 
     companion object {

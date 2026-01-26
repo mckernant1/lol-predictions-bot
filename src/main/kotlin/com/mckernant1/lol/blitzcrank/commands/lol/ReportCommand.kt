@@ -6,24 +6,26 @@ import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.Prediction
+import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.getSchedule
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
 class ReportCommand(
     event: CommandInfo,
-    private var previous: Boolean = false
-) : DiscordCommand(event) {
+    private var previous: Boolean = false, userSettings: UserSettings
+) : DiscordCommand(event, userSettings) {
 
-    override fun execute() {
+    override suspend fun execute() {
         val results = if (previous) getResults(region, numToGet) else getSchedule(region, numToGet)
 
         if (results.isEmpty()) {
             val message = "There are no matches to report"
-            event.channel.sendMessage(message).complete()
+            event.channel.sendMessage(message).submit().await()
             return
         }
 
@@ -85,7 +87,7 @@ class ReportCommand(
         }.getOrElse { "" }
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["number_of_matches"])
     }
@@ -117,7 +119,7 @@ class ReportCommand(
         """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = ReportCommand(event, false)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = ReportCommand(event, false, userSettings)
     }
 
     object Report : CommandMetadata {
@@ -145,7 +147,7 @@ class ReportCommand(
             }
         """.trimIndent())
 
-        override fun create(event: CommandInfo): DiscordCommand = ReportCommand(event, true)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = ReportCommand(event, true, userSettings)
     }
 
 }

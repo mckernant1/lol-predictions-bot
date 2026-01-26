@@ -24,7 +24,8 @@ repositories {
 dependencies {
     // Utils
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.guava:guava:33.4.8-jre")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
@@ -38,7 +39,7 @@ dependencies {
     // My Libs
     implementation("com.mckernant1.lol:esports-api:0.2.2")
     implementation("com.mckernant1.commons:kotlin-utils:0.2.3")
-    implementation("com.mckernant1.commons:metrics:0.0.10")
+    implementation("com.mckernant1.commons:metrics:0.1.3")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.17")

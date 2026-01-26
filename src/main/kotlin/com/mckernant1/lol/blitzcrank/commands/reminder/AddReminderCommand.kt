@@ -6,10 +6,14 @@ import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.Reminder
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.commandDataFromJson
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 
-class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
-    override fun execute() {
+class AddReminderCommand(
+    event: CommandInfo,
+    userSettings: UserSettings
+) : DiscordCommand(event, userSettings) {
+    override suspend fun execute() {
         val newReminders = userSettings.reminders
         newReminders.add(
             Reminder(
@@ -21,10 +25,10 @@ class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
         userSettings.reminders = newReminders
         UserSettings.putSettings(userSettings)
         logger.info("Rem: $userSettings")
-        event.channel.sendMessage("Your Reminder has been added").complete()
+        event.channel.sendMessage("Your Reminder has been added").submit().await()
     }
 
-    override fun validate(options: Map<String, String>) {
+    override suspend fun validate(options: Map<String, String>) {
         validateAndSetRegion(options["league_id"])
         validateAndSetNumberPositive(options["hours_before"])
     }
@@ -56,6 +60,5 @@ class AddReminderCommand(event: CommandInfo) : DiscordCommand(event) {
             """.trimIndent()
         )
 
-        override fun create(event: CommandInfo): DiscordCommand = AddReminderCommand(event)
-    }
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = AddReminderCommand(event, userSettings)    }
 }

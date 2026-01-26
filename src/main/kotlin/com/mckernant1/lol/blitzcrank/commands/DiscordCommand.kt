@@ -8,18 +8,23 @@ import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.entities.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.Duration
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-abstract class DiscordCommand(protected val event: CommandInfo) {
+abstract class DiscordCommand(
+    protected val event: CommandInfo,
+    protected val userSettings: UserSettings,
+) {
 
     companion object {
-        private val LEAGUE_MAP = mapOf<String, String>(
-            "lcs" to "lta_n",
-            "cblol" to "lta_s",
+        private val LEAGUE_MAP = mapOf(
             "worlds" to "wcs"
         )
     }
@@ -28,10 +33,6 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
     protected var numToGet: Int? = null
 
     protected val logger: Logger = LoggerFactory.getLogger("${event.author.id}-${event.commandString}")
-
-    protected val userSettings by lazy {
-        UserSettings.getSettingsForUser(event.author.id)
-    }
 
     protected val longDateFormat: DateTimeFormatter by lazy {
         DateTimeFormatter
@@ -49,10 +50,10 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
             )
     }
 
-    abstract fun execute(): Unit
+    abstract suspend fun execute(): Unit
 
     @Throws(InvalidCommandException::class)
-    abstract fun validate(options: Map<String, String>): Unit
+    abstract suspend fun validate(options: Map<String, String>): Unit
 
     protected fun validateAndSetNumberPositive(input: String?) {
         numToGet = try {
@@ -68,7 +69,7 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         }
     }
 
-    protected fun validateAndSetRegion(leagueId: String?) {
+    protected suspend fun validateAndSetRegion(leagueId: String?) {
         region = leagueId
             ?: throw InvalidCommandException("league_id cannot be null")
 
@@ -77,10 +78,13 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
         }
 
         try {
-            apiClient.getLeagueByCode(region.uppercase())
+            withContext(Dispatchers.IO) {
+                apiClient.getLeagueByCode(region.uppercase())
+            }
             logger.info("validateRegion with region: '${region.uppercase()}'")
         } catch (e: Exception) {
-            throw LeagueDoesNotExistException("League '$region' does not exist. Available regions: ${
+            throw LeagueDoesNotExistException(
+                "League '$region' does not exist. Available regions: ${
                 apiClient.leagues.joinToString(", ") { it.leagueId.uppercase() }
             }")
         }
@@ -89,28 +93,32 @@ abstract class DiscordCommand(protected val event: CommandInfo) {
 
     protected fun validateTeam(teamName: String?) {
         teamName ?: throw InvalidCommandException("Team name cannot be null")
-        try  {
+        try {
             apiClient.getTeamByCode(teamName.uppercase())
             logger.info("validateTeam with team '$teamName'")
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             throw TeamDoesNotExistException("Team '$teamName' does not exists. Use team code, not team name (C9 not Cloud9)")
         }
 
     }
 
-    protected fun getAllUsersForServer(): List<BotUser> {
+    protected suspend fun getAllUsersForServer(): List<BotUser> {
         return if (event.isFromGuild) {
             val (duration, users) = measureOperation {
-                event.guild!!.loadMembers()
-                    .get()
-                    .map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
+                withContext(Dispatchers.IO) {
+                    event.guild!!.loadMembers()
+                        .setTimeout(Duration.ofMinutes(1))
+                        .get()
+                }.map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
             }
             logger.info("loading ${users.size} members took ${duration.toMillis()}ms")
             users
         } else {
-            listOf(event.author).map { BotUser(it, UserSettings.getSettingsForUser(it.id)) }
+            listOf(event.author).map {
+                BotUser(it, UserSettings.getSettingsForUser(it.id))
+            }
         }
     }
 
-    protected fun reply(message: String): Message = event.channel.sendMessage(message).complete()
+    protected suspend fun reply(message: String): Message = event.channel.sendMessage(message).submit().await()
 }
