@@ -37,7 +37,7 @@ class MessageListener : ListenerAdapter() {
             handleCommonCommandLogic(event, command, words)
 
             try {
-                hook.deleteOriginal().complete()
+                hook.deleteOriginal().submit().await()
             } catch (e: Exception) {
                 logger.warn("Failed to delete original message", e)
             }

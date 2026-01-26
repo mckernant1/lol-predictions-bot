@@ -46,9 +46,13 @@ class PredictCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCo
 
                 logger.info("Done sleeping")
                 val blueTeamUsers =
-                    message.retrieveReactionUsers(BLUE_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
+                    message.retrieveReactionUsers(BLUE_TEAM_EMOJI)
+                        .submit()
+                        .await()
+                        .filter { !it.isBot }.map { it.id }
                 val redTeamUsers =
-                    message.retrieveReactionUsers(RED_TEAM_EMOJI).complete().filter { !it.isBot }.map { it.id }
+                    message.retrieveReactionUsers(RED_TEAM_EMOJI).submit()
+                        .await().filter { !it.isBot }.map { it.id }
                 val predictions = mapOf(match.blueTeamId to blueTeamUsers, match.redTeamId to redTeamUsers)
                     .map { (team, users) ->
                         users.map { Prediction(matchId = match.matchId, userId = it, prediction = team) }

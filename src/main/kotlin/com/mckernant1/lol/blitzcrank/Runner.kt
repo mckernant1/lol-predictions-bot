@@ -5,6 +5,7 @@ import com.mckernant1.lol.blitzcrank.core.MessageListener
 import com.mckernant1.lol.blitzcrank.core.commandList
 import com.mckernant1.lol.blitzcrank.timers.publishBotMetrics
 import com.mckernant1.lol.blitzcrank.timers.reminderChecker
+import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -17,7 +18,7 @@ import software.amazon.codeguruprofilerjavaagent.Profiler
 
 private val logger = LoggerFactory.getLogger("MainLogger")
 
-fun main() {
+suspend fun main() {
     assertEnvironmentVariablesExist(
         "BOT_TOKEN",
         "ESPORTS_API_KEY",
@@ -43,7 +44,7 @@ fun main() {
     reminderChecker(bot)
 }
 
-fun startBot(token: String): JDA {
+suspend fun startBot(token: String): JDA {
     return JDABuilder.create(
         token,
         GatewayIntent.GUILD_MEMBERS,
@@ -77,12 +78,12 @@ fun startBot(token: String): JDA {
         .awaitReady()
 }
 
-private fun registerCommands(
+private suspend fun registerCommands(
     bot: JDA,
 ) {
     commandList.forEach {
         logger.info("Upserting command ${it.commandString}")
-        bot.upsertCommand(it.commandData).complete()
+        bot.upsertCommand(it.commandData).submit().await()
     }
     logger.info("Done inserting commands!")
 }

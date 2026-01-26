@@ -94,9 +94,9 @@ class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordComm
         } else if (str.length < 2000) {
             event.channel.sendMessage("Prediction results for $region are:\n$str").submit().await()
         } else {
-            event.channel.sendMessage("Prediction results for $region are:").complete()
+            event.channel.sendMessage("Prediction results for $region are:").submit().await()
             resultString.forEach {
-                event.channel.sendMessage(it).complete()
+                event.channel.sendMessage(it).submit().await()
             }
         }
     }

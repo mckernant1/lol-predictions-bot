@@ -65,9 +65,9 @@ class ReportCommand(
         val str = predictionStrings.joinToString("\n\n")
         when {
             predictionStrings.isEmpty() -> return
-            str.length < 2000 -> event.channel.sendMessage(str).complete()
+            str.length < 2000 -> event.channel.sendMessage(str).submit().await()
             else -> predictionStrings.forEach {
-                event.channel.sendMessage(it).complete()
+                event.channel.sendMessage(it).submit().await()
             }
         }
     }

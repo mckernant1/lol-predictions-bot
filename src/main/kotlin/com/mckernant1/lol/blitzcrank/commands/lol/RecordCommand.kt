@@ -12,6 +12,7 @@ import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.startTimeAsInstant
 import com.mckernant1.lol.esports.api.models.Match
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import java.time.Instant
@@ -67,7 +68,7 @@ class RecordCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCom
         val messageString =
             "Record for ${team1.name} ${if (team2Words != null) "vs ${apiClient.getTeamByCode(team2Words).name} " else ""}in ${region.uppercase()} (${totalTeamWins}W - ${totalTeamLosses}L):$LINE_SEPARATOR$teamStrings"
         messageString.chunked(2000).forEach {
-            event.channel.sendMessage(it).complete()
+            event.channel.sendMessage(it).submit().await()
         }
     }
 
