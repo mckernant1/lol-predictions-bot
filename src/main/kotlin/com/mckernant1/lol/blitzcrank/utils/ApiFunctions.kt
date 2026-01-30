@@ -1,9 +1,9 @@
 package com.mckernant1.lol.blitzcrank.utils
 
 
+import com.mckernant1.commons.standalone.MeasureSuspend.measureOperation
 import com.mckernant1.lol.blitzcrank.utils.model.Standing
 import com.mckernant1.lol.esports.api.models.Match
-import com.mckernant1.commons.standalone.measureOperation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.dv8tion.jda.api.entities.Message

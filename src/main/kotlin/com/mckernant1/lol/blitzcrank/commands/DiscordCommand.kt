@@ -1,6 +1,6 @@
 package com.mckernant1.lol.blitzcrank.commands
 
-import com.mckernant1.commons.standalone.measureOperation
+import com.mckernant1.commons.standalone.MeasureSuspend.measureOperation
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.exceptions.LeagueDoesNotExistException
 import com.mckernant1.lol.blitzcrank.exceptions.TeamDoesNotExistException

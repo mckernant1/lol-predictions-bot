@@ -1,5 +1,6 @@
 package com.mckernant1.lol.blitzcrank.timers
 
+import com.mckernant1.commons.extensions.coroutines.Schedule.scheduleAtFixedRate
 import com.mckernant1.commons.extensions.executor.Executors.scheduleAtFixedRate
 import com.mckernant1.commons.extensions.time.Instants.timeUntilNextWhole
 import com.mckernant1.lol.blitzcrank.model.UserSettings
@@ -24,6 +25,7 @@ suspend fun reminderCheckerWork(
     bot: JDA,
     userSettings: UserSettings,
 ) {
+    logger.info("Checking reminders for user ${userSettings.discordId}")
     val user = bot.getUserById(userSettings.discordId!!) ?: return
     val privateChannel = user.openPrivateChannel().submit().await() ?: return
     val reminders = userSettings.reminders
@@ -50,21 +52,18 @@ suspend fun reminderCheckerWork(
             logger.error("An unknown error occurred while sending reminders", e)
         }
     }
-
+    logger.info("Putting ${userSettings.reminders.size} reminders for user ${userSettings.discordId}")
     userSettings.reminders = reminders
     UserSettings.putSettings(userSettings)
 }
 
 fun reminderChecker(bot: JDA) {
-    periodicActionsThreadPool.scheduleAtFixedRate(
-        Duration.ofMinutes(30).toMillis(),
-        Instant.now().timeUntilNextWhole(ChronoUnit.HOURS).toMillis(),
-        TimeUnit.MILLISECONDS
+    coroutineScope.scheduleAtFixedRate(
+        Instant.now().timeUntilNextWhole(ChronoUnit.HOURS),
+        Duration.ofMinutes(30)
     ) {
-        coroutineScope.launch {
-            UserSettings.scan().collect {
-                reminderCheckerWork(bot, it)
-            }
+        UserSettings.scan().collect {
+            reminderCheckerWork(bot, it)
         }
     }
 }

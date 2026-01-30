@@ -2,7 +2,7 @@ package com.mckernant1.lol.blitzcrank.commands.lol
 
 import com.mckernant1.commons.extensions.collections.SetTheory.cartesianProduct
 import com.mckernant1.commons.extensions.math.DoubleAlgebra.round
-import com.mckernant1.commons.standalone.measureOperation
+import com.mckernant1.commons.standalone.MeasureSuspend.measureOperation
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
@@ -18,7 +18,6 @@ import com.mckernant1.lol.esports.api.models.Match
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.OptionData

@@ -2,7 +2,7 @@ package com.mckernant1.lol.blitzcrank.core
 
 import com.mckernant1.commons.extensions.strings.capitalize
 import com.mckernant1.commons.logging.Slf4j.logger
-import com.mckernant1.commons.standalone.measureDuration
+import com.mckernant1.commons.standalone.MeasureSuspend.measureDuration
 import com.mckernant1.lol.blitzcrank.commands.DiscordCommand
 import com.mckernant1.lol.blitzcrank.exceptions.InvalidCommandException
 import com.mckernant1.lol.blitzcrank.model.CommandInfo
