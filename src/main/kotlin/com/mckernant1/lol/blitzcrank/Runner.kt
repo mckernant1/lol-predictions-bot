@@ -5,7 +5,11 @@ import com.mckernant1.lol.blitzcrank.core.MessageListener
 import com.mckernant1.lol.blitzcrank.core.commandList
 import com.mckernant1.lol.blitzcrank.timers.publishBotMetrics
 import com.mckernant1.lol.blitzcrank.timers.reminderChecker
+import com.mckernant1.lol.blitzcrank.utils.coroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -40,8 +44,11 @@ suspend fun main() {
 
     val bot = startBot(botToken)
     registerCommands(bot)
+    logger.info("Done inserting commands!")
     publishBotMetrics(bot)
+    logger.info("Started Metrics")
     reminderChecker(bot)
+    logger.info("Started Reminders")
 }
 
 suspend fun startBot(token: String): JDA {
@@ -80,10 +87,12 @@ suspend fun startBot(token: String): JDA {
 
 private suspend fun registerCommands(
     bot: JDA,
-) {
+) = coroutineScope {
     commandList.forEach {
-        logger.info("Upserting command ${it.commandString}")
-        bot.upsertCommand(it.commandData).submit().await()
+        launch {
+            logger.info("Upserting command ${it.commandString}")
+            bot.upsertCommand(it.commandData).submit().await()
+            logger.info("Done upserting command ${it.commandString}")
+        }
     }
-    logger.info("Done inserting commands!")
 }

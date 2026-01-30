@@ -1,5 +1,6 @@
 package com.mckernant1.lol.blitzcrank.timers
 
+import com.mckernant1.commons.extensions.coroutines.Schedule.scheduleAtFixedRate
 import com.mckernant1.commons.extensions.executor.Executors.scheduleAtFixedRate
 import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.cwp
@@ -20,16 +21,17 @@ private val metrics by lazy {
 }
 
 fun publishBotMetrics(bot: JDA) {
-    periodicActionsThreadPool.scheduleAtFixedRate(Duration.ofMinutes(5)) {
-        coroutineScope.launch {
-            logger.info("Publishing metrics")
-            try {
-                metrics.submitAndClear {
-                    it.addCount("count", bot.guilds.size)
-                }
-            } catch (e: Exception) {
-                logger.error("An error occurred while posting metrics", e)
+    coroutineScope.scheduleAtFixedRate(
+        Duration.ofMinutes(0),
+        Duration.ofMinutes(5)
+    ) {
+        logger.info("Publishing metrics")
+        try {
+            metrics.submitAndClear {
+                it.addCount("count", bot.guilds.size)
             }
+        } catch (e: Exception) {
+            logger.error("An error occurred while posting metrics", e)
         }
     }
 }

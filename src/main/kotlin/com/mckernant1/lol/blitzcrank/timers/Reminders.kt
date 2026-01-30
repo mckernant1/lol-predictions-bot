@@ -62,6 +62,7 @@ fun reminderChecker(bot: JDA) {
         Instant.now().timeUntilNextWhole(ChronoUnit.HOURS),
         Duration.ofMinutes(30)
     ) {
+        logger.info("Checking reminders")
         UserSettings.scan().collect {
             reminderCheckerWork(bot, it)
         }
