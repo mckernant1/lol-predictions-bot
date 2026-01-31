@@ -1,5 +1,6 @@
 package com.mckernant1.lol.blitzcrank.utils
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -14,7 +15,7 @@ fun String.file(): File = File(this)
 
 internal fun commandDataFromJson(json: String): CommandData = CommandData.fromData(DataObject.fromJson(json))
 
-
+@OptIn(ExperimentalCoroutinesApi::class)
 fun <T : Any> DynamoDbAsyncTable<T>.scanAsFlow(
     request: ScanEnhancedRequest = ScanEnhancedRequest.builder().build()
 ): Flow<T> =
