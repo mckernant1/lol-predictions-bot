@@ -51,7 +51,7 @@ suspend fun main() {
     logger.info("Started Reminders")
 }
 
-suspend fun startBot(token: String): JDA {
+fun startBot(token: String): JDA {
     return JDABuilder.create(
         token,
         GatewayIntent.GUILD_MEMBERS,

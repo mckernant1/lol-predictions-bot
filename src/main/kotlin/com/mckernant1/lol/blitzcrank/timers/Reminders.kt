@@ -1,20 +1,16 @@
 package com.mckernant1.lol.blitzcrank.timers
 
 import com.mckernant1.commons.extensions.coroutines.Schedule.scheduleAtFixedRate
-import com.mckernant1.commons.extensions.executor.Executors.scheduleAtFixedRate
 import com.mckernant1.commons.extensions.time.Instants.timeUntilNextWhole
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.coroutineScope
-import com.mckernant1.lol.blitzcrank.utils.periodicActionsThreadPool
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import org.slf4j.LoggerFactory
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.TimeUnit
 
 private val logger by lazy {
     LoggerFactory.getLogger("ReminderChecker")
@@ -30,6 +26,7 @@ suspend fun reminderCheckerWork(
     val privateChannel = user.openPrivateChannel().submit().await() ?: return
     val reminders = userSettings.reminders
 
+    var changesMade = false
     for (it in reminders) {
         if (!it.shouldSendMessage()) continue
         try {
@@ -37,6 +34,7 @@ suspend fun reminderCheckerWork(
                 "Reminder: ${it.leagueSlug} is coming up in ${it.hoursBeforeMatches} hours"
             ).submit().await()
             it.lastReminderSentEpochMillis = Instant.now().toEpochMilli()
+            changesMade = true
         } catch (e: ErrorResponseException) {
             val knownErrorResponse = when (e.errorCode) {
                 50001 -> "Bot does not have permission to channel it was called from"
@@ -52,9 +50,14 @@ suspend fun reminderCheckerWork(
             logger.error("An unknown error occurred while sending reminders", e)
         }
     }
-    logger.info("Putting ${userSettings.reminders.size} reminders for user ${userSettings.discordId}")
-    userSettings.reminders = reminders
-    UserSettings.putSettings(userSettings)
+
+    if (changesMade) {
+        logger.info("Putting updated reminders for user ${userSettings.discordId}")
+        userSettings.reminders = reminders
+        UserSettings.putSettings(userSettings)
+    } else {
+        logger.info("No updates to reminders for user ${userSettings.discordId}")
+    }
 }
 
 fun reminderChecker(bot: JDA) {

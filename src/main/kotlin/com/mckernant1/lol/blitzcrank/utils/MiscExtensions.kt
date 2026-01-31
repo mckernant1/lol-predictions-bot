@@ -18,8 +18,8 @@ internal fun commandDataFromJson(json: String): CommandData = CommandData.fromDa
 fun <T : Any> DynamoDbAsyncTable<T>.scanAsFlow(
     request: ScanEnhancedRequest = ScanEnhancedRequest.builder().build()
 ): Flow<T> =
-    this.scan(request)          // SdkPublisher<Page<T>>
-        .asFlow()            // Flow<Page<T>>
+    this.scan(request)
+        .asFlow()
         .flatMapConcat { page ->
             page.items().asFlow()
         }

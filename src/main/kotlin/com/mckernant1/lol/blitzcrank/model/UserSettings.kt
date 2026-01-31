@@ -79,12 +79,16 @@ class Reminder(
         if (other !is Reminder) return false
 
         return userId == other.userId &&
-                leagueSlug == other.leagueSlug
+                leagueSlug == other.leagueSlug &&
+                hoursBeforeMatches == other.hoursBeforeMatches &&
+                lastReminderSentEpochMillis == other.lastReminderSentEpochMillis
     }
 
     override fun hashCode(): Int {
         var result = userId.hashCode()
         result = 31 * result + leagueSlug.hashCode()
+        result = 31 * result + hoursBeforeMatches.hashCode()
+        result = 31 * result + lastReminderSentEpochMillis.hashCode()
         return result
     }
 
