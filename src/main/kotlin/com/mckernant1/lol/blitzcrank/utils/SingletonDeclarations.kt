@@ -51,18 +51,18 @@ internal val periodicActionsThreadPool: ScheduledExecutorService by lazy {
     Executors.newScheduledThreadPool(2, tf)
 }
 
+internal val cache = Cache(
+    File("store"),
+    50L * 1024L * 1024L // 50 MiB
+)
+
 internal val apiClient = DefaultApi(
     ApiClient(
         OkHttpClient.Builder()
             .readTimeout(Duration.ofSeconds(60))
             .connectTimeout(Duration.ofSeconds(60))
             .writeTimeout(Duration.ofSeconds(60))
-            .cache(
-                Cache(
-                    File("store"),
-                    50L * 1024L * 1024L // 50 MiB
-                )
-            )
+            .cache(cache)
             .build()
     ).apply {
         basePath = "https://v2-api.lol-esports.mckernant1.com"
