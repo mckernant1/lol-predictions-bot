@@ -38,7 +38,7 @@ dependencies {
 
     // My Libs
     implementation("com.mckernant1.lol:esports-api:0.2.2")
-    implementation("com.mckernant1:kotlin-utils:0.3.19")
+    implementation("com.mckernant1:kotlin-utils:0.3.20")
     implementation("com.mckernant1.commons:metrics:0.1.4")
 
     // Logging
