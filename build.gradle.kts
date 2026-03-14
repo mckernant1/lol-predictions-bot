@@ -28,7 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.guava:guava:33.4.8-jre")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.1")
 
     // Discord
