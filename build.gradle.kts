@@ -24,7 +24,7 @@ repositories {
 dependencies {
     // Utils
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.guava:guava:33.4.8-jre")
