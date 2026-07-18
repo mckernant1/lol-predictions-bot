@@ -42,11 +42,11 @@ dependencies {
     implementation("com.mckernant1.commons:metrics:0.1.8")
 
     // Logging
-    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("org.slf4j:slf4j-api:2.0.18")
     implementation("org.apache.logging.log4j:log4j-core:2.26.1")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.26.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.26.1")
-    implementation("org.slf4j:jul-to-slf4j:2.0.17")
+    implementation("org.slf4j:jul-to-slf4j:2.0.18")
 
     // AWS
     implementation(platform("software.amazon.awssdk:bom:2.42.18"))
