@@ -1,6 +1,5 @@
 package com.mckernant1.lol.blitzcrank.commands.lol
 
-import com.mckernant1.commons.extensions.collections.SetTheory.cartesianProduct
 import com.mckernant1.commons.extensions.math.DoubleAlgebra.round
 import com.mckernant1.commons.standalone.MeasureSuspend.measureOperation
 import com.mckernant1.lol.blitzcrank.commands.CommandMetadata
@@ -10,13 +9,15 @@ import com.mckernant1.lol.blitzcrank.model.CommandInfo
 import com.mckernant1.lol.blitzcrank.model.Prediction
 import com.mckernant1.lol.blitzcrank.model.UserSettings
 import com.mckernant1.lol.blitzcrank.utils.apiClient
-import com.mckernant1.lol.blitzcrank.utils.coroutineScope
 import com.mckernant1.lol.blitzcrank.utils.endDateAsDate
 import com.mckernant1.lol.blitzcrank.utils.getResults
 import com.mckernant1.lol.blitzcrank.utils.model.BotUser
 import com.mckernant1.lol.esports.api.models.Match
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
@@ -27,6 +28,7 @@ import java.time.ZonedDateTime
 
 class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordCommand(event, userSettings) {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun execute(): Unit {
         val results: List<Match> = when (Timeframe.valueOf(event.options["timeframe"]!!)) {
             Timeframe.Tournament -> getResults(region, 100)
@@ -35,6 +37,7 @@ class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordComm
             }.flatMap {
                 apiClient.getMatchesForTournament(it.tournamentId)
             }
+
             Timeframe.Split -> {
                 val splitIdentifier: String = apiClient.getMostRecentTournament(region.uppercase()).let {
                     val groups = tournamentIdRegex.matchEntire(it.tournamentId)?.groups
@@ -54,17 +57,16 @@ class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordComm
 
         }
 
-
         val users = getAllUsersForServer()
+        val userIds = users.mapTo(HashSet()) { it.getId() }
 
         val (duration, serverMatches) = measureOperation {
-            users
-                .cartesianProduct(results)
-                .map { (user, match) ->
-                    coroutineScope.async { Prediction.getItem(user.getId(), match.matchId) }
+            results.asFlow()
+                .flatMapMerge(32) {
+                    Prediction.getAllPredictionsForMatch(it.matchId).asFlow()
                 }
-                .awaitAll()
-                .filterNotNull()
+                .filter { it.userId in userIds }
+                .toList()
         }
 
         logger.info("Getting ${serverMatches.size} matches took ${duration.toMillis()}ms")
@@ -135,6 +137,7 @@ class StatsCommand(event: CommandInfo, userSettings: UserSettings) : DiscordComm
                     .addChoice("Year", "Year")
             )
 
-        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand = StatsCommand(event, userSettings)
+        override fun create(event: CommandInfo, userSettings: UserSettings): DiscordCommand =
+            StatsCommand(event, userSettings)
     }
 }
