@@ -49,7 +49,7 @@ dependencies {
     implementation("org.slf4j:jul-to-slf4j:2.0.18")
 
     // AWS
-    implementation(platform("software.amazon.awssdk:bom:2.48.3"))
+    implementation(platform("software.amazon.awssdk:bom:2.53.3"))
     implementation("software.amazon.awssdk:cloudwatch")
     implementation("software.amazon.awssdk:dynamodb-enhanced")
 
