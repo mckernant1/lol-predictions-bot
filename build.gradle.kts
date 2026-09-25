@@ -29,7 +29,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.14.0")
     implementation("com.google.guava:guava:33.4.8-jre")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.22.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.2")
 
     // Discord
     implementation("net.dv8tion:JDA:6.3.2") {
